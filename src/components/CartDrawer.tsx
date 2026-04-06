@@ -25,35 +25,20 @@ const CartDrawer = () => {
               {items.map((item) => (
                 <div key={item.product.id} className="flex gap-4 border-b border-border pb-4">
                   <img
-                    src={item.product.images[0]}
+                    src={item.product.images?.[0] || "/placeholder.svg"}
                     alt={item.product.name}
                     className="w-20 h-20 object-contain bg-secondary rounded"
                   />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-sm truncate">{item.product.name}</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      ₹{item.product.salePrice ?? item.product.price}
+                      ₹{item.product.sale_price ?? item.product.price}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
-                      <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        className="p-1 rounded hover:bg-secondary"
-                      >
-                        <Minus className="h-3 w-3" />
-                      </button>
+                      <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="p-1 rounded hover:bg-secondary"><Minus className="h-3 w-3" /></button>
                       <span className="text-sm w-6 text-center">{item.quantity}</span>
-                      <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="p-1 rounded hover:bg-secondary"
-                      >
-                        <Plus className="h-3 w-3" />
-                      </button>
-                      <button
-                        onClick={() => removeFromCart(item.product.id)}
-                        className="ml-auto p-1 text-muted-foreground hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                      <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="p-1 rounded hover:bg-secondary"><Plus className="h-3 w-3" /></button>
+                      <button onClick={() => removeFromCart(item.product.id)} className="ml-auto p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
                     </div>
                   </div>
                 </div>
@@ -64,14 +49,7 @@ const CartDrawer = () => {
                 <span>Total</span>
                 <span>₹{totalPrice.toLocaleString("en-IN")}</span>
               </div>
-              <Button
-                className="w-full"
-                size="lg"
-                onClick={() => {
-                  setIsOpen(false);
-                  navigate("/checkout");
-                }}
-              >
+              <Button className="w-full" size="lg" onClick={() => { setIsOpen(false); navigate("/checkout"); }}>
                 Proceed to Checkout
               </Button>
             </div>
