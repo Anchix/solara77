@@ -9,7 +9,7 @@ serve(async (req) => {
   }
 
   try {
-    const { phone, name, orderId, trackingId } = await req.json();
+    const { phone, name, orderId, trackingId, customMessage } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
@@ -17,12 +17,13 @@ serve(async (req) => {
     const TWILIO_API_KEY = Deno.env.get("TWILIO_API_KEY");
     if (!TWILIO_API_KEY) throw new Error("TWILIO_API_KEY is not configured");
 
-    // Get Twilio phone number from env or use a default
     const fromNumber = Deno.env.get("TWILIO_PHONE_NUMBER") || "+15017122661";
 
-    const message = trackingId
-      ? `Hi ${name}, your Solura order #${orderId} is confirmed! Track your order: ${trackingId}. Thank you for shopping with Solura Cosmetics! 💚`
-      : `Hi ${name}, your Solura order #${orderId} is confirmed! We'll send you tracking details soon. Thank you for shopping with Solura Cosmetics! 💚`;
+    const message = customMessage
+      ? customMessage
+      : trackingId
+        ? `Hi ${name}, your Solura order #${orderId} is confirmed! Track your order: ${trackingId}. Thank you for shopping with Solura Cosmetics! 💚`
+        : `Hi ${name}, your Solura order #${orderId} is confirmed! We'll send you tracking details soon. Thank you for shopping with Solura Cosmetics! 💚`;
 
     const response = await fetch(`${GATEWAY_URL}/Messages.json`, {
       method: "POST",
