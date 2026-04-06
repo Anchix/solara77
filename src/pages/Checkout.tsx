@@ -8,51 +8,30 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 declare global {
-  interface Window {
-    Razorpay: any;
-  }
+  interface Window { Razorpay: any; }
 }
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    pincode: "",
-  });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", city: "", state: "", pincode: "" });
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   const handlePay = async () => {
     if (!form.name || !form.email || !form.phone || !form.address || !form.city || !form.state || !form.pincode) {
-      toast.error("Please fill in all fields");
-      return;
+      toast.error("Please fill in all fields"); return;
     }
-    if (items.length === 0) {
-      toast.error("Cart is empty");
-      return;
-    }
+    if (items.length === 0) { toast.error("Cart is empty"); return; }
 
     setLoading(true);
-
     try {
-      // 1. Create Razorpay order via edge function
       const { data: orderData, error: orderError } = await supabase.functions.invoke("create-razorpay-order", {
         body: { amount: totalPrice * 100, currency: "INR" },
       });
+      if (orderError || !orderData?.id) throw new Error(orderError?.message || "Failed to create order");
 
-      if (orderError || !orderData?.id) {
-        throw new Error(orderError?.message || "Failed to create order");
-      }
-
-      // 2. Open Razorpay checkout
       const options = {
         key: "rzp_test_SaCviik1qz5ZZp",
         amount: totalPrice * 100,
@@ -62,7 +41,6 @@ const Checkout = () => {
         order_id: orderData.id,
         handler: async (response: any) => {
           try {
-            // 3. Verify payment
             const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-payment", {
               body: {
                 razorpay_order_id: response.razorpay_order_id,
@@ -73,40 +51,24 @@ const Checkout = () => {
                   product_id: i.product.id,
                   name: i.product.name,
                   quantity: i.quantity,
-                  price: i.product.salePrice ?? i.product.price,
+                  price: i.product.sale_price ?? i.product.price,
                 })),
                 total: totalPrice,
               },
             });
-
             if (verifyError) throw new Error(verifyError.message);
-
-            toast.success("Payment received! Order confirmed ✅", {
-              description: `Order #${verifyData.orderId}`,
-              duration: 5000,
-            });
-
+            toast.success("Payment received! Order confirmed ✅", { description: `Order #${verifyData.orderId}`, duration: 5000 });
             clearCart();
             navigate(`/order-confirmation/${verifyData.orderId}`);
-          } catch (err: any) {
-            toast.error("Payment verification failed: " + err.message);
-          }
+          } catch (err: any) { toast.error("Payment verification failed: " + err.message); }
         },
-        prefill: {
-          name: form.name,
-          email: form.email,
-          contact: form.phone,
-        },
+        prefill: { name: form.name, email: form.email, contact: form.phone },
         theme: { color: "#2D5A3D" },
       };
-
       const rzp = new window.Razorpay(options);
       rzp.open();
-    } catch (err: any) {
-      toast.error("Payment failed: " + err.message);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err: any) { toast.error("Payment failed: " + err.message); }
+    finally { setLoading(false); }
   };
 
   if (items.length === 0) {
@@ -124,9 +86,7 @@ const Checkout = () => {
     <div className="min-h-screen py-12">
       <div className="container max-w-5xl">
         <h1 className="font-display text-3xl md:text-4xl font-semibold mb-8">Checkout</h1>
-
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-          {/* Form */}
           <div className="lg:col-span-3 space-y-6">
             <h2 className="font-display text-xl font-semibold">Shipping Details</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -141,29 +101,18 @@ const Checkout = () => {
               ].map((f) => (
                 <div key={f.name} className={f.full ? "sm:col-span-2" : ""}>
                   <Label htmlFor={f.name}>{f.label}</Label>
-                  <Input
-                    id={f.name}
-                    name={f.name}
-                    type={f.type}
-                    value={form[f.name as keyof typeof form]}
-                    onChange={onChange}
-                    className="mt-1"
-                  />
+                  <Input id={f.name} name={f.name} type={f.type} value={form[f.name as keyof typeof form]} onChange={onChange} className="mt-1" />
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Summary */}
           <div className="lg:col-span-2">
             <div className="bg-secondary rounded-lg p-6 space-y-4 sticky top-24">
               <h2 className="font-display text-xl font-semibold">Order Summary</h2>
               {items.map((item) => (
                 <div key={item.product.id} className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    {item.product.name} × {item.quantity}
-                  </span>
-                  <span>₹{((item.product.salePrice ?? item.product.price) * item.quantity).toLocaleString("en-IN")}</span>
+                  <span className="text-muted-foreground">{item.product.name} × {item.quantity}</span>
+                  <span>₹{((item.product.sale_price ?? item.product.price) * item.quantity).toLocaleString("en-IN")}</span>
                 </div>
               ))}
               <div className="border-t border-border pt-3 flex justify-between font-semibold text-lg">
