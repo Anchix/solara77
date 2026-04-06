@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
 import { CartItem, Product } from "@/data/products";
 import { toast } from "sonner";
 
@@ -14,7 +14,19 @@ interface CartContextType {
   setIsOpen: (open: boolean) => void;
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+const defaultCtx: CartContextType = {
+  items: [],
+  addToCart: () => {},
+  removeFromCart: () => {},
+  updateQuantity: () => {},
+  clearCart: () => {},
+  totalItems: 0,
+  totalPrice: 0,
+  isOpen: false,
+  setIsOpen: () => {},
+};
+
+const CartContext = createContext<CartContextType>(defaultCtx);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -68,7 +80,5 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 export const useCart = () => {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error("useCart must be used within CartProvider");
-  return ctx;
+  return useContext(CartContext);
 };
