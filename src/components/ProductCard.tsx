@@ -12,14 +12,14 @@ const ProductCard = ({ product }: { product: Product }) => {
       <Link to={`/product/${product.slug}`} className="block">
         <div className="relative bg-secondary rounded-lg overflow-hidden aspect-square flex items-center justify-center p-8 group-hover:shadow-lg transition-shadow">
           <img
-            src={product.images[0]}
+            src={product.images?.[0] || "/placeholder.svg"}
             alt={product.name}
             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />
-          {product.discount && (
+          {product.sale_price && product.sale_price < product.price && (
             <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-medium px-2.5 py-1 rounded-full">
-              {product.discount}
+              {Math.round((1 - product.sale_price / product.price) * 100)}% off
             </span>
           )}
         </div>
@@ -30,9 +30,9 @@ const ProductCard = ({ product }: { product: Product }) => {
         </Link>
         <p className="text-xs text-muted-foreground uppercase tracking-wider">{product.category}</p>
         <div className="flex items-center gap-2">
-          {product.salePrice ? (
+          {product.sale_price ? (
             <>
-              <span className="font-semibold">₹{product.salePrice}</span>
+              <span className="font-semibold">₹{product.sale_price}</span>
               <span className="text-sm text-muted-foreground line-through">₹{product.price}</span>
             </>
           ) : (
