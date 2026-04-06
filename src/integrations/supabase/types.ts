@@ -14,7 +14,179 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blog_posts: {
+        Row: {
+          author: string | null
+          content: string | null
+          created_at: string
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          published_at: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          content?: string | null
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          published_at?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          content?: string | null
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          published_at?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string
+          price: number
+          product_id: string
+          product_name: string
+          quantity: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id: string
+          price: number
+          product_id: string
+          product_name: string
+          quantity: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string
+          price?: number
+          product_id?: string
+          product_name?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          address: string
+          city: string
+          created_at: string
+          customer_name: string
+          email: string
+          id: string
+          payment_id: string | null
+          phone: string
+          pincode: string
+          razorpay_order_id: string | null
+          state: string
+          status: string
+          total: number
+          tracking_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          city: string
+          created_at?: string
+          customer_name: string
+          email: string
+          id?: string
+          payment_id?: string | null
+          phone: string
+          pincode: string
+          razorpay_order_id?: string | null
+          state: string
+          status?: string
+          total: number
+          tracking_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          city?: string
+          created_at?: string
+          customer_name?: string
+          email?: string
+          id?: string
+          payment_id?: string | null
+          phone?: string
+          pincode?: string
+          razorpay_order_id?: string | null
+          state?: string
+          status?: string
+          total?: number
+          tracking_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          images: string[] | null
+          name: string
+          price: number
+          sale_price: number | null
+          slug: string
+          specs: Json | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          name: string
+          price: number
+          sale_price?: number | null
+          slug: string
+          specs?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          name?: string
+          price?: number
+          sale_price?: number | null
+          slug?: string
+          specs?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
