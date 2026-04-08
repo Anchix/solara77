@@ -9,6 +9,11 @@ const Footer = () => (
           <p className="text-primary-foreground/70 max-w-sm leading-relaxed">
             Premium, chemical-free cosmetics crafted for your daily glow. Born from a passion for natural beauty and a startup pitch competition.
           </p>
+          <div className="mt-4 text-sm text-primary-foreground/60">
+            <p>184, South Manthai Street, Pallapatti</p>
+            <p>Karur, Tamil Nadu - 639205</p>
+            <p className="mt-1">GST: 33AFUFS3776C1ZM</p>
+          </div>
         </div>
         <div>
           <h4 className="font-medium text-sm uppercase tracking-wider mb-4">Quick Links</h4>
@@ -16,13 +21,18 @@ const Footer = () => (
             <li><Link to="/shop" className="hover:text-primary-foreground transition-colors">Shop</Link></li>
             <li><Link to="/blog" className="hover:text-primary-foreground transition-colors">Blog</Link></li>
             <li><Link to="/about" className="hover:text-primary-foreground transition-colors">About</Link></li>
+            <li><Link to="/my-orders" className="hover:text-primary-foreground transition-colors">My Orders</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="font-medium text-sm uppercase tracking-wider mb-4">Contact</h4>
           <ul className="space-y-2 text-primary-foreground/70 text-sm">
-            <li>hello@soluracosmo.com</li>
-            <li>Hyderabad, India</li>
+            <li>
+              <a href="mailto:contact@soluracosmo.com" className="hover:text-primary-foreground transition-colors">
+                contact@soluracosmo.com
+              </a>
+            </li>
+            <li>Karur, Tamil Nadu, India</li>
           </ul>
         </div>
       </div>
