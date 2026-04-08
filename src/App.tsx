@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import ChatBot from "@/components/ChatBot";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -15,6 +16,8 @@ import BlogPost from "./pages/BlogPost";
 import About from "./pages/About";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import Auth from "./pages/Auth";
+import MyOrders from "./pages/MyOrders";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
@@ -38,10 +41,13 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/my-orders" element={<MyOrders />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
+          <ChatBot />
         </BrowserRouter>
       </CartProvider>
     </TooltipProvider>

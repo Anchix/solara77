@@ -1,11 +1,21 @@
-import { Link } from "react-router-dom";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ShoppingBag, Menu, X, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navbar = () => {
   const { totalItems, setIsOpen } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user || null);
+    });
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+  }, []);
 
   const links = [
     { to: "/", label: "Home" },
@@ -23,17 +33,26 @@ const Navbar = () => {
 
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors uppercase"
-            >
+            <Link key={l.to} to={l.to} className="text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground transition-colors uppercase">
               {l.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          {user ? (
+            <button
+              onClick={() => navigate("/my-orders")}
+              className="p-2 hover:bg-secondary rounded-full transition-colors"
+              aria-label="My account"
+            >
+              <User className="h-5 w-5" />
+            </button>
+          ) : (
+            <Link to="/auth" className="hidden md:inline-flex text-sm font-medium text-muted-foreground hover:text-foreground transition-colors uppercase">
+              Login
+            </Link>
+          )}
           <button
             onClick={() => setIsOpen(true)}
             className="relative p-2 hover:bg-secondary rounded-full transition-colors"
@@ -46,11 +65,7 @@ const Navbar = () => {
               </span>
             )}
           </button>
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2"
-            aria-label="Toggle menu"
-          >
+          <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden p-2" aria-label="Toggle menu">
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
@@ -59,15 +74,20 @@ const Navbar = () => {
       {mobileOpen && (
         <nav className="md:hidden border-t border-border bg-background px-6 py-4 space-y-3">
           {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              onClick={() => setMobileOpen(false)}
-              className="block text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground uppercase"
-            >
+            <Link key={l.to} to={l.to} onClick={() => setMobileOpen(false)} className="block text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground uppercase">
               {l.label}
             </Link>
           ))}
+          {!user && (
+            <Link to="/auth" onClick={() => setMobileOpen(false)} className="block text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground uppercase">
+              Login
+            </Link>
+          )}
+          {user && (
+            <Link to="/my-orders" onClick={() => setMobileOpen(false)} className="block text-sm font-medium tracking-wide text-muted-foreground hover:text-foreground uppercase">
+              My Orders
+            </Link>
+          )}
         </nav>
       )}
     </header>
