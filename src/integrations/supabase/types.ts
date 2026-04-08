@@ -108,6 +108,7 @@ export type Database = {
           total: number
           tracking_id: string | null
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           address: string
@@ -125,6 +126,7 @@ export type Database = {
           total: number
           tracking_id?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           address?: string
@@ -142,6 +144,7 @@ export type Database = {
           total?: number
           tracking_id?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -184,6 +187,66 @@ export type Database = {
           slug?: string
           specs?: Json | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          created_at: string
+          customer_name: string
+          id: string
+          images: string[] | null
+          product_id: string
+          rating: number
+          review_text: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          id?: string
+          images?: string[] | null
+          product_id: string
+          rating?: number
+          review_text?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          id?: string
+          images?: string[] | null
+          product_id?: string
+          rating?: number
+          review_text?: string | null
         }
         Relationships: []
       }
