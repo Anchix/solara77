@@ -19,6 +19,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import Auth from "./pages/Auth";
 import MyOrders from "./pages/MyOrders";
 import Admin from "./pages/Admin";
+import FounderStory from "./pages/FounderStory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-lite";
+import { Link } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart, Lightbulb, Users, Target, Award, Sparkles } from "lucide-react";
