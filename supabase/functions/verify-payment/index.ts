@@ -18,7 +18,7 @@ serve(async (req) => {
     } = await req.json();
 
     // Verify signature using HMAC SHA256
-    const secret = process.env.RAZORPAY_KEY_SECRET;
+    const RAZORPAY_KEY_SECRET = process.env.2JcgOm8R3tBJYd7IyQvtqBFf;
     if (!RAZORPAY_KEY_SECRET) throw new Error("Razorpay secret not configured");
 
     const encoder = new TextEncoder();
