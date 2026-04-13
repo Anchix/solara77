@@ -104,7 +104,7 @@ const Checkout = () => {
       if (orderError || !orderData?.id) throw new Error(orderError?.message || "Failed to create order");
 
       const options = {
-        key: "rzp_test_SaCviik1qz5ZZp",
+        key: "rzp_live_ScznhZSQVoONHS",
         amount: finalTotal * 100,
         currency: "INR",
         name: "Solura Cosmetics",
