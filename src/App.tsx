@@ -33,21 +33,23 @@ const App = () => (
         <BrowserRouter>
           <Navbar />
           <CartDrawer />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/product/:slug" element={<ProductDetail />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/my-orders" element={<MyOrders />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/founder-story" element={<FounderStory />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <main>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/product/:slug" element={<ProductDetail />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/my-orders" element={<MyOrders />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/founder-story" element={<FounderStory />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
           <Footer />
           <ChatBot />
         </BrowserRouter>
