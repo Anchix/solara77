@@ -3,13 +3,11 @@ import { useProducts } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Leaf, Sun, Shield, Award, CheckCircle, Star, Truck, CreditCard } from "lucide-react";
-import { useEffect, useState, useCallback } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import heroVisual from "@/assets/hero-visual.jpg";
+import HeroSlider from "@/components/HeroSlider";
 import naturalBeauty from "@/assets/natural-beauty.jpg";
 import certifications from "@/assets/certifications.png";
 
-const heroWords = ["Radiance", "Confidence", "Glow"];
 
 const testimonials = [
   { name: "Lakshmi", text: "The Bright-X Face Wash transformed my skin in just 2 weeks. My complexion has never looked better!", rating: 5 },
@@ -27,47 +25,12 @@ const certs = [
 ];
 
 const Index = () => {
-  const [wordIndex, setWordIndex] = useState(0);
   const { data: products = [], isLoading } = useProducts();
-
-  useEffect(() => {
-    const interval = setInterval(() => setWordIndex((i) => (i + 1) % heroWords.length), 3000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden py-20 md:py-32">
-        <div className="container grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-          <div className="text-center md:text-left">
-            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6 animate-fade-in">Chemical-Free · Natural · Luxurious</p>
-            <h1 className="font-display text-5xl md:text-7xl font-light leading-tight">
-              Discover Your<br />
-              <span className="font-semibold text-primary italic transition-all duration-500">{heroWords[wordIndex]}</span>
-            </h1>
-            <p className="mt-6 text-muted-foreground max-w-lg leading-relaxed">
-              Premium skincare and haircare products crafted with natural ingredients for your everyday glow.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button asChild size="lg" className="gap-2"><Link to="/shop">Shop Now <ArrowRight className="h-4 w-4" /></Link></Button>
-              <Button asChild variant="outline" size="lg"><Link to="/about">Our Story</Link></Button>
-            </div>
-          </div>
-          <div className="relative">
-            <img src={heroVisual} alt="Solura natural products" className="rounded-lg shadow-2xl w-full" width={1200} height={800} />
-            <div className="absolute -bottom-4 -left-4 bg-card border border-border rounded-lg p-4 shadow-lg hidden md:block">
-              <div className="flex items-center gap-2">
-                <div className="flex">
-                  {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-accent text-accent" />)}
-                </div>
-                <span className="text-sm font-medium">4.9/5</span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">Trusted by 5000+ customers</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Slider */}
+      <HeroSlider />
 
       {/* Trust badges */}
       <section className="py-6 border-y border-border">
