@@ -20,6 +20,7 @@ const Navbar = () => {
   const links = [
     { to: "/", label: "Home" },
     { to: "/shop", label: "Shop" },
+    { to: "/founder-story", label: "Our Story" },
     { to: "/blog", label: "Blog" },
     { to: "/about", label: "About" },
   ];

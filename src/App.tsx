@@ -19,6 +19,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import Auth from "./pages/Auth";
 import MyOrders from "./pages/MyOrders";
 import Admin from "./pages/Admin";
+import FounderStory from "./pages/FounderStory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/my-orders" element={<MyOrders />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/founder-story" element={<FounderStory />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />

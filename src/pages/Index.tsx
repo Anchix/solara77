@@ -17,7 +17,6 @@ const testimonials = [
 ];
 
 const certs = [
-  { icon: Shield, name: "FDA Approved" },
   { icon: Award, name: "GMP Certified" },
   { icon: CheckCircle, name: "ISO Certified" },
   { icon: Leaf, name: "Cruelty Free" },
@@ -33,26 +32,26 @@ const Index = () => {
       <HeroSlider />
 
       {/* Trust badges */}
-      <section className="py-6 border-y border-border">
-        <div className="container flex flex-wrap justify-center gap-8 md:gap-16 items-center">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground"><Truck className="h-4 w-4 text-primary" /> Free Shipping on Prepaid</div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground"><CreditCard className="h-4 w-4 text-primary" /> Secure Payments</div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground"><Shield className="h-4 w-4 text-primary" /> 100% Genuine Products</div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground"><Leaf className="h-4 w-4 text-primary" /> Chemical-Free</div>
+      <section className="py-4 md:py-6 border-y border-border">
+        <div className="container flex flex-wrap justify-center gap-4 md:gap-16 items-center">
+          <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Truck className="h-4 w-4 text-primary" /> Free Shipping on Prepaid</div>
+          <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><CreditCard className="h-4 w-4 text-primary" /> Secure Payments</div>
+          <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Shield className="h-4 w-4 text-primary" /> 100% Genuine Products</div>
+          <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Leaf className="h-4 w-4 text-primary" /> Chemical-Free</div>
         </div>
       </section>
 
       {/* Bestsellers Carousel */}
-      <section className="py-20">
+      <section className="py-12 md:py-20">
         <div className="container">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 md:mb-12">
             <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Our Collection</p>
-            <h2 className="font-display text-4xl md:text-5xl font-light">Bestsellers</h2>
+            <h2 className="font-display text-3xl md:text-5xl font-light">Bestsellers</h2>
           </div>
           {isLoading ? (
             <p className="text-center text-muted-foreground">Loading products...</p>
           ) : (
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-5xl mx-auto px-4 md:px-0">
               <Carousel opts={{ align: "start", loop: true }} className="w-full">
                 <CarouselContent className="-ml-4">
                   {products.map((p) => (
@@ -61,44 +60,44 @@ const Index = () => {
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="-left-4 md:-left-12" />
-                <CarouselNext className="-right-4 md:-right-12" />
+                <CarouselPrevious className="-left-2 md:-left-12" />
+                <CarouselNext className="-right-2 md:-right-12" />
               </Carousel>
             </div>
           )}
-          <div className="text-center mt-12">
+          <div className="text-center mt-8 md:mt-12">
             <Button asChild variant="outline" size="lg"><Link to="/shop">View All Products</Link></Button>
           </div>
         </div>
       </section>
 
       {/* Certifications */}
-      <section className="py-16 bg-secondary">
-        <div className="container text-center">
+      <section className="py-12 md:py-16 bg-secondary">
+        <div className="container text-center px-4">
           <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-6">Certified Quality</p>
-          <h2 className="font-display text-3xl md:text-4xl font-light mb-10">Our Certifications</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
+          <h2 className="font-display text-2xl md:text-4xl font-light mb-10">Our Certifications</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6 max-w-3xl mx-auto">
             {certs.map((c) => (
               <div key={c.name} className="flex flex-col items-center gap-3 p-4 bg-card border border-border rounded-lg">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <c.icon className="h-6 w-6 text-primary" />
                 </div>
-                <p className="text-sm font-medium">{c.name}</p>
+                <p className="text-xs md:text-sm font-medium">{c.name}</p>
               </div>
             ))}
           </div>
-          <img src={certifications} alt="FDA, GMP, ISO, Cruelty Free, Non GMO certifications" className="max-w-2xl mx-auto mt-8" loading="lazy" width={1920} height={512} />
+          <img src={certifications} alt="GMP, ISO, Cruelty Free, Non GMO certifications" className="max-w-full md:max-w-2xl mx-auto mt-8" loading="lazy" width={1920} height={512} />
         </div>
       </section>
 
       {/* Natural beauty section */}
-      <section className="py-20">
-        <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+      <section className="py-12 md:py-20">
+        <div className="container px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center max-w-5xl mx-auto">
             <img src={naturalBeauty} alt="Natural skincare" className="rounded-lg shadow-lg w-full" loading="lazy" width={1200} height={800} />
             <div className="space-y-6">
               <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Why Solura?</p>
-              <h2 className="font-display text-3xl md:text-4xl font-light">Pure Ingredients,<br />Real Results</h2>
+              <h2 className="font-display text-2xl md:text-4xl font-light">Pure Ingredients,<br />Real Results</h2>
               <div className="space-y-4">
                 {[
                   { icon: Leaf, title: "Chemical-Free", desc: "100% natural ingredients, no harsh chemicals or parabens" },
@@ -123,11 +122,11 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-secondary">
-        <div className="container">
-          <div className="text-center mb-12">
+      <section className="py-12 md:py-20 bg-secondary">
+        <div className="container px-4">
+          <div className="text-center mb-8 md:mb-12">
             <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">What Our Customers Say</p>
-            <h2 className="font-display text-4xl md:text-5xl font-light">Testimonials</h2>
+            <h2 className="font-display text-3xl md:text-5xl font-light">Testimonials</h2>
           </div>
           <div className="max-w-5xl mx-auto">
             <Carousel opts={{ align: "start", loop: true }}>
@@ -144,21 +143,21 @@ const Index = () => {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="-left-4" />
-              <CarouselNext className="-right-4" />
+              <CarouselPrevious className="-left-2 md:-left-4" />
+              <CarouselNext className="-right-2 md:-right-4" />
             </Carousel>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-20">
-        <div className="container text-center max-w-2xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl font-light mb-4">Ready to Glow?</h2>
-          <p className="text-muted-foreground mb-8">Join thousands of happy customers who've switched to natural, chemical-free skincare.</p>
+      <section className="py-12 md:py-20">
+        <div className="container text-center max-w-2xl mx-auto px-4">
+          <h2 className="font-display text-2xl md:text-4xl font-light mb-4">Ready to Glow?</h2>
+          <p className="text-muted-foreground mb-8 text-sm md:text-base">Join thousands of happy customers who've switched to natural, chemical-free skincare.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="gap-2"><Link to="/shop">Shop Now <ArrowRight className="h-4 w-4" /></Link></Button>
-            <Button asChild variant="outline" size="lg"><Link to="/auth">Create Account</Link></Button>
+            <Button asChild variant="outline" size="lg"><Link to="/founder-story">Our Story</Link></Button>
           </div>
         </div>
       </section>
