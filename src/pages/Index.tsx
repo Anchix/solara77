@@ -3,12 +3,10 @@ import { useProducts } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Leaf, Sun, Shield, Award, CheckCircle, Star, Truck, CreditCard } from "lucide-react";
-import { useEffect, useState, useCallback } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import heroVisual from "@/assets/hero-visual.jpg";
+import HeroSlider from "@/components/HeroSlider";
 import naturalBeauty from "@/assets/natural-beauty.jpg";
 import certifications from "@/assets/certifications.png";
-
 const heroWords = ["Radiance", "Confidence", "Glow"];
 
 const testimonials = [
