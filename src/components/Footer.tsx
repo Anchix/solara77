@@ -49,7 +49,7 @@ const Footer = () => (
       </div>
       <div className="border-t border-primary-foreground/20 mt-12 pt-6 text-center text-primary-foreground/50 text-xs space-y-1">
         <p>© {new Date().getFullYear()} Solura Cosmetics. All rights reserved.</p>
-        <p>Built & Marketed By <a href="https://wa.me/918220110838" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-primary-foreground transition-colors font-medium">BrandHype Solutions</a></p>
+        <p>Built & Marketed By <a href="https://wa.me/917857905819" target="_blank" rel="noopener noreferrer" className="hover:text-primary-foreground transition-colors font-medium text-base" style={{ color: '#7A6CF0' }}>BrandHype <span style={{ fontFamily: 'cursive' }}>Solutions</span></a></p>
       </div>
     </div>
   </footer>
