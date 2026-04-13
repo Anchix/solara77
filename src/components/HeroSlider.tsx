@@ -84,7 +84,7 @@ const HeroSlider = () => {
                         {slide.cta.label} <ArrowRight className="h-4 w-4" />
                       </Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-sm md:text-base h-9 md:h-11">
+                    <Button asChild variant="outline" size="lg" className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20 text-sm md:text-base h-9 md:h-11">
                       <Link to={slide.ctaSecondary.to}>{slide.ctaSecondary.label}</Link>
                     </Button>
                   </div>
