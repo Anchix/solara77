@@ -7,7 +7,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import HeroSlider from "@/components/HeroSlider";
 import naturalBeauty from "@/assets/natural-beauty.jpg";
 import certifications from "@/assets/certifications.png";
-const heroWords = ["Radiance", "Confidence", "Glow"];
+
 
 const testimonials = [
   { name: "Lakshmi", text: "The Bright-X Face Wash transformed my skin in just 2 weeks. My complexion has never looked better!", rating: 5 },
