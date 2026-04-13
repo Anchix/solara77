@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Package, RotateCcw, ShoppingBag } from "lucide-react";
+import { Package, RotateCcw, Search } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 interface Order {
@@ -14,6 +15,8 @@ interface Order {
   created_at: string;
   customer_name: string;
   tracking_id: string | null;
+  phone: string;
+  email: string;
 }
 
 interface OrderItem {
@@ -35,47 +38,48 @@ const statusColors: Record<string, string> = {
 const MyOrders = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const [user, setUser] = useState<any>(null);
+  const [phone, setPhone] = useState("");
   const [orders, setOrders] = useState<Order[]>([]);
   const [orderItems, setOrderItems] = useState<Record<string, OrderItem[]>>({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { navigate("/auth"); return; }
-      setUser(user);
+  const handleSearch = async () => {
+    const trimmed = phone.trim();
+    if (!trimmed || trimmed.length < 10) {
+      toast.error("Please enter a valid 10-digit phone number");
+      return;
+    }
+    setLoading(true);
+    setSearched(true);
 
-      // Fetch orders by email since user_id may not always be set
-      const { data: ordersData } = await supabase
-        .from("orders")
+    const { data: ordersData } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("phone", trimmed)
+      .order("created_at", { ascending: false });
+
+    if (ordersData && ordersData.length > 0) {
+      setOrders(ordersData);
+      const ids = ordersData.map((o) => o.id);
+      const { data: items } = await supabase
+        .from("order_items")
         .select("*")
-        .eq("email", user.email || "")
-        .order("created_at", { ascending: false });
-
-      if (ordersData) {
-        setOrders(ordersData);
-        // Fetch items for all orders
-        const ids = ordersData.map((o) => o.id);
-        if (ids.length > 0) {
-          const { data: items } = await supabase
-            .from("order_items")
-            .select("*")
-            .in("order_id", ids);
-          if (items) {
-            const grouped: Record<string, OrderItem[]> = {};
-            items.forEach((item) => {
-              if (!grouped[item.order_id]) grouped[item.order_id] = [];
-              grouped[item.order_id].push(item);
-            });
-            setOrderItems(grouped);
-          }
-        }
+        .in("order_id", ids);
+      if (items) {
+        const grouped: Record<string, OrderItem[]> = {};
+        items.forEach((item) => {
+          if (!grouped[item.order_id]) grouped[item.order_id] = [];
+          grouped[item.order_id].push(item);
+        });
+        setOrderItems(grouped);
       }
-      setLoading(false);
-    };
-    checkAuth();
-  }, [navigate]);
+    } else {
+      setOrders([]);
+      setOrderItems({});
+    }
+    setLoading(false);
+  };
 
   const handleCancel = async (orderId: string) => {
     const { error } = await supabase.functions.invoke("update-order-status", {
@@ -89,7 +93,6 @@ const MyOrders = () => {
   const handleReorder = async (orderId: string) => {
     const items = orderItems[orderId];
     if (!items) return;
-    // Fetch products and add to cart
     for (const item of items) {
       const { data: product } = await supabase
         .from("products")
@@ -105,24 +108,39 @@ const MyOrders = () => {
     navigate("/checkout");
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
-
   return (
     <div className="min-h-screen py-12">
       <div className="container max-w-4xl">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="font-display text-3xl md:text-4xl font-semibold">My Orders</h1>
-          <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}>Sign Out</Button>
+        <h1 className="font-display text-3xl md:text-4xl font-semibold mb-8">Track My Orders</h1>
+
+        {/* Search by phone */}
+        <div className="bg-card border border-border rounded-lg p-6 mb-8">
+          <p className="text-sm text-muted-foreground mb-3">Enter the phone number you used while placing the order</p>
+          <div className="flex gap-3">
+            <Input
+              type="tel"
+              placeholder="Enter your phone number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              className="max-w-xs"
+            />
+            <Button onClick={handleSearch} disabled={loading} className="gap-2">
+              <Search className="h-4 w-4" /> {loading ? "Searching..." : "Track Orders"}
+            </Button>
+          </div>
         </div>
 
-        {orders.length === 0 ? (
+        {searched && orders.length === 0 && !loading && (
           <div className="text-center py-20 space-y-4">
             <Package className="h-16 w-16 mx-auto text-muted-foreground/30" />
-            <h2 className="font-display text-2xl">No orders yet</h2>
-            <p className="text-muted-foreground">Start shopping to see your orders here</p>
+            <h2 className="font-display text-2xl">No orders found</h2>
+            <p className="text-muted-foreground">No orders found for this phone number</p>
             <Button asChild><Link to="/shop">Shop Now</Link></Button>
           </div>
-        ) : (
+        )}
+
+        {orders.length > 0 && (
           <div className="space-y-4">
             {orders.map((order) => (
               <div key={order.id} className="bg-card border border-border rounded-lg p-5">
@@ -130,6 +148,7 @@ const MyOrders = () => {
                   <div>
                     <p className="text-xs text-muted-foreground">Order #{order.id.slice(0, 8)}</p>
                     <p className="text-xs text-muted-foreground">{new Date(order.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</p>
+                    <p className="text-xs text-muted-foreground">{order.customer_name}</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <Badge className={statusColors[order.status] || "bg-muted"}>{order.status}</Badge>
