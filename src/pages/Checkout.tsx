@@ -12,7 +12,7 @@ declare global {
   interface Window { Razorpay: any; }
 }
 
-const COD_FEE = 40;
+const COD_FEE = 0;
 const SHIPPING_FEE = 50;
 
 const Checkout = () => {
