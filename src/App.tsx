@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/context/CartContext";
+import { Analytics } from "@vercel/analytics/react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
@@ -53,6 +54,7 @@ const App = () => (
           <Footer />
           <ChatBot />
         </BrowserRouter>
+        <Analytics />
       </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>
