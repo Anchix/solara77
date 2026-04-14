@@ -53,6 +53,48 @@ export type Database = {
         }
         Relationships: []
       }
+      coupons: {
+        Row: {
+          code: string
+          created_at: string
+          discount_type: string
+          discount_value: number
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          max_uses: number | null
+          min_order_amount: number | null
+          updated_at: string
+          used_count: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number | null
+          min_order_amount?: number | null
+          updated_at?: string
+          used_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number | null
+          min_order_amount?: number | null
+          updated_at?: string
+          used_count?: number
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
@@ -150,43 +192,82 @@ export type Database = {
       }
       products: {
         Row: {
+          brand: string | null
           category: string | null
+          country_of_origin: string | null
           created_at: string
           description: string | null
+          expected_result: string | null
+          how_to_use: string | null
           id: string
           images: string[] | null
+          key_benefits: string | null
           name: string
+          net_quantity: string | null
+          package_type: string | null
           price: number
+          product_type: string | null
+          safety_info: string | null
           sale_price: number | null
+          skin_type: string | null
           slug: string
           specs: Json | null
+          storage_info: string | null
+          texture: string | null
           updated_at: string
+          usage_time: string | null
         }
         Insert: {
+          brand?: string | null
           category?: string | null
+          country_of_origin?: string | null
           created_at?: string
           description?: string | null
+          expected_result?: string | null
+          how_to_use?: string | null
           id?: string
           images?: string[] | null
+          key_benefits?: string | null
           name: string
+          net_quantity?: string | null
+          package_type?: string | null
           price: number
+          product_type?: string | null
+          safety_info?: string | null
           sale_price?: number | null
+          skin_type?: string | null
           slug: string
           specs?: Json | null
+          storage_info?: string | null
+          texture?: string | null
           updated_at?: string
+          usage_time?: string | null
         }
         Update: {
+          brand?: string | null
           category?: string | null
+          country_of_origin?: string | null
           created_at?: string
           description?: string | null
+          expected_result?: string | null
+          how_to_use?: string | null
           id?: string
           images?: string[] | null
+          key_benefits?: string | null
           name?: string
+          net_quantity?: string | null
+          package_type?: string | null
           price?: number
+          product_type?: string | null
+          safety_info?: string | null
           sale_price?: number | null
+          skin_type?: string | null
           slug?: string
           specs?: Json | null
+          storage_info?: string | null
+          texture?: string | null
           updated_at?: string
+          usage_time?: string | null
         }
         Relationships: []
       }
