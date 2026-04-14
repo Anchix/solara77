@@ -3,12 +3,11 @@ import { useProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ShoppingBag, ArrowLeft, Shield, Award, CheckCircle, Leaf, Sun } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun } from "lucide-react";
 import { useState } from "react";
 import ProductReviews from "@/components/ProductReviews";
 
 const certs = [
-  { icon: Shield, name: "FDA Approved" },
   { icon: Award, name: "GMP" },
   { icon: CheckCircle, name: "ISO" },
   { icon: Leaf, name: "Cruelty Free" },
@@ -36,6 +35,23 @@ const ProductDetail = () => {
   const discount = product.sale_price ? `${Math.round((1 - product.sale_price / product.price) * 100)}% off` : null;
   const images = product.images && product.images.length > 0 ? product.images : ["/placeholder.svg"];
 
+  const detailRows = [
+    { label: "Brand", value: product.brand },
+    { label: "Product Type", value: product.product_type },
+    { label: "MRP", value: `₹${product.price}` },
+    { label: "Net Quantity", value: product.net_quantity },
+    { label: "Skin Type", value: product.skin_type },
+    { label: "Key Benefits", value: product.key_benefits },
+    { label: "Texture", value: product.texture },
+    { label: "Usage Time", value: product.usage_time },
+    { label: "How to Use", value: product.how_to_use },
+    { label: "Expected Result", value: product.expected_result },
+    { label: "Storage", value: product.storage_info },
+    { label: "Safety Information", value: product.safety_info },
+    { label: "Package Type", value: product.package_type },
+    { label: "Country of Origin", value: product.country_of_origin },
+  ].filter(r => r.value);
+
   return (
     <div className="min-h-screen py-12">
       <div className="container max-w-5xl">
@@ -45,8 +61,8 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Image Gallery */}
           <div className="space-y-3">
-            <div className="bg-secondary rounded-lg flex items-center justify-center p-8 aspect-square">
-              <img src={images[selectedImage]} alt={product.name} className="w-full h-full object-contain" />
+            <div className="bg-secondary rounded-lg flex items-center justify-center aspect-square overflow-hidden">
+              <img src={images[selectedImage]} alt={product.name} className="w-full h-full object-contain p-4 md:p-8" />
             </div>
             {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
@@ -54,7 +70,7 @@ const ProductDetail = () => {
                   <button
                     key={i}
                     onClick={() => setSelectedImage(i)}
-                    className={`shrink-0 w-16 h-16 rounded border-2 overflow-hidden ${i === selectedImage ? "border-primary" : "border-border"}`}
+                    className={`shrink-0 w-14 h-14 md:w-16 md:h-16 rounded border-2 overflow-hidden ${i === selectedImage ? "border-primary" : "border-border"}`}
                   >
                     <img src={img} alt={`${product.name} ${i + 1}`} className="w-full h-full object-contain" />
                   </button>
@@ -102,11 +118,26 @@ const ProductDetail = () => {
             </div>
 
             <div className="border-t border-border pt-6">
-              <Tabs defaultValue="description">
+              <Tabs defaultValue="details">
                 <TabsList>
+                  <TabsTrigger value="details">Product Details</TabsTrigger>
                   <TabsTrigger value="description">Description</TabsTrigger>
                   <TabsTrigger value="specs">Specifications</TabsTrigger>
                 </TabsList>
+                <TabsContent value="details" className="mt-4">
+                  {detailRows.length > 0 ? (
+                    <dl className="space-y-3">
+                      {detailRows.map(r => (
+                        <div key={r.label} className="flex text-sm">
+                          <dt className="w-40 shrink-0 text-muted-foreground">{r.label}</dt>
+                          <dd className="font-medium">{r.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No details available.</p>
+                  )}
+                </TabsContent>
                 <TabsContent value="description" className="mt-4 text-sm text-muted-foreground leading-relaxed">
                   {product.description}
                 </TabsContent>

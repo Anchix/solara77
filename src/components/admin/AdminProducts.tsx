@@ -12,6 +12,9 @@ import type { Product } from "@/data/products";
 const emptyProduct = {
   name: "", slug: "", description: "", price: "", sale_price: "", category: "", specs: "",
   image1: "", image2: "", image3: "", image4: "", image5: "",
+  brand: "", product_type: "", net_quantity: "", skin_type: "", key_benefits: "",
+  texture: "", usage_time: "", how_to_use: "", expected_result: "",
+  storage_info: "", safety_info: "", package_type: "", country_of_origin: "India",
 };
 
 const AdminProducts = () => {
@@ -32,6 +35,11 @@ const AdminProducts = () => {
     category: p.category || "", specs: p.specs ? JSON.stringify(p.specs, null, 2) : "",
     image1: p.images?.[0] || "", image2: p.images?.[1] || "", image3: p.images?.[2] || "",
     image4: p.images?.[3] || "", image5: p.images?.[4] || "",
+    brand: p.brand || "", product_type: p.product_type || "", net_quantity: p.net_quantity || "",
+    skin_type: p.skin_type || "", key_benefits: p.key_benefits || "", texture: p.texture || "",
+    usage_time: p.usage_time || "", how_to_use: p.how_to_use || "", expected_result: p.expected_result || "",
+    storage_info: p.storage_info || "", safety_info: p.safety_info || "",
+    package_type: p.package_type || "", country_of_origin: p.country_of_origin || "India",
   });
 
   const handleSave = async () => {
@@ -41,10 +49,17 @@ const AdminProducts = () => {
       try { parsedSpecs = JSON.parse(editing.specs); } catch { toast.error("Specs must be valid JSON"); return; }
     }
     const images = [editing.image1, editing.image2, editing.image3, editing.image4, editing.image5].filter(Boolean);
-    const payload = {
+    const payload: any = {
       name: editing.name, slug: editing.slug, description: editing.description || null,
       price: Number(editing.price), sale_price: editing.sale_price ? Number(editing.sale_price) : null,
       category: editing.category || null, images, specs: parsedSpecs,
+      brand: editing.brand || null, product_type: editing.product_type || null,
+      net_quantity: editing.net_quantity || null, skin_type: editing.skin_type || null,
+      key_benefits: editing.key_benefits || null, texture: editing.texture || null,
+      usage_time: editing.usage_time || null, how_to_use: editing.how_to_use || null,
+      expected_result: editing.expected_result || null, storage_info: editing.storage_info || null,
+      safety_info: editing.safety_info || null, package_type: editing.package_type || null,
+      country_of_origin: editing.country_of_origin || null,
     };
 
     if (editing.id) {
@@ -65,6 +80,13 @@ const AdminProducts = () => {
     toast.success("Product deleted"); fetchProducts();
   };
 
+  const textField = (label: string, key: string, placeholder?: string) => (
+    <div key={key}>
+      <Label>{label}</Label>
+      <Input value={editing?.[key] || ""} onChange={(e) => setEditing({ ...editing, [key]: e.target.value })} className="mt-1" placeholder={placeholder} />
+    </div>
+  );
+
   return (
     <div className="bg-card border border-border">
       <div className="px-5 py-4 border-b border-border flex justify-between items-center">
@@ -79,14 +101,32 @@ const AdminProducts = () => {
             <DialogHeader><DialogTitle className="font-display text-xl">{editing?.id ? "Edit Product" : "New Product"}</DialogTitle></DialogHeader>
             {editing && (
               <div className="space-y-4 mt-4">
-                <div><Label>Name</Label><Input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="mt-1" /></div>
-                <div><Label>Slug</Label><Input value={editing.slug} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} className="mt-1" /></div>
+                {textField("Name", "name")}
+                {textField("Slug", "slug")}
                 <div><Label>Description</Label><Textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className="mt-1" rows={3} /></div>
                 <div className="grid grid-cols-2 gap-4">
                   <div><Label>Price (₹)</Label><Input type="number" value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} className="mt-1" /></div>
                   <div><Label>Sale Price (₹)</Label><Input type="number" value={editing.sale_price} onChange={(e) => setEditing({ ...editing, sale_price: e.target.value })} className="mt-1" /></div>
                 </div>
-                <div><Label>Category</Label><Input value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })} className="mt-1" /></div>
+                {textField("Category", "category")}
+
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-2">Product Details</p>
+                <div className="grid grid-cols-2 gap-4">
+                  {textField("Brand", "brand", "e.g. Solura")}
+                  {textField("Product Type", "product_type", "e.g. Cream")}
+                  {textField("Net Quantity", "net_quantity", "e.g. 50g")}
+                  {textField("Skin Type", "skin_type", "e.g. All Skin Types")}
+                  {textField("Texture", "texture", "e.g. Lightweight")}
+                  {textField("Usage Time", "usage_time", "e.g. Day & Night")}
+                  {textField("Package Type", "package_type", "e.g. Jar")}
+                  {textField("Country of Origin", "country_of_origin", "India")}
+                </div>
+                {textField("Key Benefits", "key_benefits", "e.g. Brightening, Moisturizing")}
+                <div><Label>How to Use</Label><Textarea value={editing.how_to_use || ""} onChange={(e) => setEditing({ ...editing, how_to_use: e.target.value })} className="mt-1" rows={2} /></div>
+                <div><Label>Expected Result</Label><Textarea value={editing.expected_result || ""} onChange={(e) => setEditing({ ...editing, expected_result: e.target.value })} className="mt-1" rows={2} /></div>
+                {textField("Storage", "storage_info", "e.g. Cool & dry place")}
+                <div><Label>Safety Information</Label><Textarea value={editing.safety_info || ""} onChange={(e) => setEditing({ ...editing, safety_info: e.target.value })} className="mt-1" rows={2} /></div>
+
                 <div className="space-y-2">
                   <Label>Product Images (up to 5)</Label>
                   {[1, 2, 3, 4, 5].map((n) => (

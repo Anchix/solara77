@@ -11,6 +11,19 @@ export interface Product {
   images: string[] | null;
   category: string | null;
   specs: Record<string, string> | null;
+  brand: string | null;
+  product_type: string | null;
+  net_quantity: string | null;
+  skin_type: string | null;
+  key_benefits: string | null;
+  texture: string | null;
+  usage_time: string | null;
+  how_to_use: string | null;
+  expected_result: string | null;
+  storage_info: string | null;
+  safety_info: string | null;
+  package_type: string | null;
+  country_of_origin: string | null;
 }
 
 export interface CartItem {
@@ -29,16 +42,18 @@ export interface BlogPost {
   author: string | null;
 }
 
+const mapProduct = (p: any): Product => ({
+  ...p,
+  specs: p.specs as Record<string, string> | null,
+});
+
 export const useProducts = () =>
   useQuery({
     queryKey: ["products"],
     queryFn: async (): Promise<Product[]> => {
       const { data, error } = await supabase.from("products").select("*");
       if (error) throw error;
-      return (data || []).map((p) => ({
-        ...p,
-        specs: p.specs as Record<string, string> | null,
-      }));
+      return (data || []).map(mapProduct);
     },
   });
 
@@ -52,7 +67,7 @@ export const useProductBySlug = (slug: string) =>
         .eq("slug", slug)
         .maybeSingle();
       if (error) throw error;
-      return data ? { ...data, specs: data.specs as Record<string, string> | null } : null;
+      return data ? mapProduct(data) : null;
     },
   });
 
