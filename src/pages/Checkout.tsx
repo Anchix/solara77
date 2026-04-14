@@ -290,7 +290,7 @@ const Checkout = () => {
                 )}
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span className="text-primary font-medium">FREE</span>
+                  <span>₹{SHIPPING_FEE}</span>
                 </div>
               </div>
               <div className="border-t border-border pt-3 flex justify-between font-semibold text-lg">
