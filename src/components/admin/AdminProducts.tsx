@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,17 +18,33 @@ const emptyProduct = {
   storage_info: "", safety_info: "", package_type: "", country_of_origin: "India",
 };
 
+const callAdminProducts = async (body: any) => {
+  const res = await supabase.functions.invoke("admin-products", { body });
+  if (res.error) throw new Error(res.error.message);
+  return res.data;
+};
+
 const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [editing, setEditing] = useState<any>(null);
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const fetchProducts = async () => {
-    const { data } = await supabase.from("products").select("*").order("created_at", { ascending: false });
-    if (data) setProducts(data.map((p) => ({ ...p, specs: p.specs as Record<string, string> | null })));
+    try {
+      const data = await callAdminProducts({ action: "list" });
+      if (data) setProducts(data.map((p: any) => ({ ...p, specs: p.specs as Record<string, string> | null })));
+    } catch (e: any) {
+      toast.error("Failed to load products: " + e.message);
+    }
   };
 
   useEffect(() => { fetchProducts(); }, []);
+
+  const invalidateCache = () => {
+    queryClient.invalidateQueries({ queryKey: ["products"] });
+    queryClient.invalidateQueries({ queryKey: ["product"] });
+  };
 
   const toForm = (p: Product) => ({
     id: p.id, name: p.name, slug: p.slug, description: p.description || "",
@@ -62,22 +79,27 @@ const AdminProducts = () => {
       country_of_origin: editing.country_of_origin || null,
     };
 
-    if (editing.id) {
-      const { error } = await supabase.from("products").update(payload).eq("id", editing.id);
-      if (error) { toast.error("Failed: " + error.message); return; }
-      toast.success("Product updated");
-    } else {
-      const { error } = await supabase.from("products").insert(payload);
-      if (error) { toast.error("Failed: " + error.message); return; }
-      toast.success("Product created");
+    try {
+      if (editing.id) {
+        await callAdminProducts({ action: "update", id: editing.id, product: payload });
+        toast.success("Product updated");
+      } else {
+        await callAdminProducts({ action: "create", product: payload });
+        toast.success("Product created");
+      }
+      setOpen(false); setEditing(null); fetchProducts(); invalidateCache();
+    } catch (e: any) {
+      toast.error("Failed: " + e.message);
     }
-    setOpen(false); setEditing(null); fetchProducts();
   };
 
   const handleDelete = async (id: string) => {
-    const { error } = await supabase.from("products").delete().eq("id", id);
-    if (error) { toast.error("Failed: " + error.message); return; }
-    toast.success("Product deleted"); fetchProducts();
+    try {
+      await callAdminProducts({ action: "delete", id });
+      toast.success("Product deleted"); fetchProducts(); invalidateCache();
+    } catch (e: any) {
+      toast.error("Failed: " + e.message);
+    }
   };
 
   const textField = (label: string, key: string, placeholder?: string) => (
