@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Heart, Lightbulb, Users, Target, Award, Sparkles } from "lucide-react";
+import { ArrowRight, Heart, Lightbulb, Target, Award, Sparkles } from "lucide-react";
+import foundersImage from "@/assets/founders.png";
 
 const milestones = [
   { year: "2024", title: "The Spark", desc: "Solura's concept wins at a state-level startup pitch competition, proving the idea has real potential." },
@@ -79,29 +80,44 @@ const FounderStory = () => (
       </div>
     </section>
 
-    {/* Founder */}
+    {/* Founders with Image */}
     <section className="py-12 md:py-20">
-      <div className="container max-w-4xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          <div className="space-y-6">
-            <p className="text-xs uppercase tracking-[0.3em] text-primary">The Founder</p>
-            <h2 className="font-display text-2xl md:text-4xl font-light">A 16-Year-Old Entrepreneur</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Solura Cosmetics was founded by <strong>Muhammadh Muaadh</strong>, a 16-year-old student studying in the 11th standard. Starting a business at such a young age came with unique challenges — balancing school and business, managing time and resources, and learning business fundamentals from scratch.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              But passion turned obstacles into opportunities. From late-night research sessions to early morning planning, every step of Solura's journey reflects discipline, consistency, and belief.
-            </p>
+      <div className="container max-w-5xl mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 items-center">
+          {/* Image */}
+          <div className="lg:col-span-2 flex justify-center">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl max-w-sm">
+              <img
+                src={foundersImage}
+                alt="Muhammadh Muaadh (Founder) and Muhammed Javith (Co-Founder & Mentor)"
+                className="w-full h-auto object-cover"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <p className="text-white text-xs font-medium">Muhammed Javith & Muhammadh Muaadh</p>
+                <p className="text-white/70 text-[10px]">Co-Founder & Mentor · Founder</p>
+              </div>
+            </div>
           </div>
-          <div className="space-y-6">
-            <p className="text-xs uppercase tracking-[0.3em] text-primary">The Mentor</p>
-            <h2 className="font-display text-2xl md:text-4xl font-light">The Vision Behind</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Behind every strong founder is a strong support system. <strong>Muhammed Javith</strong>, Co-Founder and Mentor, played a crucial role in shaping Solura Cosmetics — from refining the business strategy to guiding decisions. His mentorship transformed a student idea into a structured and scalable brand.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              Solura is built on trust, shared vision, and mutual support. The bond between the founder and mentor represents a brotherhood driven by purpose and growth.
-            </p>
+
+          {/* Text */}
+          <div className="lg:col-span-3 space-y-8">
+            <div className="space-y-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-primary">The Founder</p>
+              <h2 className="font-display text-2xl md:text-4xl font-light">A 16-Year-Old Entrepreneur</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Solura Cosmetics was founded by <strong>Muhammadh Muaadh</strong>, a 16-year-old student studying in the 11th standard. Starting a business at such a young age came with unique challenges — balancing school and business, managing time and resources, and learning business fundamentals from scratch.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                But passion turned obstacles into opportunities. From late-night research sessions to early morning planning, every step of Solura's journey reflects discipline, consistency, and belief.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-primary">The Mentor</p>
+              <h2 className="font-display text-2xl md:text-3xl font-light">The Vision Behind</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Behind every strong founder is a strong support system. <strong>Muhammed Javith</strong>, Co-Founder and Mentor, played a crucial role in shaping Solura Cosmetics — from refining the business strategy to guiding decisions. His mentorship transformed a student idea into a structured and scalable brand.
+              </p>
+            </div>
           </div>
         </div>
       </div>
