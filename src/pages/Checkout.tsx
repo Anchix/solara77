@@ -13,6 +13,7 @@ declare global {
 }
 
 const COD_FEE = 40;
+const SHIPPING_FEE = 50;
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -90,7 +91,7 @@ const Checkout = () => {
 
   const discountAmount = couponApplied?.discount || 0;
   const afterDiscount = totalPrice - discountAmount;
-  const finalTotal = (paymentMethod === "cod" ? afterDiscount + COD_FEE : afterDiscount);
+  const finalTotal = afterDiscount + SHIPPING_FEE + (paymentMethod === "cod" ? COD_FEE : 0);
 
   const handlePay = async () => {
     if (!form.name || !form.email || !form.phone || !form.address || !form.city || !form.state || !form.pincode) {
@@ -289,7 +290,7 @@ const Checkout = () => {
                 )}
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span className="text-primary font-medium">FREE</span>
+                  <span>₹{SHIPPING_FEE}</span>
                 </div>
               </div>
               <div className="border-t border-border pt-3 flex justify-between font-semibold text-lg">
