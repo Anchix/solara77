@@ -13,6 +13,7 @@ declare global {
 }
 
 const COD_FEE = 40;
+const SHIPPING_FEE = 50;
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
