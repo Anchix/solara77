@@ -12,7 +12,7 @@ declare global {
   interface Window { Razorpay: any; }
 }
 
-const COD_FEE = 40;
+const COD_FEE = 0;
 const SHIPPING_FEE = 50;
 
 const Checkout = () => {
@@ -229,7 +229,7 @@ const Checkout = () => {
                   className={`p-4 border rounded-lg text-left transition-all ${paymentMethod === "cod" ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
                 >
                   <p className="font-medium text-sm">Cash on Delivery</p>
-                  <p className="text-xs text-muted-foreground mt-1">+₹{COD_FEE} extra charge</p>
+                  <p className="text-xs text-muted-foreground mt-1">Pay when delivered</p>
                 </button>
               </div>
             </div>
@@ -280,12 +280,6 @@ const Checkout = () => {
                   <div className="flex justify-between text-sm text-primary">
                     <span>Coupon Discount</span>
                     <span>−₹{couponApplied.discount}</span>
-                  </div>
-                )}
-                {paymentMethod === "cod" && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">COD Charge</span>
-                    <span>₹{COD_FEE}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
