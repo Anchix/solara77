@@ -15,7 +15,7 @@ const SYSTEM_PROMPT = `You are Solura's friendly customer support assistant. You
 - Returns and cancellations (orders can be cancelled if status is "pending")
 - Shipping info (free shipping on prepaid, ₹40 extra for COD)
 - Product recommendations based on skin/hair type
-- Certifications: FDA Approved, GMP, ISO Certified, Cruelty Free, Non GMO
+- Certifications: GMP, ISO Certified, Cruelty Free, Non GMO
 
 Company: Solura Cosmetics, Pallapatti, Karur, Tamil Nadu 639205
 Email: contact@soluracosmo.com
