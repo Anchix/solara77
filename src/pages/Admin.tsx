@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import AdminLogin from "@/components/admin/AdminLogin";
 import AdminDashboard from "@/components/admin/AdminDashboard";
@@ -19,8 +19,16 @@ const navItems = [
 type PageId = (typeof navItems)[number]["id"];
 
 const Admin = () => {
-  const { isAuthenticated, logout } = useAdminAuth();
+  const { initialize, isAuthenticated, isLoading, logout } = useAdminAuth();
   const [activePage, setActivePage] = useState<PageId>("dashboard");
+
+  useEffect(() => {
+    void initialize();
+  }, [initialize]);
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">Checking admin access...</div>;
+  }
 
   if (!isAuthenticated) return <AdminLogin />;
 
@@ -51,7 +59,7 @@ const Admin = () => {
           <a href="/" target="_blank" rel="noopener noreferrer" className="w-full flex items-center gap-3 px-6 py-3 text-[13px] text-primary-foreground/60 border-l-[3px] border-l-transparent hover:text-white hover:bg-white/[0.04] transition-all">
             <Globe className="h-4 w-4" />View Website
           </a>
-          <button onClick={logout} className="w-full flex items-center gap-3 px-6 py-3 text-[13px] text-primary-foreground/60 border-l-[3px] border-l-transparent hover:text-white hover:bg-white/[0.04] transition-all">
+          <button onClick={() => void logout()} className="w-full flex items-center gap-3 px-6 py-3 text-[13px] text-primary-foreground/60 border-l-[3px] border-l-transparent hover:text-white hover:bg-white/[0.04] transition-all">
             <LogOut className="h-4 w-4" />Logout
           </button>
         </nav>
