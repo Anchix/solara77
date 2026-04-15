@@ -78,8 +78,8 @@ const Checkout = () => {
       setCouponApplied({ code: data.code, discount });
       toast.success(`Coupon applied! You save ₹${discount}`);
 
-      // Increment used_count
-      await supabase.from("coupons").update({ used_count: data.used_count + 1 }).eq("id", data.id);
+      // Increment used_count via secure function
+      await supabase.rpc("increment_coupon_usage", { _coupon_id: data.id });
     } catch { toast.error("Failed to apply coupon"); }
     setCouponLoading(false);
   };
