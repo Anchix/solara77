@@ -53,7 +53,7 @@ const fetchAdminStatus = async (action: "status" | "bootstrap") => {
 };
 
 export const useAdminAuth = create<AdminAuthState>((set, get) => {
-  const applyLoggedOutState = async () => {
+  const applyLoggedOutState = async (): Promise<AdminAccessResponse> => {
     const setup = await fetchAdminSetup().catch(() => ({ adminExists: true }));
 
     set({
@@ -63,7 +63,11 @@ export const useAdminAuth = create<AdminAuthState>((set, get) => {
       isLoading: false,
     });
 
-    return setup;
+    return {
+      adminExists: setup.adminExists,
+      claimed: false,
+      isAdmin: false,
+    };
   };
 
   const syncAdminState = async (action: "status" | "bootstrap" = "status") => {
