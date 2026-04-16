@@ -179,7 +179,7 @@ const AdminProducts = () => {
         <table className="w-full border-collapse text-[13px]">
           <thead>
             <tr>
-              {["Product", "Category", "Price", "MRP", "Images", "Actions"].map((h) => (
+              {["Product", "Category", "Price", "MRP", "Stock", "Actions"].map((h) => (
                 <th key={h} className="text-left text-[10px] tracking-[0.12em] uppercase text-muted-foreground font-medium px-5 py-2 border-b border-border">{h}</th>
               ))}
             </tr>
@@ -199,7 +199,11 @@ const AdminProducts = () => {
                   <td className="px-5 py-3 text-muted-foreground">{p.category}</td>
                   <td className="px-5 py-3 font-semibold">₹{Number(p.sale_price || p.price).toLocaleString("en-IN")}</td>
                   <td className="px-5 py-3 text-muted-foreground line-through">{p.sale_price ? `₹${p.price}` : "—"}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{p.images?.length || 0}/5</td>
+                  <td className="px-5 py-3">
+                    <span className={`text-[11px] px-2 py-0.5 rounded-full ${p.is_out_of_stock ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-700"}`}>
+                      {p.is_out_of_stock ? "Out of Stock" : "In Stock"}
+                    </span>
+                  </td>
                   <td className="px-5 py-3">
                     <div className="flex gap-[6px]">
                       <button onClick={() => { setEditing(toForm(p)); setOpen(true); }} className="text-[11px] px-3 py-1 border border-border bg-transparent hover:bg-foreground hover:text-primary-foreground transition-all font-body">Edit</button>
