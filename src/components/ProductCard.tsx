@@ -7,6 +7,8 @@ import { ShoppingBag } from "lucide-react";
 const ProductCard = ({ product }: { product: Product }) => {
   const { addToCart } = useCart();
 
+  const isOutOfStock = product.is_out_of_stock;
+
   return (
     <div className="group">
       <Link to={`/product/${product.slug}`} className="block">
@@ -14,10 +16,15 @@ const ProductCard = ({ product }: { product: Product }) => {
           <img
             src={product.images?.[0] || "/placeholder.svg"}
             alt={product.name}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+            className={`w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? "opacity-50" : ""}`}
             loading="lazy"
           />
-          {product.sale_price && product.sale_price < product.price && (
+          {isOutOfStock && (
+            <span className="absolute top-3 right-3 bg-destructive text-destructive-foreground text-xs font-medium px-2.5 py-1 rounded-full">
+              Out of Stock
+            </span>
+          )}
+          {!isOutOfStock && product.sale_price && product.sale_price < product.price && (
             <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-medium px-2.5 py-1 rounded-full">
               {Math.round((1 - product.sale_price / product.price) * 100)}% off
             </span>
@@ -44,9 +51,10 @@ const ProductCard = ({ product }: { product: Product }) => {
           size="sm"
           className="w-full mt-2 gap-2"
           onClick={() => addToCart(product)}
+          disabled={isOutOfStock}
         >
           <ShoppingBag className="h-4 w-4" />
-          Add to Cart
+          {isOutOfStock ? "Out of Stock" : "Add to Cart"}
         </Button>
       </div>
     </div>
