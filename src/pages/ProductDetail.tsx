@@ -106,16 +106,23 @@ const ProductDetail = () => {
               ))}
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex items-center border border-border rounded">
-                <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-3 py-2 hover:bg-secondary transition-colors">−</button>
-                <span className="px-4 py-2 border-x border-border text-sm">{qty}</span>
-                <button onClick={() => setQty(qty + 1)} className="px-3 py-2 hover:bg-secondary transition-colors">+</button>
+            {product.is_out_of_stock ? (
+              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-center">
+                <p className="text-destructive font-semibold">Out of Stock</p>
+                <p className="text-xs text-muted-foreground mt-1">This product is currently unavailable</p>
               </div>
-              <Button size="lg" className="flex-1 gap-2" onClick={handleAdd}>
-                <ShoppingBag className="h-4 w-4" /> Add to Cart
-              </Button>
-            </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center border border-border rounded">
+                  <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-3 py-2 hover:bg-secondary transition-colors">−</button>
+                  <span className="px-4 py-2 border-x border-border text-sm">{qty}</span>
+                  <button onClick={() => setQty(qty + 1)} className="px-3 py-2 hover:bg-secondary transition-colors">+</button>
+                </div>
+                <Button size="lg" className="flex-1 gap-2" onClick={handleAdd}>
+                  <ShoppingBag className="h-4 w-4" /> Add to Cart
+                </Button>
+              </div>
+            )}
 
             <div className="border-t border-border pt-6">
               <Tabs defaultValue="details">

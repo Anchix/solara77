@@ -34,7 +34,7 @@ const Index = () => {
       {/* Trust badges */}
       <section className="py-4 md:py-6 border-y border-border">
         <div className="container flex flex-wrap justify-center gap-4 md:gap-16 items-center">
-          <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Truck className="h-4 w-4 text-primary" /> Free Shipping on Prepaid</div>
+          <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Truck className="h-4 w-4 text-primary" /> Fast Delivery</div>
           <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><CreditCard className="h-4 w-4 text-primary" /> Secure Payments</div>
           <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Shield className="h-4 w-4 text-primary" /> 100% Genuine Products</div>
           <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Leaf className="h-4 w-4 text-primary" /> Chemical-Free</div>

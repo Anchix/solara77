@@ -24,6 +24,7 @@ export interface Product {
   safety_info: string | null;
   package_type: string | null;
   country_of_origin: string | null;
+  is_out_of_stock: boolean;
 }
 
 export interface CartItem {

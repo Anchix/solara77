@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
 import type { Product } from "@/data/products";
@@ -16,6 +17,7 @@ const emptyProduct = {
   brand: "", product_type: "", net_quantity: "", skin_type: "", key_benefits: "",
   texture: "", usage_time: "", how_to_use: "", expected_result: "",
   storage_info: "", safety_info: "", package_type: "", country_of_origin: "India",
+  is_out_of_stock: false,
 };
 
 const callAdminProducts = async (body: any) => {
@@ -57,6 +59,7 @@ const AdminProducts = () => {
     usage_time: p.usage_time || "", how_to_use: p.how_to_use || "", expected_result: p.expected_result || "",
     storage_info: p.storage_info || "", safety_info: p.safety_info || "",
     package_type: p.package_type || "", country_of_origin: p.country_of_origin || "India",
+    is_out_of_stock: p.is_out_of_stock ?? false,
   });
 
   const handleSave = async () => {
@@ -77,6 +80,7 @@ const AdminProducts = () => {
       expected_result: editing.expected_result || null, storage_info: editing.storage_info || null,
       safety_info: editing.safety_info || null, package_type: editing.package_type || null,
       country_of_origin: editing.country_of_origin || null,
+      is_out_of_stock: editing.is_out_of_stock ?? false,
     };
 
     try {
@@ -132,6 +136,14 @@ const AdminProducts = () => {
                 </div>
                 {textField("Category", "category")}
 
+                <div className="flex items-center justify-between py-2">
+                  <div>
+                    <Label>Out of Stock</Label>
+                    <p className="text-xs text-muted-foreground">When enabled, customers can view but cannot order this product</p>
+                  </div>
+                  <Switch checked={editing?.is_out_of_stock ?? false} onCheckedChange={(checked) => setEditing({ ...editing, is_out_of_stock: checked })} />
+                </div>
+
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-2">Product Details</p>
                 <div className="grid grid-cols-2 gap-4">
                   {textField("Brand", "brand", "e.g. Solura")}
@@ -167,7 +179,7 @@ const AdminProducts = () => {
         <table className="w-full border-collapse text-[13px]">
           <thead>
             <tr>
-              {["Product", "Category", "Price", "MRP", "Images", "Actions"].map((h) => (
+              {["Product", "Category", "Price", "MRP", "Stock", "Actions"].map((h) => (
                 <th key={h} className="text-left text-[10px] tracking-[0.12em] uppercase text-muted-foreground font-medium px-5 py-2 border-b border-border">{h}</th>
               ))}
             </tr>
@@ -187,7 +199,11 @@ const AdminProducts = () => {
                   <td className="px-5 py-3 text-muted-foreground">{p.category}</td>
                   <td className="px-5 py-3 font-semibold">₹{Number(p.sale_price || p.price).toLocaleString("en-IN")}</td>
                   <td className="px-5 py-3 text-muted-foreground line-through">{p.sale_price ? `₹${p.price}` : "—"}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{p.images?.length || 0}/5</td>
+                  <td className="px-5 py-3">
+                    <span className={`text-[11px] px-2 py-0.5 rounded-full ${p.is_out_of_stock ? "bg-destructive/10 text-destructive" : "bg-green-100 text-green-700"}`}>
+                      {p.is_out_of_stock ? "Out of Stock" : "In Stock"}
+                    </span>
+                  </td>
                   <td className="px-5 py-3">
                     <div className="flex gap-[6px]">
                       <button onClick={() => { setEditing(toForm(p)); setOpen(true); }} className="text-[11px] px-3 py-1 border border-border bg-transparent hover:bg-foreground hover:text-primary-foreground transition-all font-body">Edit</button>
