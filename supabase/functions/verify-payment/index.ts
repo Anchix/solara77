@@ -45,6 +45,30 @@ serve(async (req) => {
       });
     }
 
+    // Fetch the actual paid amount from Razorpay to prevent client-side manipulation
+    const RAZORPAY_KEY_ID = Deno.env.get("RAZORPAY_KEY_ID");
+    if (!RAZORPAY_KEY_ID) throw new Error("Razorpay key ID not configured");
+
+    const rzpOrderRes = await fetch(
+      `https://api.razorpay.com/v1/orders/${razorpay_order_id}`,
+      {
+        headers: {
+          Authorization: "Basic " + btoa(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`),
+        },
+      }
+    );
+    if (!rzpOrderRes.ok) throw new Error("Failed to fetch Razorpay order details");
+    const rzpOrder = await rzpOrderRes.json();
+    const verifiedTotal = rzpOrder.amount / 100; // paise → rupees
+
+    if (Math.abs(verifiedTotal - total) > 0.01) {
+      console.error(`Amount mismatch: paid=${verifiedTotal}, claimed=${total}`);
+      return new Response(JSON.stringify({ error: "Payment amount mismatch" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Save order to database
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
