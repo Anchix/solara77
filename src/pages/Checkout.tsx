@@ -20,7 +20,16 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">("online");
+  const [codEnabled, setCodEnabled] = useState(true);
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", city: "", state: "", pincode: "" });
+
+  useEffect(() => {
+    supabase.from("site_settings").select("value").eq("key", "cod_enabled").maybeSingle().then(({ data }) => {
+      const enabled = data ? (data.value === true || (data.value as any) === "true") : true;
+      setCodEnabled(enabled);
+      if (!enabled) setPaymentMethod("online");
+    });
+  }, []);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState("");
@@ -225,11 +234,12 @@ const Checkout = () => {
                   <p className="text-xs text-muted-foreground mt-1">UPI, Cards, Netbanking</p>
                 </button>
                 <button
-                  onClick={() => setPaymentMethod("cod")}
-                  className={`p-4 border rounded-lg text-left transition-all ${paymentMethod === "cod" ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
+                  onClick={() => codEnabled && setPaymentMethod("cod")}
+                  disabled={!codEnabled}
+                  className={`p-4 border rounded-lg text-left transition-all ${!codEnabled ? "opacity-40 cursor-not-allowed border-border" : paymentMethod === "cod" ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
                 >
                   <p className="font-medium text-sm">Cash on Delivery</p>
-                  <p className="text-xs text-muted-foreground mt-1">Pay when delivered</p>
+                  <p className="text-xs text-muted-foreground mt-1">{codEnabled ? "Pay when delivered" : "Currently unavailable"}</p>
                 </button>
               </div>
             </div>
