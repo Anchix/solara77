@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
 import type { Product } from "@/data/products";
@@ -134,6 +135,14 @@ const AdminProducts = () => {
                   <div><Label>Sale Price (₹)</Label><Input type="number" value={editing.sale_price} onChange={(e) => setEditing({ ...editing, sale_price: e.target.value })} className="mt-1" /></div>
                 </div>
                 {textField("Category", "category")}
+
+                <div className="flex items-center justify-between py-2">
+                  <div>
+                    <Label>Out of Stock</Label>
+                    <p className="text-xs text-muted-foreground">When enabled, customers can view but cannot order this product</p>
+                  </div>
+                  <Switch checked={editing?.is_out_of_stock ?? false} onCheckedChange={(checked) => setEditing({ ...editing, is_out_of_stock: checked })} />
+                </div>
 
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-2">Product Details</p>
                 <div className="grid grid-cols-2 gap-4">
