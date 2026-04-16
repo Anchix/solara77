@@ -6,7 +6,8 @@ import AdminOrders from "@/components/admin/AdminOrders";
 import AdminProducts from "@/components/admin/AdminProducts";
 import AdminBlog from "@/components/admin/AdminBlog";
 import AdminCoupons from "@/components/admin/AdminCoupons";
-import { LogOut, LayoutDashboard, Package, ShoppingBag, FileText, Globe, Tag } from "lucide-react";
+import AdminSettings from "@/components/admin/AdminSettings";
+import { LogOut, LayoutDashboard, Package, ShoppingBag, FileText, Globe, Tag, Settings } from "lucide-react";
 
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -14,6 +15,7 @@ const navItems = [
   { id: "products", label: "Products", icon: ShoppingBag },
   { id: "coupons", label: "Coupons", icon: Tag },
   { id: "blog", label: "Blog", icon: FileText },
+  { id: "settings", label: "Settings", icon: Settings },
 ] as const;
 
 type PageId = (typeof navItems)[number]["id"];
@@ -76,6 +78,7 @@ const Admin = () => {
           {activePage === "products" && <AdminProducts />}
           {activePage === "coupons" && <AdminCoupons />}
           {activePage === "blog" && <AdminBlog />}
+          {activePage === "settings" && <AdminSettings />}
         </div>
       </main>
     </div>
