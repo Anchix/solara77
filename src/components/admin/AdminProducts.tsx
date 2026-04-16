@@ -16,6 +16,7 @@ const emptyProduct = {
   brand: "", product_type: "", net_quantity: "", skin_type: "", key_benefits: "",
   texture: "", usage_time: "", how_to_use: "", expected_result: "",
   storage_info: "", safety_info: "", package_type: "", country_of_origin: "India",
+  is_out_of_stock: false,
 };
 
 const callAdminProducts = async (body: any) => {
@@ -57,6 +58,7 @@ const AdminProducts = () => {
     usage_time: p.usage_time || "", how_to_use: p.how_to_use || "", expected_result: p.expected_result || "",
     storage_info: p.storage_info || "", safety_info: p.safety_info || "",
     package_type: p.package_type || "", country_of_origin: p.country_of_origin || "India",
+    is_out_of_stock: p.is_out_of_stock ?? false,
   });
 
   const handleSave = async () => {
@@ -77,6 +79,7 @@ const AdminProducts = () => {
       expected_result: editing.expected_result || null, storage_info: editing.storage_info || null,
       safety_info: editing.safety_info || null, package_type: editing.package_type || null,
       country_of_origin: editing.country_of_origin || null,
+      is_out_of_stock: editing.is_out_of_stock ?? false,
     };
 
     try {
