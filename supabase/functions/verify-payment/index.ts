@@ -84,7 +84,7 @@ serve(async (req) => {
         city: customer.city,
         state: customer.state,
         pincode: customer.pincode,
-        total,
+        total: verifiedTotal,
         payment_id: razorpay_payment_id,
         razorpay_order_id,
         status: "confirmed",
