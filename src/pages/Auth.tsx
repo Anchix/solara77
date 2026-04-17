@@ -44,31 +44,12 @@ const Auth = () => {
     setLoading(false);
   };
 
-  const handlePhoneOtp = async () => {
-    if (!phoneLogin.phone) { toast.error("Enter phone number"); return; }
-    setLoading(true);
-    const phone = phoneLogin.phone.startsWith("+") ? phoneLogin.phone : `+91${phoneLogin.phone}`;
-    const { error } = await supabase.auth.signInWithOtp({ phone });
-    if (error) toast.error(error.message);
-    else { setOtpSent(true); toast.success("OTP sent!"); }
-    setLoading(false);
-  };
-
-  const handleVerifyOtp = async () => {
-    setLoading(true);
-    const phone = phoneLogin.phone.startsWith("+") ? phoneLogin.phone : `+91${phoneLogin.phone}`;
-    const { error } = await supabase.auth.verifyOtp({ phone, token: phoneLogin.otp, type: "sms" });
-    if (error) toast.error(error.message);
-    else { toast.success("Welcome!"); navigate("/"); }
-    setLoading(false);
-  };
-
   const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin },
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
     });
-    if (error) toast.error(error.message);
+    if (result?.error) toast.error(result.error.message ?? "Google sign-in failed");
+    else if (!result?.redirected) navigate("/");
   };
 
   return (
