@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Mail, Phone, Eye, EyeOff } from "lucide-react";
+import { Mail, Eye, EyeOff } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -14,8 +15,6 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [signupForm, setSignupForm] = useState({ email: "", password: "", name: "", phone: "" });
-  const [phoneLogin, setPhoneLogin] = useState({ phone: "", otp: "" });
-  const [otpSent, setOtpSent] = useState(false);
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
@@ -45,31 +44,12 @@ const Auth = () => {
     setLoading(false);
   };
 
-  const handlePhoneOtp = async () => {
-    if (!phoneLogin.phone) { toast.error("Enter phone number"); return; }
-    setLoading(true);
-    const phone = phoneLogin.phone.startsWith("+") ? phoneLogin.phone : `+91${phoneLogin.phone}`;
-    const { error } = await supabase.auth.signInWithOtp({ phone });
-    if (error) toast.error(error.message);
-    else { setOtpSent(true); toast.success("OTP sent!"); }
-    setLoading(false);
-  };
-
-  const handleVerifyOtp = async () => {
-    setLoading(true);
-    const phone = phoneLogin.phone.startsWith("+") ? phoneLogin.phone : `+91${phoneLogin.phone}`;
-    const { error } = await supabase.auth.verifyOtp({ phone, token: phoneLogin.otp, type: "sms" });
-    if (error) toast.error(error.message);
-    else { toast.success("Welcome!"); navigate("/"); }
-    setLoading(false);
-  };
-
   const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin },
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
     });
-    if (error) toast.error(error.message);
+    if (result?.error) toast.error(result.error.message ?? "Google sign-in failed");
+    else if (!result?.redirected) navigate("/");
   };
 
   return (
@@ -140,22 +120,6 @@ const Auth = () => {
               Continue with Google
             </Button>
 
-            <div className="space-y-2">
-              <p className="text-xs text-center text-muted-foreground">Or login with phone number</p>
-              <div className="flex gap-2">
-                <Input type="tel" placeholder="Phone number" value={phoneLogin.phone} onChange={(e) => setPhoneLogin({ ...phoneLogin, phone: e.target.value.replace(/\D/g, "") })} className="flex-1" />
-                {!otpSent ? (
-                  <Button variant="outline" size="sm" onClick={handlePhoneOtp} disabled={loading}>
-                    <Phone className="h-4 w-4 mr-1" /> Send OTP
-                  </Button>
-                ) : (
-                  <>
-                    <Input type="text" placeholder="OTP" value={phoneLogin.otp} onChange={(e) => setPhoneLogin({ ...phoneLogin, otp: e.target.value })} className="w-24" />
-                    <Button size="sm" onClick={handleVerifyOtp} disabled={loading}>Verify</Button>
-                  </>
-                )}
-              </div>
-            </div>
           </div>
         </div>
       </div>
