@@ -1,11 +1,35 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { blogPosts } from "@/data/products";
+import { blogPosts as fallbackPosts, BlogPost as BlogPostType } from "@/data/products";
+import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 
 const BlogPost = () => {
   const { slug } = useParams();
-  const post = blogPosts.find((p) => p.slug === slug);
+  const [post, setPost] = useState<BlogPostType | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!slug) return;
+    supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) {
+          setPost(data as BlogPostType);
+        } else {
+          setPost(fallbackPosts.find((p) => p.slug === slug) || null);
+        }
+        setLoading(false);
+      });
+  }, [slug]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">Loading...</div>;
+  }
 
   if (!post) {
     return <div className="min-h-screen flex items-center justify-center"><p>Post not found.</p></div>;
