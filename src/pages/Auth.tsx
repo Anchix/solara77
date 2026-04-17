@@ -120,22 +120,6 @@ const Auth = () => {
               Continue with Google
             </Button>
 
-            <div className="space-y-2">
-              <p className="text-xs text-center text-muted-foreground">Or login with phone number</p>
-              <div className="flex gap-2">
-                <Input type="tel" placeholder="Phone number" value={phoneLogin.phone} onChange={(e) => setPhoneLogin({ ...phoneLogin, phone: e.target.value.replace(/\D/g, "") })} className="flex-1" />
-                {!otpSent ? (
-                  <Button variant="outline" size="sm" onClick={handlePhoneOtp} disabled={loading}>
-                    <Phone className="h-4 w-4 mr-1" /> Send OTP
-                  </Button>
-                ) : (
-                  <>
-                    <Input type="text" placeholder="OTP" value={phoneLogin.otp} onChange={(e) => setPhoneLogin({ ...phoneLogin, otp: e.target.value })} className="w-24" />
-                    <Button size="sm" onClick={handleVerifyOtp} disabled={loading}>Verify</Button>
-                  </>
-                )}
-              </div>
-            </div>
           </div>
         </div>
       </div>
