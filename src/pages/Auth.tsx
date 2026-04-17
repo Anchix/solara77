@@ -15,8 +15,6 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [signupForm, setSignupForm] = useState({ email: "", password: "", name: "", phone: "" });
-  const [phoneLogin, setPhoneLogin] = useState({ phone: "", otp: "" });
-  const [otpSent, setOtpSent] = useState(false);
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
