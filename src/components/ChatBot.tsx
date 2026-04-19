@@ -50,9 +50,10 @@ const ChatBot = () => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!input.trim() || loading) return;
-    const userMsg: Message = { role: "user", content: input.trim() };
+  const sendMessage = async (overrideText?: string) => {
+    const text = (overrideText ?? input).trim();
+    if (!text || loading) return;
+    const userMsg: Message = { role: "user", content: text };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInput("");
@@ -61,14 +62,11 @@ const ChatBot = () => {
     try {
       const { data, error } = await supabase.functions.invoke("ai-chat", {
         body: {
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            ...newMessages.map((m) => ({ role: m.role, content: m.content })),
-          ],
+          messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
         },
       });
       if (error) throw error;
-      setMessages([...newMessages, { role: "assistant", content: data.reply || "Sorry, I couldn't process that. Please try again." }]);
+      setMessages([...newMessages, { role: "assistant", content: data?.reply || "Sorry, I couldn't process that. Please try again." }]);
     } catch {
       setMessages([...newMessages, { role: "assistant", content: "Sorry, I'm having trouble right now. Please email us at contact@soluracosmo.com" }]);
     }
