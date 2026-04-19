@@ -9,22 +9,38 @@ interface Message {
   content: string;
 }
 
-const SYSTEM_PROMPT = `You are Solura's friendly customer support assistant. You help customers with:
-- Product information (skincare, haircare, chemical-free natural products)
-- Order status and tracking
-- Returns and cancellations (orders can be cancelled if status is "pending")
-- Shipping info (free shipping on prepaid, ₹40 extra for COD)
-- Product recommendations based on skin/hair type
-- Certifications: GMP, ISO Certified, Cruelty Free, Non GMO
+const QUICK_REPLIES = [
+  "Best product for oily skin?",
+  "Track my order",
+  "Shipping & payment info",
+  "Recommend a hair product",
+];
 
-Company: Solura Cosmetics, Pallapatti, Karur, Tamil Nadu 639205
-Email: contact@soluracosmo.com
-Be warm, helpful, and concise. Use emojis sparingly. Always suggest products when relevant.`;
+// Renders text with [label](/path) markdown links as clickable internal links
+const renderContent = (text: string) => {
+  const parts: (string | { label: string; href: string })[] = [];
+  const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = regex.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    parts.push({ label: m[1], href: m[2] });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts.map((p, i) =>
+    typeof p === "string" ? (
+      <span key={i} className="whitespace-pre-wrap">{p}</span>
+    ) : (
+      <a key={i} href={p.href} className="underline font-medium text-primary hover:opacity-80">{p.label}</a>
+    )
+  );
+};
 
 const ChatBot = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Hi! 👋 Welcome to Solura. How can I help you today?" },
+    { role: "assistant", content: "Hi! 👋 Welcome to Solura. I can help with product recommendations, order tracking (just share your phone number), shipping, payments & more. What can I help you with?" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
