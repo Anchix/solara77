@@ -9,22 +9,38 @@ interface Message {
   content: string;
 }
 
-const SYSTEM_PROMPT = `You are Solura's friendly customer support assistant. You help customers with:
-- Product information (skincare, haircare, chemical-free natural products)
-- Order status and tracking
-- Returns and cancellations (orders can be cancelled if status is "pending")
-- Shipping info (free shipping on prepaid, ₹40 extra for COD)
-- Product recommendations based on skin/hair type
-- Certifications: GMP, ISO Certified, Cruelty Free, Non GMO
+const QUICK_REPLIES = [
+  "Best product for oily skin?",
+  "Track my order",
+  "Shipping & payment info",
+  "Recommend a hair product",
+];
 
-Company: Solura Cosmetics, Pallapatti, Karur, Tamil Nadu 639205
-Email: contact@soluracosmo.com
-Be warm, helpful, and concise. Use emojis sparingly. Always suggest products when relevant.`;
+// Renders text with [label](/path) markdown links as clickable internal links
+const renderContent = (text: string) => {
+  const parts: (string | { label: string; href: string })[] = [];
+  const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = regex.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    parts.push({ label: m[1], href: m[2] });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts.map((p, i) =>
+    typeof p === "string" ? (
+      <span key={i} className="whitespace-pre-wrap">{p}</span>
+    ) : (
+      <a key={i} href={p.href} className="underline font-medium text-primary hover:opacity-80">{p.label}</a>
+    )
+  );
+};
 
 const ChatBot = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Hi! 👋 Welcome to Solura. How can I help you today?" },
+    { role: "assistant", content: "Hi! 👋 Welcome to Solura. I can help with product recommendations, order tracking (just share your phone number), shipping, payments & more. What can I help you with?" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,9 +50,10 @@ const ChatBot = () => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!input.trim() || loading) return;
-    const userMsg: Message = { role: "user", content: input.trim() };
+  const sendMessage = async (overrideText?: string) => {
+    const text = (overrideText ?? input).trim();
+    if (!text || loading) return;
+    const userMsg: Message = { role: "user", content: text };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInput("");
@@ -45,14 +62,11 @@ const ChatBot = () => {
     try {
       const { data, error } = await supabase.functions.invoke("ai-chat", {
         body: {
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            ...newMessages.map((m) => ({ role: m.role, content: m.content })),
-          ],
+          messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
         },
       });
       if (error) throw error;
-      setMessages([...newMessages, { role: "assistant", content: data.reply || "Sorry, I couldn't process that. Please try again." }]);
+      setMessages([...newMessages, { role: "assistant", content: data?.reply || "Sorry, I couldn't process that. Please try again." }]);
     } catch {
       setMessages([...newMessages, { role: "assistant", content: "Sorry, I'm having trouble right now. Please email us at contact@soluracosmo.com" }]);
     }
@@ -81,14 +95,27 @@ const ChatBot = () => {
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${m.role === "user" ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground"}`}>
-                  {m.content}
+                <div className={`max-w-[85%] rounded-lg px-3 py-2 text-sm leading-relaxed ${m.role === "user" ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground"}`}>
+                  {m.role === "assistant" ? renderContent(m.content) : m.content}
                 </div>
               </div>
             ))}
             {loading && (
               <div className="flex justify-start">
                 <div className="bg-secondary rounded-lg px-3 py-2 text-sm text-muted-foreground">Typing...</div>
+              </div>
+            )}
+            {messages.length === 1 && !loading && (
+              <div className="flex flex-wrap gap-2 pt-2">
+                {QUICK_REPLIES.map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => sendMessage(q)}
+                    className="text-xs px-3 py-1.5 rounded-full border border-border bg-background hover:bg-secondary transition-colors"
+                  >
+                    {q}
+                  </button>
+                ))}
               </div>
             )}
           </div>
@@ -101,7 +128,7 @@ const ChatBot = () => {
               placeholder="Ask anything..."
               className="flex-1 text-sm"
             />
-            <Button size="icon" onClick={sendMessage} disabled={loading}>
+            <Button size="icon" onClick={() => sendMessage()} disabled={loading}>
               <Send className="h-4 w-4" />
             </Button>
           </div>
