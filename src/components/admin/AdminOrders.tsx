@@ -204,7 +204,7 @@ const AdminOrders = () => {
                         )}
                       </td>
                       <td className="px-4 py-3 font-mono text-xs font-semibold">
-                        {o.id.slice(0, 8)}
+                        {o.order_number || o.id.slice(0, 8)}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground text-xs">
                         {new Date(o.created_at).toLocaleDateString("en-IN", {
