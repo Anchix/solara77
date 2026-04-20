@@ -77,6 +77,7 @@ const Admin = () => {
         <div className="p-7 flex-1">
           {activePage === "dashboard" && <AdminDashboard />}
           {activePage === "orders" && <AdminOrders />}
+          {activePage === "payments" && <AdminPaymentAttempts />}
           {activePage === "products" && <AdminProducts />}
           {activePage === "coupons" && <AdminCoupons />}
           {activePage === "blog" && <AdminBlog />}
