@@ -86,7 +86,7 @@ const AdminOrders = () => {
 
   const exportCSV = () => {
     const headers = [
-      "Order ID", "Date", "Customer Name", "Email", "Phone",
+      "Order Number", "Order ID", "Date", "Customer Name", "Email", "Phone",
       "Address", "City", "State", "Pincode",
       "Items", "Total (₹)", "Payment Mode", "Payment ID",
       "Razorpay Order ID", "Status", "Tracking ID",
@@ -95,9 +95,10 @@ const AdminOrders = () => {
     const rows = filtered.map((o) => {
       const items = orderItems[o.id] || [];
       const itemsSummary = items.map((i: any) => `${i.product_name} x${i.quantity}`).join("; ");
-      const paymentMode = o.payment_id ? "Online" : "COD";
+      const paymentMode = o.payment_id && o.payment_id !== "COD" ? "Online" : "COD";
 
       return [
+        o.order_number || "",
         o.id,
         new Date(o.created_at).toLocaleString("en-IN"),
         o.customer_name,
