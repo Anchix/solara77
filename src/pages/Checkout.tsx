@@ -130,7 +130,7 @@ const Checkout = () => {
           }))
         );
 
-        toast.success("Order placed! Cash on Delivery ✅", { description: `Order #${orderData.id.slice(0, 8)}`, duration: 5000 });
+        toast.success("Order placed! Cash on Delivery ✅", { description: `Order #${orderData.order_number || orderData.id.slice(0, 8)}`, duration: 5000 });
         clearCart(); navigate(`/order-confirmation/${orderData.id}`);
       } catch (err: any) { toast.error("Order failed: " + err.message); }
       finally { setLoading(false); }
