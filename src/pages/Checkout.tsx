@@ -167,7 +167,7 @@ const Checkout = () => {
               },
             });
             if (verifyError) throw new Error(verifyError.message);
-            toast.success("Payment received! Order confirmed ✅", { description: `Order #${verifyData.orderId}`, duration: 5000 });
+            toast.success("Payment received! Order confirmed ✅", { description: `Order #${verifyData.orderNumber || verifyData.orderId}`, duration: 5000 });
             clearCart(); navigate(`/order-confirmation/${verifyData.orderId}`);
           } catch (err: any) { toast.error("Payment verification failed: " + err.message); }
         },
