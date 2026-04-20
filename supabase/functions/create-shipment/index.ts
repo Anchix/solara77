@@ -79,13 +79,21 @@ serve(async (req) => {
       .update({ tracking_id: String(trackingId) })
       .eq("id", orderId);
 
+    // Fetch order_number for SMS
+    const { data: orderRow } = await supabase
+      .from("orders")
+      .select("order_number")
+      .eq("id", orderId)
+      .maybeSingle();
+    const displayOrderId = orderRow?.order_number || orderId;
+
     // 4. Send SMS with tracking ID
     try {
       await supabase.functions.invoke("send-sms", {
         body: {
           phone: customer.phone,
           name: customer.name,
-          orderId,
+          orderId: displayOrderId,
           trackingId: String(trackingId),
         },
       });
