@@ -15,6 +15,7 @@ interface Order {
   created_at: string;
   customer_name: string;
   tracking_id: string | null;
+  order_number: string | null;
   phone: string;
   email: string;
 }
