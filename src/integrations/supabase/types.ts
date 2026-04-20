@@ -193,6 +193,51 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_attempts: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_name: string | null
+          email: string | null
+          error_message: string | null
+          id: string
+          order_id: string | null
+          phone: string | null
+          razorpay_order_id: string | null
+          razorpay_payment_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          customer_name?: string | null
+          email?: string | null
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          phone?: string | null
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_name?: string | null
+          email?: string | null
+          error_message?: string | null
+          id?: string
+          order_id?: string | null
+          phone?: string | null
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           brand: string | null
