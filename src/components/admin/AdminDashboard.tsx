@@ -239,7 +239,7 @@ const AdminDashboard = () => {
                     className="border-b border-border/30 last:border-0 hover:bg-secondary/50"
                   >
                     <td className="px-5 py-3 font-mono text-xs font-semibold">
-                      {o.id.slice(0, 8)}
+                      {o.order_number || o.id.slice(0, 8)}
                     </td>
                     <td className="px-5 py-3">{o.customer_name}</td>
                     <td className="px-5 py-3 font-semibold">
