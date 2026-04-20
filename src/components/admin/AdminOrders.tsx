@@ -77,6 +77,7 @@ const AdminOrders = () => {
     const matchSearch =
       !search ||
       o.id.toLowerCase().includes(search.toLowerCase()) ||
+      o.order_number?.toLowerCase().includes(search.toLowerCase()) ||
       o.customer_name?.toLowerCase().includes(search.toLowerCase()) ||
       o.email?.toLowerCase().includes(search.toLowerCase()) ||
       o.phone?.includes(search);
@@ -85,7 +86,7 @@ const AdminOrders = () => {
 
   const exportCSV = () => {
     const headers = [
-      "Order ID", "Date", "Customer Name", "Email", "Phone",
+      "Order Number", "Order ID", "Date", "Customer Name", "Email", "Phone",
       "Address", "City", "State", "Pincode",
       "Items", "Total (₹)", "Payment Mode", "Payment ID",
       "Razorpay Order ID", "Status", "Tracking ID",
@@ -94,9 +95,10 @@ const AdminOrders = () => {
     const rows = filtered.map((o) => {
       const items = orderItems[o.id] || [];
       const itemsSummary = items.map((i: any) => `${i.product_name} x${i.quantity}`).join("; ");
-      const paymentMode = o.payment_id ? "Online" : "COD";
+      const paymentMode = o.payment_id && o.payment_id !== "COD" ? "Online" : "COD";
 
       return [
+        o.order_number || "",
         o.id,
         new Date(o.created_at).toLocaleString("en-IN"),
         o.customer_name,
@@ -202,7 +204,7 @@ const AdminOrders = () => {
                         )}
                       </td>
                       <td className="px-4 py-3 font-mono text-xs font-semibold">
-                        {o.id.slice(0, 8)}
+                        {o.order_number || o.id.slice(0, 8)}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground text-xs">
                         {new Date(o.created_at).toLocaleDateString("en-IN", {
@@ -254,7 +256,7 @@ const AdminOrders = () => {
                         <button
                           onClick={() => {
                             const s = prompt(
-                              `Update status for ${o.id.slice(0, 8)}:\n\nOptions: pending, confirmed, shipped, delivered`
+                              `Update status for ${o.order_number || o.id.slice(0, 8)}:\n\nOptions: pending, confirmed, shipped, delivered`
                             );
                             if (s && statuses.includes(s as any)) {
                               handleStatusChange(o.id, s);

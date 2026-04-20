@@ -15,6 +15,7 @@ interface Order {
   created_at: string;
   customer_name: string;
   tracking_id: string | null;
+  order_number: string | null;
   phone: string;
   email: string;
 }
@@ -146,7 +147,7 @@ const MyOrders = () => {
               <div key={order.id} className="bg-card border border-border rounded-lg p-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
                   <div>
-                    <p className="text-xs text-muted-foreground">Order #{order.id.slice(0, 8)}</p>
+                    <p className="text-xs text-muted-foreground">Order #{order.order_number || order.id.slice(0, 8)}</p>
                     <p className="text-xs text-muted-foreground">{new Date(order.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</p>
                     <p className="text-xs text-muted-foreground">{order.customer_name}</p>
                   </div>
