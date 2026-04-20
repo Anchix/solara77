@@ -1,118 +1,49 @@
-# Solura Cosmetics — Luxury Cosmetics Website
 
-## Design Direction
+## Issues
 
-Minimal, luxury aesthetic inspired by Nykaa and Sugar Cosmetics — clean white backgrounds, elegant typography, generous whitespace, soft warm tones (beige/cream accents from the existing brand), and smooth animations.
+**1. Missing orders after payment:** In `verify-payment`, if the Razorpay signature passes but a subsequent step fails (Razorpay API fetch, amount mismatch, DB insert), the customer is charged but no order is saved. Also, if `verify-payment` itself errors out or times out, the client-side handler shows "verification failed" but the money is already taken.
 
-## Brand Colors
+Root causes:
+- `process.env.RAZORPAY_KEY_SECRET` is used (should be `Deno.env.get`) — this can throw immediately on Deno runtime, killing the function before insert.
+- Order is only inserted AFTER signature + Razorpay API verification. If Razorpay API call fails transiently, the paid order is lost forever.
+- No fallback insert on partial failure.
 
-- Primary: chose the best combo
-- Background: Warm cream (#fcfbf8) / white
-- Accent: Gold/champagne highlights
-- Text: chose the best combo
+**2. Order ID format:** Currently UUIDs (`62ca598f-...`). User wants `SOLURA1`, `SOLURA2`, `SOLURA3`...
 
----
+## Plan
 
-## Pages & Features
+### A. Fix missing orders (verify-payment edge function)
+1. Replace `process.env.RAZORPAY_KEY_SECRET` with `Deno.env.get("RAZORPAY_KEY_SECRET")` (bug — Deno doesn't have `process.env` reliably).
+2. Restructure flow: **Always insert the order to DB first** (with status `confirmed` and the verified payment_id) once the HMAC signature passes. Then do the Razorpay amount cross-check as a flag (`amount_verified` field or status note) — never lose a paid order.
+3. Wrap each step in try/catch and log clearly; return success once order is saved even if SMS/shipment fail.
+4. Add better error logging so future failures are debuggable from edge function logs.
 
-### 1. Homepage
+### B. Human-readable order IDs (SOLURA1, SOLURA2…)
+Add a new column `order_number` (text, unique) to `orders`, auto-populated as `SOLURA{n}` where n is a sequence.
 
-- Sticky minimal navbar (Logo, Shop, Blog, About, Cart icon with count)
-- Hero section with rotating text ("Shampoo / Face Wash / Face Cream") and CTA
-- Product highlights carousel (3 products with images from soluracosmo.com)
-- Brand values section (Chemical-free, Daily use, Natural glow)
-- Testimonials slider (Lakshmi, Shaik Asfaq, Sasi Prabha)
-- About section with brand story
-- Footer with social links, contact info, policies
+Implementation:
+1. **Migration:**
+   - Create sequence `orders_number_seq` starting at 1.
+   - Add column `order_number text unique`.
+   - Add trigger `BEFORE INSERT ON orders` that sets `NEW.order_number = 'SOLURA' || nextval('orders_number_seq')` if null.
+   - Backfill existing orders with sequential `SOLURA1, SOLURA2…` ordered by `created_at`.
+2. **UI updates** — display `order_number` instead of `id.slice(0,8)`:
+   - `src/components/admin/AdminOrders.tsx` (table + expanded view + CSV export)
+   - `src/components/admin/AdminDashboard.tsx` (recent orders)
+   - `src/pages/MyOrders.tsx` (customer order list)
+   - `src/pages/OrderConfirmation.tsx` (success page — fetch the order_number using the orderId param)
+   - `src/pages/Checkout.tsx` (toast messages — use returned order_number)
+3. **Edge functions** that return order info (`verify-payment`, `send-sms`, `create-shipment`) — return/use `order_number` in messages so customers see `SOLURA42` in their SMS.
 
-### 2. Shop Page
+### Files to edit
+- `supabase/functions/verify-payment/index.ts` — fix env var bug + reorder save-first flow
+- New migration — add sequence, column, trigger, backfill
+- `src/components/admin/AdminOrders.tsx`
+- `src/components/admin/AdminDashboard.tsx`
+- `src/pages/MyOrders.tsx`
+- `src/pages/OrderConfirmation.tsx`
+- `src/pages/Checkout.tsx`
+- `supabase/functions/send-sms/index.ts` (use order_number in SMS body)
 
-- Grid of 3 products with images, prices, discount badges
-- Quick "Add to Cart" button with popup toast notification
-- Product cards showing original/sale price
-
-### 3. Product Detail Page
-
-- Image gallery with thumbnails
-- Product name, price (with discount), description, specifications
-- Quantity selector + Add to Cart button (triggers toast: "Added to cart!")
-- Product details tabs (Description, Reviews)
-
-### 4. Cart (Slide-out Drawer)
-
-- Cart items with quantity controls, remove button
-- Price summary (subtotal, discount, total)
-- "Proceed to Checkout" button
-
-### 5. Checkout Page
-
-- Customer info form: Name, Email, Phone, Address (all fields needed for Shiprocket)
-- Order summary sidebar
-- Razorpay payment button (test key: `rzp_test_SaCviik1qz5ZZp`)
-- On payment success:
-  - Toast popup: "Payment successful! Your order has been placed."
-  - SMS via Twilio: Order confirmation with tracking ID
-  - Order saved to Supabase with status "confirmed"
-
-### 6. Order Confirmation Page
-
-- Order ID, tracking ID, payment status
-- Estimated delivery info
-- "Continue Shopping" button
-
-### 7. Blog Page
-
-- Blog listing with featured image, title, excerpt, date
-- Individual blog post page with rich content
-- SEO-friendly with meta tags, clean URLs
-- Sample blog posts about skincare/haircare tips
-
-### 8. About Us Page
-
-- Brand story (from existing content — startup pitch competition origin)
-- Mission & values
-
----
-
-## Products Data (hardcoded initially, then Supabase)
-
-
-| Product                   | Original Price | Sale Price | Discount |
-| ------------------------- | -------------- | ---------- | -------- |
-| Solura Bright-X Face Wash | ₹249           | ₹200       | 20% off  |
-| Solura Glow'e Night Cream | ₹699           | ₹455       | 35% off  |
-| Solura Hibiglow Shampoo   | ₹425           | ₹425       | —        |
-
-
-## Backend (Supabase via Lovable Cloud)
-
-### Database Tables
-
-- **products** — id, name, slug, description, price, sale_price, images, category, specs
-- **orders** — id, customer_name, email, phone, address, city, state, pincode, total, payment_id, razorpay_order_id, status, tracking_id, created_at
-- **order_items** — id, order_id, product_id, quantity, price
-- **blog_posts** — id, title, slug, excerpt, content, featured_image, published_at, author
-
-### Edge Functions
-
-1. **create-razorpay-order** — Creates Razorpay order on the server side
-2. **verify-payment** — Verifies Razorpay payment signature, saves order to DB
-3. **send-sms** — Sends order confirmation SMS via Twilio connector gateway
-4. **create-shipment** — Creates shipment on Shiprocket, returns tracking ID
-
-## Integrations
-
-- **Razorpay** (test mode) — Payment gateway
-- **Twilio** (connector) — SMS notifications
-- **Shiprocket** — Delivery tracking & shipment creation
-
-## Flow: Add to Cart → Payment
-
-1. User browses products → clicks "Add to Cart" → **toast: "Item added to cart! 🛒"**
-2. Opens cart drawer → adjusts quantities → clicks "Checkout"
-3. Fills shipping details (name, phone, address, pincode)
-4. Clicks "Pay Now" → Razorpay checkout opens
-5. Payment success → **toast: "Payment received! Order confirmed ✅"**
-6. Order saved to Supabase → Shiprocket shipment created → tracking ID generated
-7. **SMS sent**: "Hi {name}, your Solura order #{id} is confirmed! Track: {tracking_id}"
-8. Redirected to order confirmation page with all details
+### Out of scope
+- Changing the underlying UUID primary key (keep `id` as PK for FK integrity with `order_items`; `order_number` is a display alias).
