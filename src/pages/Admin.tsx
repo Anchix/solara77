@@ -7,11 +7,13 @@ import AdminProducts from "@/components/admin/AdminProducts";
 import AdminBlog from "@/components/admin/AdminBlog";
 import AdminCoupons from "@/components/admin/AdminCoupons";
 import AdminSettings from "@/components/admin/AdminSettings";
-import { LogOut, LayoutDashboard, Package, ShoppingBag, FileText, Globe, Tag, Settings } from "lucide-react";
+import AdminPaymentAttempts from "@/components/admin/AdminPaymentAttempts";
+import { LogOut, LayoutDashboard, Package, ShoppingBag, FileText, Globe, Tag, Settings, CreditCard } from "lucide-react";
 
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "orders", label: "Orders", icon: Package },
+  { id: "payments", label: "Payment Attempts", icon: CreditCard },
   { id: "products", label: "Products", icon: ShoppingBag },
   { id: "coupons", label: "Coupons", icon: Tag },
   { id: "blog", label: "Blog", icon: FileText },
