@@ -144,6 +144,18 @@ const Checkout = () => {
       });
       if (orderError || !orderData?.id) throw new Error(orderError?.message || "Failed to create order");
 
+      // Log the payment attempt as "created"
+      try {
+        await supabase.from("payment_attempts").insert({
+          razorpay_order_id: orderData.id,
+          status: "created",
+          amount: finalTotal,
+          customer_name: form.name,
+          email: form.email,
+          phone: form.phone,
+        });
+      } catch (e) { console.error("Log attempt failed:", e); }
+
       const options = {
         key: "rzp_live_ScznhZSQVoONHS",
         amount: finalTotal * 100, currency: "INR",
@@ -169,12 +181,42 @@ const Checkout = () => {
             if (verifyError) throw new Error(verifyError.message);
             toast.success("Payment received! Order confirmed ✅", { description: `Order #${verifyData.orderNumber || verifyData.orderId}`, duration: 5000 });
             clearCart(); navigate(`/order-confirmation/${verifyData.orderId}`);
-          } catch (err: any) { toast.error("Payment verification failed: " + err.message); }
+          } catch (err: any) {
+            // Mark attempt as failed
+            try {
+              await supabase.from("payment_attempts").update({
+                status: "failed",
+                razorpay_payment_id: response.razorpay_payment_id,
+                error_message: err.message,
+              }).eq("razorpay_order_id", response.razorpay_order_id);
+            } catch {}
+            toast.error("Payment verification failed: " + err.message);
+          }
+        },
+        modal: {
+          ondismiss: async () => {
+            // User closed the popup → mark as cancelled
+            try {
+              await supabase.from("payment_attempts").update({
+                status: "cancelled",
+                error_message: "User dismissed payment popup",
+              }).eq("razorpay_order_id", orderData.id);
+            } catch {}
+            toast.info("Payment cancelled");
+          },
         },
         prefill: { name: form.name, email: form.email, contact: form.phone },
         theme: { color: "#7A6CF0" },
       };
       const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", async (resp: any) => {
+        try {
+          await supabase.from("payment_attempts").update({
+            status: "failed",
+            error_message: resp?.error?.description || "Payment failed",
+          }).eq("razorpay_order_id", orderData.id);
+        } catch {}
+      });
       rzp.open();
     } catch (err: any) { toast.error("Payment failed: " + err.message); }
     finally { setLoading(false); }
