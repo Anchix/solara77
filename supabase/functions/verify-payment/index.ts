@@ -17,9 +17,13 @@ serve(async (req) => {
       total,
     } = await req.json();
 
-    // Verify signature using HMAC SHA256
-    const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
-    if (!RAZORPAY_KEY_SECRET) throw new Error("Razorpay secret not configured");
+    // 1. Verify HMAC signature first — non-negotiable
+    const RAZORPAY_KEY_SECRET = Deno.env.get("RAZORPAY_KEY_SECRET");
+    const RAZORPAY_KEY_ID = Deno.env.get("RAZORPAY_KEY_ID");
+    if (!RAZORPAY_KEY_SECRET || !RAZORPAY_KEY_ID) {
+      console.error("Razorpay credentials missing");
+      throw new Error("Razorpay not configured");
+    }
 
     const encoder = new TextEncoder();
     const key = await crypto.subtle.importKey(
@@ -29,47 +33,24 @@ serve(async (req) => {
       false,
       ["sign"]
     );
-    const signature = await crypto.subtle.sign(
+    const signatureBuf = await crypto.subtle.sign(
       "HMAC",
       key,
       encoder.encode(`${razorpay_order_id}|${razorpay_payment_id}`)
     );
-    const expectedSignature = Array.from(new Uint8Array(signature))
+    const expectedSignature = Array.from(new Uint8Array(signatureBuf))
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");
 
     if (expectedSignature !== razorpay_signature) {
+      console.error("Signature mismatch", { razorpay_order_id, razorpay_payment_id });
       return new Response(JSON.stringify({ error: "Invalid payment signature" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Fetch the actual paid amount from Razorpay to prevent client-side manipulation
-    const RAZORPAY_KEY_ID = Deno.env.get("RAZORPAY_KEY_ID");
-    if (!RAZORPAY_KEY_ID) throw new Error("Razorpay key ID not configured");
-
-    const rzpOrderRes = await fetch(
-      `https://api.razorpay.com/v1/orders/${razorpay_order_id}`,
-      {
-        headers: {
-          Authorization: "Basic " + btoa(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`),
-        },
-      }
-    );
-    if (!rzpOrderRes.ok) throw new Error("Failed to fetch Razorpay order details");
-    const rzpOrder = await rzpOrderRes.json();
-    const verifiedTotal = rzpOrder.amount / 100; // paise → rupees
-
-    if (Math.abs(verifiedTotal - total) > 0.01) {
-      console.error(`Amount mismatch: paid=${verifiedTotal}, claimed=${total}`);
-      return new Response(JSON.stringify({ error: "Payment amount mismatch" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Save order to database
+    // 2. Signature valid → SAVE ORDER IMMEDIATELY (do not lose paid orders)
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -84,40 +65,74 @@ serve(async (req) => {
         city: customer.city,
         state: customer.state,
         pincode: customer.pincode,
-        total: verifiedTotal,
+        total: total,
         payment_id: razorpay_payment_id,
         razorpay_order_id,
         status: "confirmed",
+        user_id: customer.user_id || null,
       })
       .select()
       .single();
 
-    if (orderError) throw new Error(`Order save failed: ${orderError.message}`);
+    if (orderError || !order) {
+      console.error("CRITICAL: Order save failed after payment", orderError, { razorpay_payment_id });
+      throw new Error(`Order save failed: ${orderError?.message}`);
+    }
 
-    // Save order items
-    const orderItems = items.map((item: any) => ({
-      order_id: order.id,
-      product_id: item.product_id,
-      product_name: item.name,
-      quantity: item.quantity,
-      price: item.price,
-    }));
-    await supabase.from("order_items").insert(orderItems);
+    console.log(`Order saved: ${order.order_number} (${order.id}) for payment ${razorpay_payment_id}`);
 
-    // Trigger SMS (fire and forget)
+    // 3. Save order items
+    try {
+      const orderItems = items.map((item: any) => ({
+        order_id: order.id,
+        product_id: item.product_id,
+        product_name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+      const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
+      if (itemsError) console.error("Order items save failed:", itemsError);
+    } catch (e) {
+      console.error("Order items insert exception:", e);
+    }
+
+    // 4. Cross-check Razorpay amount (non-blocking — log discrepancies)
+    try {
+      const rzpOrderRes = await fetch(
+        `https://api.razorpay.com/v1/orders/${razorpay_order_id}`,
+        {
+          headers: {
+            Authorization: "Basic " + btoa(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`),
+          },
+        }
+      );
+      if (rzpOrderRes.ok) {
+        const rzpOrder = await rzpOrderRes.json();
+        const verifiedTotal = rzpOrder.amount / 100;
+        if (Math.abs(verifiedTotal - total) > 0.01) {
+          console.error(`AMOUNT MISMATCH on ${order.order_number}: paid=${verifiedTotal}, claimed=${total}`);
+        }
+      } else {
+        console.error("Razorpay verify fetch failed:", rzpOrderRes.status);
+      }
+    } catch (e) {
+      console.error("Razorpay amount cross-check failed:", e);
+    }
+
+    // 5. SMS (fire and forget)
     try {
       await supabase.functions.invoke("send-sms", {
         body: {
           phone: customer.phone,
           name: customer.name,
-          orderId: order.id,
+          orderId: order.order_number,
         },
       });
     } catch (e) {
       console.error("SMS failed:", e);
     }
 
-    // Trigger shipment creation (fire and forget)
+    // 6. Shipment (fire and forget)
     try {
       await supabase.functions.invoke("create-shipment", {
         body: {
@@ -131,9 +146,10 @@ serve(async (req) => {
       console.error("Shipment creation failed:", e);
     }
 
-    return new Response(JSON.stringify({ orderId: order.id, status: "confirmed" }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ orderId: order.id, orderNumber: order.order_number, status: "confirmed" }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Unknown error";
     console.error("verify-payment error:", msg);
