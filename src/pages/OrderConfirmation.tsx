@@ -1,9 +1,26 @@
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const OrderConfirmation = () => {
   const { orderId } = useParams();
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!orderId) return;
+    supabase
+      .from("orders")
+      .select("order_number")
+      .eq("id", orderId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.order_number) setOrderNumber(data.order_number);
+      });
+  }, [orderId]);
+
+  const display = orderNumber || (orderId ? orderId.slice(0, 8) : "");
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12">
@@ -13,7 +30,7 @@ const OrderConfirmation = () => {
         </div>
         <h1 className="font-display text-3xl font-semibold">Order Confirmed!</h1>
         <p className="text-muted-foreground">
-          Thank you for your purchase. Your order <span className="font-medium text-foreground">#{orderId}</span> has been placed successfully.
+          Thank you for your purchase. Your order <span className="font-medium text-foreground">#{display}</span> has been placed successfully.
         </p>
         <p className="text-sm text-muted-foreground">
           You will receive an SMS with your tracking details shortly.
