@@ -77,6 +77,7 @@ const AdminOrders = () => {
     const matchSearch =
       !search ||
       o.id.toLowerCase().includes(search.toLowerCase()) ||
+      o.order_number?.toLowerCase().includes(search.toLowerCase()) ||
       o.customer_name?.toLowerCase().includes(search.toLowerCase()) ||
       o.email?.toLowerCase().includes(search.toLowerCase()) ||
       o.phone?.includes(search);
