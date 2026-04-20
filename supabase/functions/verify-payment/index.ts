@@ -81,6 +81,20 @@ serve(async (req) => {
 
     console.log(`Order saved: ${order.order_number} (${order.id}) for payment ${razorpay_payment_id}`);
 
+    // Mark payment attempt as paid
+    try {
+      await supabase
+        .from("payment_attempts")
+        .update({
+          status: "paid",
+          razorpay_payment_id,
+          order_id: order.id,
+        })
+        .eq("razorpay_order_id", razorpay_order_id);
+    } catch (e) {
+      console.error("Update payment attempt failed:", e);
+    }
+
     // 3. Save order items
     try {
       const orderItems = items.map((item: any) => ({
