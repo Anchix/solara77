@@ -256,7 +256,7 @@ const AdminOrders = () => {
                         <button
                           onClick={() => {
                             const s = prompt(
-                              `Update status for ${o.id.slice(0, 8)}:\n\nOptions: pending, confirmed, shipped, delivered`
+                              `Update status for ${o.order_number || o.id.slice(0, 8)}:\n\nOptions: pending, confirmed, shipped, delivered`
                             );
                             if (s && statuses.includes(s as any)) {
                               handleStatusChange(o.id, s);
