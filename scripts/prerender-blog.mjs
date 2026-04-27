@@ -110,12 +110,14 @@ function buildPostHtml(template, post) {
 
   let html = template;
 
-  // Replace existing <title> and <meta name="description"> + add SEO block
+  // Replace existing <title> and meta/link tags so per-post values are unique
   html = html.replace(/<title>[\s\S]*?<\/title>/, "");
   html = html.replace(/<meta\s+name="description"[^>]*>/g, "");
+  html = html.replace(/<link\s+rel="canonical"[^>]*>/g, "");
   html = html.replace(/<meta\s+property="og:title"[^>]*>/g, "");
   html = html.replace(/<meta\s+property="og:description"[^>]*>/g, "");
   html = html.replace(/<meta\s+property="og:type"[^>]*>/g, "");
+  html = html.replace(/<meta\s+property="og:url"[^>]*>/g, "");
   html = html.replace("</head>", `${seoTags}\n</head>`);
 
   // Inject article into <div id="root"> so crawlers see content
