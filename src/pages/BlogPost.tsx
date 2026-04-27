@@ -5,6 +5,42 @@ import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 
+const SITE_URL = "https://soluracosmo.com";
+
+function setMeta(attr: "name" | "property", key: string, value: string) {
+  if (typeof document === "undefined") return;
+  let el = document.head.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", value);
+}
+
+function setCanonical(href: string) {
+  if (typeof document === "undefined") return;
+  let el = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!el) {
+    el = document.createElement("link");
+    el.setAttribute("rel", "canonical");
+    document.head.appendChild(el);
+  }
+  el.setAttribute("href", href);
+}
+
+function setJsonLd(data: Record<string, unknown>) {
+  if (typeof document === "undefined") return;
+  let el = document.head.querySelector('script[data-jsonld="blogpost"]') as HTMLScriptElement | null;
+  if (!el) {
+    el = document.createElement("script");
+    el.type = "application/ld+json";
+    el.setAttribute("data-jsonld", "blogpost");
+    document.head.appendChild(el);
+  }
+  el.text = JSON.stringify(data);
+}
+
 const BlogPost = () => {
   const { slug } = useParams();
   const [post, setPost] = useState<BlogPostType | null>(null);
@@ -26,6 +62,40 @@ const BlogPost = () => {
         setLoading(false);
       });
   }, [slug]);
+
+  useEffect(() => {
+    if (!post) return;
+    const url = `${SITE_URL}/blog/${post.slug}`;
+    const desc = (post.excerpt || post.content || "").slice(0, 160).replace(/\s+/g, " ").trim();
+    const image = post.featured_image || `${SITE_URL}/placeholder.svg`;
+    document.title = `${post.title} — Solura Journal`;
+    setMeta("name", "description", desc);
+    setCanonical(url);
+    setMeta("property", "og:type", "article");
+    setMeta("property", "og:title", post.title);
+    setMeta("property", "og:description", desc);
+    setMeta("property", "og:url", url);
+    setMeta("property", "og:image", image);
+    setMeta("name", "twitter:card", "summary_large_image");
+    setMeta("name", "twitter:title", post.title);
+    setMeta("name", "twitter:description", desc);
+    setMeta("name", "twitter:image", image);
+    setJsonLd({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: desc,
+      image: [image],
+      datePublished: post.published_at,
+      author: { "@type": "Person", name: post.author || "Solura Team" },
+      publisher: {
+        "@type": "Organization",
+        name: "Solura Cosmetics",
+        logo: { "@type": "ImageObject", url: `${SITE_URL}/placeholder.svg` },
+      },
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    });
+  }, [post]);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">Loading...</div>;
