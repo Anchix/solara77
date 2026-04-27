@@ -10,6 +10,16 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import Index from "./pages/Index";
 
+// Idle-prefetch likely next pages so client-side navigation is instant
+if (typeof window !== "undefined") {
+  const prefetch = () => {
+    import("./pages/Shop");
+    import("./pages/ProductDetail");
+  };
+  if ("requestIdleCallback" in window) (window as any).requestIdleCallback(prefetch);
+  else setTimeout(prefetch, 1500);
+}
+
 const ChatBot = lazy(() => import("@/components/ChatBot"));
 const Shop = lazy(() => import("./pages/Shop"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
