@@ -10,6 +10,16 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import Index from "./pages/Index";
 
+// Idle-prefetch likely next pages so client-side navigation is instant
+if (typeof window !== "undefined") {
+  const prefetch = () => {
+    import("./pages/Shop");
+    import("./pages/ProductDetail");
+  };
+  if ("requestIdleCallback" in window) (window as any).requestIdleCallback(prefetch);
+  else setTimeout(prefetch, 1500);
+}
+
 const ChatBot = lazy(() => import("@/components/ChatBot"));
 const Shop = lazy(() => import("./pages/Shop"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
@@ -24,7 +34,16 @@ const Admin = lazy(() => import("./pages/Admin"));
 const FounderStory = lazy(() => import("./pages/FounderStory"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 min — instant nav between pages
+      gcTime: 30 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
