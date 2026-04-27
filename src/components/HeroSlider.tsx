@@ -60,7 +60,9 @@ const HeroSlider = () => {
               className="w-full h-full object-cover"
               width={1920}
               height={800}
-              {...(index === 0 ? {} : { loading: "lazy" as const })}
+              decoding={index === 0 ? "sync" : "async"}
+              fetchPriority={index === 0 ? "high" : "low"}
+              loading={index === 0 ? "eager" : "lazy"}
             />
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
