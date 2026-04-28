@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 
-const SITE_URL = "https://www.soluracosmo.com";
+const SITE_URL = "https://soluracosmo.com";
 
 function setMeta(attr: "name" | "property", key: string, value: string) {
   if (typeof document === "undefined") return;

@@ -13,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const DIST = path.join(ROOT, "dist");
 
-const SITE_URL = "https://www.soluracosmo.com";
+const SITE_URL = "https://soluracosmo.com";
 const SUPABASE_URL = "https://ixzqjchjscjyutlhbxhx.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4enFqY2hqc2NqeXV0bGhieGh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODMzMDEsImV4cCI6MjA5MTA1OTMwMX0.HNDTM-a6Q33GdTmlWsIWLULU8GucAioPg2MTqR78xg8";
