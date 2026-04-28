@@ -4,8 +4,12 @@ import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductReviews from "@/components/ProductReviews";
+import { supabase } from "@/integrations/supabase/client";
+import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
+
+const SITE_URL = "https://soluracosmo.com";
 
 const certs = [
   { icon: Award, name: "GMP" },
