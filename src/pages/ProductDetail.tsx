@@ -4,8 +4,12 @@ import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductReviews from "@/components/ProductReviews";
+import { supabase } from "@/integrations/supabase/client";
+import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
+
+const SITE_URL = "https://soluracosmo.com";
 
 const certs = [
   { icon: Award, name: "GMP" },
@@ -20,6 +24,107 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+
+  // Inject Product, AggregateRating/Review, FAQ, Breadcrumb JSON-LD + SEO meta
+  useEffect(() => {
+    if (!product) return;
+    const url = `${SITE_URL}/product/${product.slug}`;
+    const imgs = product.images && product.images.length > 0 ? product.images : [`${SITE_URL}/placeholder.svg`];
+    const priceValue = product.sale_price ?? product.price;
+    const desc = (product.description || product.key_benefits || product.name).slice(0, 160);
+
+    document.title = `${product.name} — Solura Cosmetics`;
+    let metaDesc = document.head.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    if (!metaDesc) { metaDesc = document.createElement("meta"); metaDesc.name = "description"; document.head.appendChild(metaDesc); }
+    metaDesc.content = desc;
+    let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.appendChild(canonical); }
+    canonical.href = url;
+
+    supabase
+      .from("reviews")
+      .select("customer_name, rating, review_text, created_at")
+      .eq("product_id", product.id)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        const reviews = (data || []) as Array<{ customer_name: string; rating: number; review_text: string | null; created_at: string }>;
+        const avg = reviews.length > 0 ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : null;
+
+        const productLd: Record<string, unknown> = {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: product.name,
+          description: product.description || desc,
+          image: imgs,
+          sku: product.id,
+          brand: { "@type": "Brand", name: product.brand || "Solura" },
+          category: product.category || undefined,
+          url,
+          offers: {
+            "@type": "Offer",
+            url,
+            priceCurrency: "INR",
+            price: priceValue,
+            availability: product.is_out_of_stock
+              ? "https://schema.org/OutOfStock"
+              : "https://schema.org/InStock",
+            itemCondition: "https://schema.org/NewCondition",
+            seller: { "@type": "Organization", name: "Solura Cosmetics" },
+          },
+        };
+
+        if (avg !== null && reviews.length > 0) {
+          productLd.aggregateRating = {
+            "@type": "AggregateRating",
+            ratingValue: avg.toFixed(1),
+            reviewCount: reviews.length,
+            bestRating: 5,
+            worstRating: 1,
+          };
+          productLd.review = reviews.slice(0, 10).map((r) => ({
+            "@type": "Review",
+            author: { "@type": "Person", name: r.customer_name },
+            datePublished: r.created_at,
+            reviewBody: r.review_text || "",
+            reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+          }));
+        }
+
+        setJsonLd("product", productLd);
+      });
+
+    const faqs = [
+      { q: `Is ${product.name} chemical-free?`, a: "Yes. All Solura products are crafted with natural, chemical-free ingredients and are cruelty free, GMP, ISO, and Non GMO compliant." },
+      { q: `How do I use ${product.name}?`, a: product.how_to_use || "Apply as directed on the packaging. For best results use consistently as part of your daily routine." },
+      { q: "What is the shipping fee?", a: "We charge a flat ₹50 shipping fee on all orders across India." },
+      { q: "How can I track my order?", a: "After placing your order you can track its status from the My Orders page using your phone number." },
+    ];
+    setJsonLd("faq", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+
+    setJsonLd("breadcrumb", {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Shop", item: `${SITE_URL}/shop` },
+        { "@type": "ListItem", position: 3, name: product.name, item: url },
+      ],
+    });
+
+    return () => {
+      removeJsonLd("product");
+      removeJsonLd("faq");
+      removeJsonLd("breadcrumb");
+    };
+  }, [product]);
 
   if (isLoading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
   if (!product) return (

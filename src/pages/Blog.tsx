@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { blogPosts as fallbackPosts, BlogPost } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
+
+const SITE_URL = "https://soluracosmo.com";
 
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -23,6 +26,45 @@ const Blog = () => {
         setLoading(false);
       });
   }, []);
+
+  // Inject Blog + ItemList JSON-LD whenever posts change
+  useEffect(() => {
+    if (posts.length === 0) return;
+    setJsonLd("blog", {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      name: "Solura Journal",
+      url: `${SITE_URL}/blog`,
+      description: "Tips, guides, and insights for your skincare and haircare journey.",
+      publisher: {
+        "@type": "Organization",
+        name: "Solura Cosmetics",
+        logo: { "@type": "ImageObject", url: `${SITE_URL}/placeholder.svg` },
+      },
+      blogPost: posts.slice(0, 20).map((p) => ({
+        "@type": "BlogPosting",
+        headline: p.title,
+        url: `${SITE_URL}/blog/${p.slug}`,
+        image: p.featured_image || undefined,
+        datePublished: p.published_at,
+        author: { "@type": "Person", name: p.author || "Solura Team" },
+      })),
+    });
+    setJsonLd("blog-itemlist", {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      itemListElement: posts.slice(0, 20).map((p, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `${SITE_URL}/blog/${p.slug}`,
+        name: p.title,
+      })),
+    });
+    return () => {
+      removeJsonLd("blog");
+      removeJsonLd("blog-itemlist");
+    };
+  }, [posts]);
 
   return (
     <div className="min-h-screen py-12">
