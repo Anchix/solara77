@@ -191,6 +191,13 @@ async function main() {
     console.warn("[prerender-blog] could not fetch posts:", e.message);
   }
 
+  let products = [];
+  try {
+    products = await fetchProducts();
+  } catch (e) {
+    console.warn("[prerender-blog] could not fetch products:", e.message);
+  }
+
   let count = 0;
   for (const post of posts) {
     if (!post.slug) continue;
@@ -200,8 +207,8 @@ async function main() {
     count++;
   }
 
-  fs.writeFileSync(path.join(DIST, "sitemap.xml"), buildSitemap(posts));
-  console.log(`[prerender-blog] wrote ${count} blog page(s) + sitemap.xml`);
+  fs.writeFileSync(path.join(DIST, "sitemap.xml"), buildSitemap(posts, products));
+  console.log(`[prerender-blog] wrote ${count} blog page(s) + sitemap.xml (${products.length} products)`);
 }
 
 main().catch((e) => {
