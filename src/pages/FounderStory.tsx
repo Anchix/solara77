@@ -19,7 +19,15 @@ const values = [
   { icon: Sparkles, title: "Affordable Luxury", desc: "Premium quality skincare accessible to everyone." },
 ];
 
-const FounderStory = () => (
+const FounderStory = () => {
+  useEffect(() => {
+    applySeo({
+      title: "Founder Story — The Vision Behind Solura Cosmetics",
+      description: "From a student startup pitch to a growing natural beauty brand — discover the story, milestones, and values behind Solura Cosmetics.",
+      path: "/founder-story",
+    });
+  }, []);
+  return (
   <div className="min-h-screen">
     {/* Hero */}
     <section className="relative py-16 md:py-28 bg-gradient-to-b from-primary/10 to-background">
