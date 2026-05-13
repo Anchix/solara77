@@ -4,8 +4,7 @@ import { blogPosts as fallbackPosts, BlogPost } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
-
-const SITE_URL = "https://soluracosmo.com";
+import { applySeo, SITE_URL } from "@/lib/seo";
 
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
