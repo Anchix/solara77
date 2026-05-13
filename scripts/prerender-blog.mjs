@@ -52,6 +52,18 @@ async function fetchPosts() {
   return res.json();
 }
 
+async function fetchProducts() {
+  const url = `${SUPABASE_URL}/rest/v1/products?select=slug,updated_at&order=updated_at.desc`;
+  const res = await fetch(url, {
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+  });
+  if (!res.ok) throw new Error(`Supabase products fetch failed: ${res.status}`);
+  return res.json();
+}
+
 function buildPostHtml(template, post) {
   const url = `${SITE_URL}/blog/${post.slug}`;
   const title = `${post.title} — Solura Journal`;
