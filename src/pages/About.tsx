@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Leaf, Heart, Award } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
+import { applySeo } from "@/lib/seo";
 
 const faqs = [
   { q: "Are Solura products chemical-free?", a: "Yes. Every Solura product is crafted with natural ingredients and is GMP, ISO, Cruelty Free and Non GMO compliant." },
