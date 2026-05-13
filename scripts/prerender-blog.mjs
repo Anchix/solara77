@@ -141,7 +141,7 @@ function buildPostHtml(template, post) {
   return html;
 }
 
-function buildSitemap(posts) {
+function buildSitemap(posts, products) {
   const urls = [
     ...STATIC_ROUTES.map((r) => ({ loc: `${SITE_URL}${r}`, changefreq: "weekly", priority: r === "/" ? "1.0" : "0.8" })),
     ...posts.map((p) => ({
@@ -149,6 +149,12 @@ function buildSitemap(posts) {
       lastmod: (p.updated_at || p.published_at || new Date().toISOString()).slice(0, 10),
       changefreq: "monthly",
       priority: "0.7",
+    })),
+    ...products.map((p) => ({
+      loc: `${SITE_URL}/product/${p.slug}`,
+      lastmod: (p.updated_at || new Date().toISOString()).slice(0, 10),
+      changefreq: "weekly",
+      priority: "0.8",
     })),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
