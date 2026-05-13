@@ -2,11 +2,18 @@ import { useEffect } from "react";
 import { useProducts } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
-
-const SITE_URL = "https://soluracosmo.com";
+import { applySeo, SITE_URL } from "@/lib/seo";
 
 const Shop = () => {
   const { data: products = [], isLoading } = useProducts();
+
+  useEffect(() => {
+    applySeo({
+      title: "Shop Natural Skincare & Haircare — Solura Cosmetics",
+      description: "Browse Solura's collection of chemical-free, natural skincare and haircare crafted in India. Free tracking, flat ₹50 shipping.",
+      path: "/shop",
+    });
+  }, []);
 
   useEffect(() => {
     if (products.length === 0) return;
