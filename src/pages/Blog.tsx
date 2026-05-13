@@ -11,6 +11,11 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    applySeo({
+      title: "Solura Journal — Skincare & Haircare Tips",
+      description: "Skincare and haircare guides, ingredient deep-dives, and natural beauty tips from the Solura team.",
+      path: "/blog",
+    });
     supabase
       .from("blog_posts")
       .select("*")
