@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart, Lightbulb, Target, Award, Sparkles } from "lucide-react";
 import foundersImage from "@/assets/founders.png";
+import { applySeo } from "@/lib/seo";
 
 const milestones = [
   { year: "2024", title: "The Spark", desc: "Solura's concept wins at a state-level startup pitch competition, proving the idea has real potential." },
