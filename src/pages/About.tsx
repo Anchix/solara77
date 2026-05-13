@@ -15,6 +15,11 @@ const faqs = [
 
 const About = () => {
   useEffect(() => {
+    applySeo({
+      title: "About Solura — Natural, Chemical-Free Cosmetics from India",
+      description: "Learn about Solura Cosmetics: our mission, natural ingredients, and the values behind our chemical-free skincare and haircare products.",
+      path: "/about",
+    });
     setJsonLd("faq", {
       "@context": "https://schema.org",
       "@type": "FAQPage",
