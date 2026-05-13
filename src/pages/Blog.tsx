@@ -4,14 +4,18 @@ import { blogPosts as fallbackPosts, BlogPost } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
-
-const SITE_URL = "https://soluracosmo.com";
+import { applySeo, SITE_URL } from "@/lib/seo";
 
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    applySeo({
+      title: "Solura Journal — Skincare & Haircare Tips",
+      description: "Skincare and haircare guides, ingredient deep-dives, and natural beauty tips from the Solura team.",
+      path: "/blog",
+    });
     supabase
       .from("blog_posts")
       .select("*")

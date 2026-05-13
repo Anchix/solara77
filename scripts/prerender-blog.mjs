@@ -52,6 +52,18 @@ async function fetchPosts() {
   return res.json();
 }
 
+async function fetchProducts() {
+  const url = `${SUPABASE_URL}/rest/v1/products?select=slug,updated_at&order=updated_at.desc`;
+  const res = await fetch(url, {
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+  });
+  if (!res.ok) throw new Error(`Supabase products fetch failed: ${res.status}`);
+  return res.json();
+}
+
 function buildPostHtml(template, post) {
   const url = `${SITE_URL}/blog/${post.slug}`;
   const title = `${post.title} — Solura Journal`;
@@ -129,7 +141,7 @@ function buildPostHtml(template, post) {
   return html;
 }
 
-function buildSitemap(posts) {
+function buildSitemap(posts, products) {
   const urls = [
     ...STATIC_ROUTES.map((r) => ({ loc: `${SITE_URL}${r}`, changefreq: "weekly", priority: r === "/" ? "1.0" : "0.8" })),
     ...posts.map((p) => ({
@@ -137,6 +149,12 @@ function buildSitemap(posts) {
       lastmod: (p.updated_at || p.published_at || new Date().toISOString()).slice(0, 10),
       changefreq: "monthly",
       priority: "0.7",
+    })),
+    ...products.map((p) => ({
+      loc: `${SITE_URL}/product/${p.slug}`,
+      lastmod: (p.updated_at || new Date().toISOString()).slice(0, 10),
+      changefreq: "weekly",
+      priority: "0.8",
     })),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -173,6 +191,13 @@ async function main() {
     console.warn("[prerender-blog] could not fetch posts:", e.message);
   }
 
+  let products = [];
+  try {
+    products = await fetchProducts();
+  } catch (e) {
+    console.warn("[prerender-blog] could not fetch products:", e.message);
+  }
+
   let count = 0;
   for (const post of posts) {
     if (!post.slug) continue;
@@ -182,8 +207,8 @@ async function main() {
     count++;
   }
 
-  fs.writeFileSync(path.join(DIST, "sitemap.xml"), buildSitemap(posts));
-  console.log(`[prerender-blog] wrote ${count} blog page(s) + sitemap.xml`);
+  fs.writeFileSync(path.join(DIST, "sitemap.xml"), buildSitemap(posts, products));
+  console.log(`[prerender-blog] wrote ${count} blog page(s) + sitemap.xml (${products.length} products)`);
 }
 
 main().catch((e) => {

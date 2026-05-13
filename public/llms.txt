@@ -1,0 +1,17 @@
+# Solura Cosmetics
+
+> Premium chemical-free, natural skincare and haircare crafted in India. Guest-friendly checkout — track orders by phone number, no account required.
+
+Solura Cosmetics offers small-batch, GMP / ISO / Cruelty Free / Non GMO compliant beauty products formulated with natural ingredients. Flat ₹50 shipping pan-India. New customers can use code WELCOME10 for 10% off the first order.
+
+## Pages
+
+- [Home](/): Brand overview and featured products.
+- [Shop](/shop): Full catalog of skincare and haircare products.
+- [Blog](/blog): Skincare and haircare guides, ingredient deep-dives, and natural beauty tips.
+- [About](/about): Mission, values, and frequently asked questions.
+- [Founder Story](/founder-story): How Solura grew from a student startup pitch to a national brand.
+
+## Optional
+
+- [My Orders](/my-orders): Order tracking by phone number for guest customers.

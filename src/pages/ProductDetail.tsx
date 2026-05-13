@@ -34,12 +34,25 @@ const ProductDetail = () => {
     const desc = (product.description || product.key_benefits || product.name).slice(0, 160);
 
     document.title = `${product.name} — Solura Cosmetics`;
-    let metaDesc = document.head.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    if (!metaDesc) { metaDesc = document.createElement("meta"); metaDesc.name = "description"; document.head.appendChild(metaDesc); }
-    metaDesc.content = desc;
+    const upsertMeta = (attr: "name" | "property", key: string, value: string) => {
+      let m = document.head.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
+      if (!m) { m = document.createElement("meta"); m.setAttribute(attr, key); document.head.appendChild(m); }
+      m.setAttribute("content", value);
+    };
+    upsertMeta("name", "description", desc);
     let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.appendChild(canonical); }
     canonical.href = url;
+    const ogImage = imgs[0];
+    upsertMeta("property", "og:type", "product");
+    upsertMeta("property", "og:title", product.name);
+    upsertMeta("property", "og:description", desc);
+    upsertMeta("property", "og:url", url);
+    upsertMeta("property", "og:image", ogImage);
+    upsertMeta("name", "twitter:card", "summary_large_image");
+    upsertMeta("name", "twitter:title", product.name);
+    upsertMeta("name", "twitter:description", desc);
+    upsertMeta("name", "twitter:image", ogImage);
 
     supabase
       .from("reviews")

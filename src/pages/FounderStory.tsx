@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart, Lightbulb, Target, Award, Sparkles } from "lucide-react";
 import foundersImage from "@/assets/founders.png";
+import { applySeo } from "@/lib/seo";
 
 const milestones = [
   { year: "2024", title: "The Spark", desc: "Solura's concept wins at a state-level startup pitch competition, proving the idea has real potential." },
@@ -17,7 +19,15 @@ const values = [
   { icon: Sparkles, title: "Affordable Luxury", desc: "Premium quality skincare accessible to everyone." },
 ];
 
-const FounderStory = () => (
+const FounderStory = () => {
+  useEffect(() => {
+    applySeo({
+      title: "Founder Story — The Vision Behind Solura Cosmetics",
+      description: "From a student startup pitch to a growing natural beauty brand — discover the story, milestones, and values behind Solura Cosmetics.",
+      path: "/founder-story",
+    });
+  }, []);
+  return (
   <div className="min-h-screen">
     {/* Hero */}
     <section className="relative py-16 md:py-28 bg-gradient-to-b from-primary/10 to-background">
@@ -163,6 +173,7 @@ const FounderStory = () => (
       </div>
     </section>
   </div>
-);
+  );
+};
 
 export default FounderStory;
