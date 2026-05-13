@@ -173,6 +173,7 @@ const FounderStory = () => {
       </div>
     </section>
   </div>
-);
+  );
+};
 
 export default FounderStory;
