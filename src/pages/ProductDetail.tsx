@@ -3,11 +3,13 @@ import { useProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun, Gift, Flame } from "lucide-react";
 import { useState, useEffect } from "react";
 import ProductReviews from "@/components/ProductReviews";
 import { supabase } from "@/integrations/supabase/client";
 import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
+import { isBogoActive } from "@/lib/bogo";
+import CountdownTimer from "@/components/CountdownTimer";
 
 const SITE_URL = "https://soluracosmo.com";
 
