@@ -83,6 +83,7 @@ const AdminProducts = () => {
       safety_info: editing.safety_info || null, package_type: editing.package_type || null,
       country_of_origin: editing.country_of_origin || null,
       is_out_of_stock: editing.is_out_of_stock ?? false,
+      is_bogo: editing.is_bogo ?? false,
     };
 
     try {
