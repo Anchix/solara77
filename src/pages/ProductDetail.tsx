@@ -192,8 +192,20 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Image Gallery */}
           <div className="space-y-3">
-            <div className="bg-secondary rounded-lg flex items-center justify-center aspect-square overflow-hidden">
-              <img src={images[selectedImage]} alt={product.name} className="w-full h-full object-contain p-4 md:p-8" />
+            <div className="relative bg-secondary rounded-lg aspect-square overflow-hidden">
+              {images.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`${product.name} ${i + 1}`}
+                  className={`absolute inset-0 w-full h-full object-contain p-4 md:p-8 transition-opacity duration-700 ease-in-out ${i === selectedImage ? "opacity-100" : "opacity-0"}`}
+                />
+              ))}
+              {showBogo && (
+                <span className="absolute top-3 left-3 z-10 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
+                  <Gift className="h-3.5 w-3.5" /> Buy 1 Get 1 FREE
+                </span>
+              )}
             </div>
             {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
