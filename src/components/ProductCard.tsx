@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Gift } from "lucide-react";
+import { isBogoActive } from "@/lib/bogo";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const { addToCart } = useCart();
 
   const isOutOfStock = product.is_out_of_stock;
+  const showBogo = product.is_bogo && isBogoActive() && !isOutOfStock;
 
   return (
     <div className="group">
@@ -24,7 +26,12 @@ const ProductCard = ({ product }: { product: Product }) => {
               Out of Stock
             </span>
           )}
-          {!isOutOfStock && product.sale_price && product.sale_price < product.price && (
+          {showBogo && (
+            <span className="absolute top-3 right-3 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 animate-pulse">
+              <Gift className="h-3 w-3" /> Buy 1 Get 1
+            </span>
+          )}
+          {!isOutOfStock && !showBogo && product.sale_price && product.sale_price < product.price && (
             <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-medium px-2.5 py-1 rounded-full">
               {Math.round((1 - product.sale_price / product.price) * 100)}% off
             </span>
