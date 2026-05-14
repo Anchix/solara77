@@ -249,6 +249,7 @@ export type Database = {
           how_to_use: string | null
           id: string
           images: string[] | null
+          is_bogo: boolean
           is_out_of_stock: boolean
           key_benefits: string | null
           name: string
@@ -276,6 +277,7 @@ export type Database = {
           how_to_use?: string | null
           id?: string
           images?: string[] | null
+          is_bogo?: boolean
           is_out_of_stock?: boolean
           key_benefits?: string | null
           name: string
@@ -303,6 +305,7 @@ export type Database = {
           how_to_use?: string | null
           id?: string
           images?: string[] | null
+          is_bogo?: boolean
           is_out_of_stock?: boolean
           key_benefits?: string | null
           name?: string
