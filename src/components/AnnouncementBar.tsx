@@ -1,8 +1,9 @@
 const messages = [
+  "🎁 BUY 1 GET 1 FREE on selected bestsellers — ends 26 May 2026!",
+  "⏰ Hurry! BOGO offer ending soon — Shop now before it's gone",
   "✨ Get 10% OFF on your first purchase — use code WELCOME10",
   "🚚 Free shipping on prepaid orders above ₹999",
   "🌿 100% Chemical-Free · Cruelty-Free · GMP Certified",
-  "💖 Join 5000+ happy customers — Shop Solura today",
 ];
 
 const AnnouncementBar = () => {

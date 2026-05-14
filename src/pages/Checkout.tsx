@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Tag } from "lucide-react";
+import { Tag, Gift } from "lucide-react";
+import { computeBogo } from "@/lib/bogo";
 
 declare global {
   interface Window { Razorpay: any; }
@@ -98,9 +99,10 @@ const Checkout = () => {
     setCouponCode("");
   };
 
+  const bogo = computeBogo(items);
   const discountAmount = couponApplied?.discount || 0;
-  const afterDiscount = totalPrice - discountAmount;
-  const finalTotal = afterDiscount + SHIPPING_FEE + (paymentMethod === "cod" ? COD_FEE : 0);
+  const afterDiscount = totalPrice - bogo.totalDiscount - discountAmount;
+  const finalTotal = Math.max(0, afterDiscount) + SHIPPING_FEE + (paymentMethod === "cod" ? COD_FEE : 0);
 
   const handlePay = async () => {
     if (!form.name || !form.email || !form.phone || !form.address || !form.city || !form.state || !form.pincode) {
@@ -328,6 +330,12 @@ const Checkout = () => {
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>₹{totalPrice.toLocaleString("en-IN")}</span>
                 </div>
+                {bogo.totalDiscount > 0 && (
+                  <div className="flex justify-between text-sm text-primary font-medium">
+                    <span className="flex items-center gap-1"><Gift className="h-3 w-3" /> BOGO (Buy 1 Get 1)</span>
+                    <span>−₹{bogo.totalDiscount.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
                 {couponApplied && (
                   <div className="flex justify-between text-sm text-primary">
                     <span>Coupon Discount</span>
