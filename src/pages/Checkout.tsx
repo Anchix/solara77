@@ -99,9 +99,10 @@ const Checkout = () => {
     setCouponCode("");
   };
 
+  const bogo = computeBogo(items);
   const discountAmount = couponApplied?.discount || 0;
-  const afterDiscount = totalPrice - discountAmount;
-  const finalTotal = afterDiscount + SHIPPING_FEE + (paymentMethod === "cod" ? COD_FEE : 0);
+  const afterDiscount = totalPrice - bogo.totalDiscount - discountAmount;
+  const finalTotal = Math.max(0, afterDiscount) + SHIPPING_FEE + (paymentMethod === "cod" ? COD_FEE : 0);
 
   const handlePay = async () => {
     if (!form.name || !form.email || !form.phone || !form.address || !form.city || !form.state || !form.pincode) {
