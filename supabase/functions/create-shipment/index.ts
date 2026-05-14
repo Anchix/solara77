@@ -8,7 +8,8 @@ serve(async (req) => {
   }
 
   try {
-    const { orderId, customer, items, total } = await req.json();
+    const { orderId, customer, items, total, paymentMethod } = await req.json();
+    const isCOD = paymentMethod === "cod" || paymentMethod === "COD";
 
     const SHIPROCKET_EMAIL = Deno.env.get("SHIPROCKET_EMAIL");
     const SHIPROCKET_PASSWORD = Deno.env.get("SHIPROCKET_PASSWORD");
@@ -49,7 +50,7 @@ serve(async (req) => {
         units: item.quantity,
         selling_price: item.price,
       })),
-      payment_method: "Prepaid",
+      payment_method: isCOD ? "COD" : "Prepaid",
       sub_total: total,
       length: 20,
       breadth: 15,
