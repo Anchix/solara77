@@ -50,7 +50,7 @@ serve(async (req) => {
         units: item.quantity,
         selling_price: item.price,
       })),
-      payment_method: "Prepaid",
+      payment_method: isCOD ? "COD" : "Prepaid",
       sub_total: total,
       length: 20,
       breadth: 15,
