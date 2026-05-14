@@ -25,6 +25,7 @@ export interface Product {
   package_type: string | null;
   country_of_origin: string | null;
   is_out_of_stock: boolean;
+  is_bogo?: boolean;
 }
 
 export interface CartItem {
