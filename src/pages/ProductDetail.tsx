@@ -141,6 +141,16 @@ const ProductDetail = () => {
     };
   }, [product]);
 
+  // Auto-rotate product images every 4s with fade
+  useEffect(() => {
+    const len = product?.images?.length || 0;
+    if (len <= 1) return;
+    const id = setInterval(() => {
+      setSelectedImage((i) => (i + 1) % len);
+    }, 4000);
+    return () => clearInterval(id);
+  }, [product?.id, product?.images?.length]);
+
   if (isLoading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
   if (!product) return (
     <div className="min-h-screen flex items-center justify-center">
