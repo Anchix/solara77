@@ -154,6 +154,7 @@ const ProductDetail = () => {
   const handleAdd = () => { for (let i = 0; i < qty; i++) addToCart(product); };
   const discount = product.sale_price ? `${Math.round((1 - product.sale_price / product.price) * 100)}% off` : null;
   const images = product.images && product.images.length > 0 ? product.images : ["/placeholder.svg"];
+  const showBogo = product.is_bogo && isBogoActive() && !product.is_out_of_stock;
 
   const detailRows = [
     { label: "Brand", value: product.brand },
