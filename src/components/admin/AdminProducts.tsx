@@ -61,6 +61,7 @@ const AdminProducts = () => {
     storage_info: p.storage_info || "", safety_info: p.safety_info || "",
     package_type: p.package_type || "", country_of_origin: p.country_of_origin || "India",
     is_out_of_stock: p.is_out_of_stock ?? false,
+    is_bogo: p.is_bogo ?? false,
   });
 
   const handleSave = async () => {
