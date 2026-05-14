@@ -32,6 +32,9 @@ const Index = () => {
       {/* Hero Slider */}
       <HeroSlider />
 
+      {/* BOGO promotional banner */}
+      <BogoBanner />
+
       {/* Trust badges */}
       <section className="py-4 md:py-6 border-y border-border">
         <div className="container flex flex-wrap justify-center gap-4 md:gap-16 items-center">
