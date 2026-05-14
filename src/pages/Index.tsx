@@ -45,28 +45,23 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Bestsellers Carousel */}
+      {/* Bestsellers — full grid */}
       <section className="py-12 md:py-20">
         <div className="container">
           <div className="text-center mb-8 md:mb-12">
             <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Our Collection</p>
             <h2 className="font-display text-3xl md:text-5xl font-light">Bestsellers</h2>
+            <p className="text-sm text-muted-foreground mt-3 max-w-md mx-auto">
+              Hand-crafted, chemical-free essentials loved by 5000+ customers.
+            </p>
           </div>
           {isLoading ? (
             <p className="text-center text-muted-foreground">Loading products...</p>
           ) : (
-            <div className="max-w-5xl mx-auto px-4 md:px-0">
-              <Carousel opts={{ align: "start", loop: true }} className="w-full">
-                <CarouselContent className="-ml-4">
-                  {products.map((p) => (
-                    <CarouselItem key={p.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-                      <ProductCard product={p} />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="-left-2 md:-left-12" />
-                <CarouselNext className="-right-2 md:-right-12" />
-              </Carousel>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 max-w-6xl mx-auto px-2 md:px-0">
+              {products.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
             </div>
           )}
           <div className="text-center mt-8 md:mt-12">
