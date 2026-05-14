@@ -240,6 +240,26 @@ const ProductDetail = () => {
             </div>
             <p className="text-muted-foreground leading-relaxed">{product.description}</p>
 
+            {showBogo && (
+              <div className="rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0">
+                    <Gift className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-display text-base font-semibold leading-tight">Buy 1, Get 1 FREE</p>
+                    <p className="text-xs text-muted-foreground">Add 2 to cart — pay for just 1. Auto-applied.</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between gap-2 pt-1 border-t border-primary/20">
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+                    <Flame className="h-3 w-3 text-primary animate-pulse" /> Ends in
+                  </span>
+                  <CountdownTimer variant="dark" />
+                </div>
+              </div>
+            )}
+
             {/* Certifications */}
             <div className="flex flex-wrap gap-2">
               {certs.map(c => (
