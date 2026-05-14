@@ -147,6 +147,14 @@ const AdminProducts = () => {
                   <Switch checked={editing?.is_out_of_stock ?? false} onCheckedChange={(checked) => setEditing({ ...editing, is_out_of_stock: checked })} />
                 </div>
 
+                <div className="flex items-center justify-between py-2 rounded-lg bg-primary/5 border border-primary/20 px-3">
+                  <div>
+                    <Label>Buy 1 Get 1 FREE 🎁</Label>
+                    <p className="text-xs text-muted-foreground">Include in BOGO promotion (ends 26 May 2026). Cart auto-discounts every 2nd unit.</p>
+                  </div>
+                  <Switch checked={editing?.is_bogo ?? false} onCheckedChange={(checked) => setEditing({ ...editing, is_bogo: checked })} />
+                </div>
+
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-2">Product Details</p>
                 <div className="grid grid-cols-2 gap-4">
                   {textField("Brand", "brand", "e.g. Solura")}
