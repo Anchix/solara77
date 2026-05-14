@@ -330,6 +330,12 @@ const Checkout = () => {
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>₹{totalPrice.toLocaleString("en-IN")}</span>
                 </div>
+                {bogo.totalDiscount > 0 && (
+                  <div className="flex justify-between text-sm text-primary font-medium">
+                    <span className="flex items-center gap-1"><Gift className="h-3 w-3" /> BOGO (Buy 1 Get 1)</span>
+                    <span>−₹{bogo.totalDiscount.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
                 {couponApplied && (
                   <div className="flex justify-between text-sm text-primary">
                     <span>Coupon Discount</span>
