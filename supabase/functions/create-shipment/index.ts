@@ -33,7 +33,7 @@ serve(async (req) => {
     const orderPayload = {
       order_id: orderId,
       order_date: new Date().toISOString().split("T")[0],
-      pickup_location: "Primary",
+      pickup_location: Deno.env.get("SHIPROCKET_PICKUP_LOCATION") || "South Manthai Street",
       billing_customer_name: customer.name,
       billing_last_name: "",
       billing_address: customer.address,
