@@ -67,13 +67,19 @@ serve(async (req) => {
       body: JSON.stringify(orderPayload),
     });
     const shipData = await shipResponse.json();
+    console.log("Shiprocket response status:", shipResponse.status);
+    console.log("Shiprocket response body:", JSON.stringify(shipData));
+
+    if (!shipResponse.ok || (!shipData.shipment_id && !shipData.order_id)) {
+      throw new Error(`Shiprocket order create failed: ${JSON.stringify(shipData)}`);
+    }
 
     // 3. Update order with tracking info
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const trackingId = shipData.shipment_id || shipData.order_id || `SR-${orderId.slice(0, 8)}`;
+    const trackingId = shipData.shipment_id || shipData.order_id;
 
     await supabase
       .from("orders")
