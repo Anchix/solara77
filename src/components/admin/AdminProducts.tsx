@@ -18,6 +18,7 @@ const emptyProduct = {
   texture: "", usage_time: "", how_to_use: "", expected_result: "",
   storage_info: "", safety_info: "", package_type: "", country_of_origin: "India",
   is_out_of_stock: false,
+  is_bogo: false,
 };
 
 const callAdminProducts = async (body: any) => {
