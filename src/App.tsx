@@ -80,6 +80,7 @@ const App = () => (
           <Suspense fallback={null}>
             <ChatBot />
           </Suspense>
+          <BogoPopup />
         </BrowserRouter>
       </CartProvider>
     </TooltipProvider>
