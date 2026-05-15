@@ -74,7 +74,7 @@ const HeroSlider = () => {
                   <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] text-primary-foreground/80 mb-2 md:mb-4">
                     {slide.subtitle}
                   </p>
-                  <h1 className="font-display text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-light leading-tight mb-3 md:mb-6">
+                  <h1 key={`title-${current}`} className="font-display text-3xl sm:text-5xl md:text-7xl lg:text-[5.5rem] font-light leading-[1.05] tracking-tight mb-3 md:mb-6 italic animate-fade-in">
                     {slide.title}
                   </h1>
                   <p className="text-primary-foreground/80 text-xs sm:text-sm md:text-lg leading-relaxed mb-4 md:mb-8 max-w-md">
