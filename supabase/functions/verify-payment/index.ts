@@ -146,20 +146,6 @@ serve(async (req) => {
       console.error("SMS failed:", e);
     }
 
-    // 6. Shipment (fire and forget)
-    try {
-      await supabase.functions.invoke("create-shipment", {
-        body: {
-          orderId: order.id,
-          customer,
-          items,
-          total,
-        },
-      });
-    } catch (e) {
-      console.error("Shipment creation failed:", e);
-    }
-
     return new Response(
       JSON.stringify({ orderId: order.id, orderNumber: order.order_number, status: "confirmed" }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
