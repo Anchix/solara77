@@ -10,29 +10,40 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   const isOutOfStock = product.is_out_of_stock;
   const showBogo = product.is_bogo && isBogoActive() && !isOutOfStock;
+  const primaryImg = product.images?.[0] || "/placeholder.svg";
+  const hoverImg = product.images?.[1] || primaryImg;
+  const hasHover = hoverImg !== primaryImg;
 
   return (
     <div className="group">
       <Link to={`/product/${product.slug}`} className="block">
-        <div className="relative bg-secondary rounded-lg overflow-hidden aspect-square flex items-center justify-center p-8 group-hover:shadow-lg transition-shadow">
+        <div className="relative bg-secondary rounded-lg overflow-hidden aspect-square flex items-center justify-center p-8 transition-all duration-500 group-hover:shadow-xl group-hover:-translate-y-1">
           <img
-            src={product.images?.[0] || "/placeholder.svg"}
+            src={primaryImg}
             alt={product.name}
-            className={`w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? "opacity-50" : ""}`}
+            className={`absolute inset-0 w-full h-full object-contain p-8 transition-opacity duration-700 ${hasHover ? "group-hover:opacity-0" : "group-hover:scale-105"} ${isOutOfStock ? "opacity-50" : ""}`}
             loading="lazy"
           />
+          {hasHover && (
+            <img
+              src={hoverImg}
+              alt={`${product.name} alternate`}
+              className={`absolute inset-0 w-full h-full object-contain p-8 opacity-0 transition-opacity duration-700 group-hover:opacity-100 ${isOutOfStock ? "opacity-50" : ""}`}
+              loading="lazy"
+            />
+          )}
           {isOutOfStock && (
-            <span className="absolute top-3 right-3 bg-destructive text-destructive-foreground text-xs font-medium px-2.5 py-1 rounded-full">
+            <span className="absolute top-3 right-3 z-10 bg-destructive text-destructive-foreground text-xs font-medium px-2.5 py-1 rounded-full">
               Out of Stock
             </span>
           )}
           {showBogo && (
-            <span className="absolute top-3 right-3 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 animate-pulse">
+            <span className="absolute top-3 right-3 z-10 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 animate-pulse">
               <Gift className="h-3 w-3" /> Buy 1 Get 1
             </span>
           )}
           {!isOutOfStock && !showBogo && product.sale_price && product.sale_price < product.price && (
-            <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-medium px-2.5 py-1 rounded-full">
+            <span className="absolute top-3 left-3 z-10 bg-accent text-accent-foreground text-xs font-medium px-2.5 py-1 rounded-full">
               {Math.round((1 - product.sale_price / product.price) * 100)}% off
             </span>
           )}
@@ -56,7 +67,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         <Button
           variant="outline"
           size="sm"
-          className="w-full mt-2 gap-2"
+          className="w-full mt-2 gap-2 transition-all hover:bg-primary hover:text-primary-foreground hover:border-primary"
           onClick={() => addToCart(product)}
           disabled={isOutOfStock}
         >
