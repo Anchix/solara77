@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useProducts } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Leaf, Sun, Shield, Award, CheckCircle, Star, Truck, CreditCard } from "lucide-react";
+import { ArrowRight, Sparkles, Leaf, Sun, Shield, Award, CheckCircle, Star, Truck, CreditCard, Droplet, Flower2, Wind, Heart } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import HeroSlider from "@/components/HeroSlider";
 import BogoBanner from "@/components/BogoBanner";
@@ -66,6 +66,45 @@ const Index = () => {
           )}
           <div className="text-center mt-8 md:mt-12">
             <Button asChild variant="outline" size="lg"><Link to="/shop">View All Products</Link></Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Shop by Concern */}
+      <section className="py-12 md:py-20 bg-gradient-to-b from-background via-secondary/40 to-background">
+        <div className="container px-4">
+          <div className="text-center mb-8 md:mb-12">
+            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Find Your Match</p>
+            <h2 className="font-display text-3xl md:text-5xl font-light italic">Shop by Concern</h2>
+            <p className="text-sm text-muted-foreground mt-3 max-w-md mx-auto">
+              Targeted rituals for every skin and hair story.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto">
+            {[
+              { icon: Sparkles, title: "Daily Glow", desc: "Brighten & even tone", to: "/shop" },
+              { icon: Droplet, title: "Hydration", desc: "Soft, supple skin", to: "/shop" },
+              { icon: Flower2, title: "Hair Vitality", desc: "Shine & strength", to: "/shop" },
+              { icon: Heart, title: "Sensitive Care", desc: "Calm & gentle", to: "/shop" },
+            ].map((c) => (
+              <Link
+                key={c.title}
+                to={c.to}
+                className="group relative overflow-hidden rounded-xl bg-card border border-border p-6 md:p-8 text-center hover:border-primary/40 hover:shadow-lg transition-all duration-500 hover:-translate-y-1"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative">
+                  <div className="w-14 h-14 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:scale-110 transition-all duration-500">
+                    <c.icon className="h-6 w-6 text-primary group-hover:text-primary-foreground transition-colors" />
+                  </div>
+                  <h3 className="font-display text-lg md:text-xl font-medium mb-1">{c.title}</h3>
+                  <p className="text-xs text-muted-foreground">{c.desc}</p>
+                  <span className="inline-flex items-center gap-1 text-xs text-primary mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Explore <ArrowRight className="h-3 w-3" />
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
