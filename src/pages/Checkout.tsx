@@ -134,22 +134,6 @@ const Checkout = () => {
 
         toast.success("Order placed! Cash on Delivery ✅", { description: `Order #${orderData.order_number || orderData.id.slice(0, 8)}`, duration: 5000 });
 
-        // Trigger Shiprocket shipment for COD (fire-and-forget)
-        try {
-          await supabase.functions.invoke("create-shipment", {
-            body: {
-              orderId: orderData.id,
-              customer: { ...form },
-              items: items.map((i) => ({
-                product_id: i.product.id, name: i.product.name,
-                quantity: i.quantity, price: i.product.sale_price ?? i.product.price,
-              })),
-              total: finalTotal,
-              paymentMethod: "cod",
-            },
-          });
-        } catch (e) { console.error("COD shipment creation failed:", e); }
-
         clearCart(); navigate(`/order-confirmation/${orderData.id}`);
       } catch (err: any) { toast.error("Order failed: " + err.message); }
       finally { setLoading(false); }
