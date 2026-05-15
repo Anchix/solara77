@@ -184,7 +184,7 @@ const ProductDetail = () => {
   ].filter(r => r.value);
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen py-12 pb-28 md:pb-12">
       <div className="container max-w-5xl">
         <Link to="/shop" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
           <ArrowLeft className="h-4 w-4" /> Back to Shop
@@ -335,6 +335,30 @@ const ProductDetail = () => {
           <ProductReviews productId={product.id} />
         </div>
       </div>
+
+      {/* Mobile sticky add-to-cart bar */}
+      {!product.is_out_of_stock && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-md border-t border-border shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] px-4 py-3 animate-fade-in">
+          <div className="flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-muted-foreground truncate">{product.name}</p>
+              <div className="flex items-baseline gap-2">
+                {product.sale_price ? (
+                  <>
+                    <span className="font-semibold text-base">₹{product.sale_price}</span>
+                    <span className="text-xs text-muted-foreground line-through">₹{product.price}</span>
+                  </>
+                ) : (
+                  <span className="font-semibold text-base">₹{product.price}</span>
+                )}
+              </div>
+            </div>
+            <Button size="lg" className="gap-2 shrink-0" onClick={handleAdd}>
+              <ShoppingBag className="h-4 w-4" /> Add
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
