@@ -207,8 +207,15 @@ async function main() {
     count++;
   }
 
+  const staticPages = buildStaticPages(posts);
+  for (const page of staticPages) {
+    const dir = path.join(DIST, page.path.replace(/^\//, ""));
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, "index.html"), buildStaticHtml(template, page));
+  }
+
   fs.writeFileSync(path.join(DIST, "sitemap.xml"), buildSitemap(posts, products));
-  console.log(`[prerender-blog] wrote ${count} blog page(s) + sitemap.xml (${products.length} products)`);
+  console.log(`[prerender-blog] wrote ${count} blog post(s) + ${staticPages.length} static page(s) + sitemap.xml (${products.length} products)`);
 }
 
 main().catch((e) => {
