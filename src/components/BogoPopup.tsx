@@ -24,7 +24,7 @@ const BogoPopup = () => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-foreground/60 backdrop-blur-sm animate-fade-in" onClick={close}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-foreground/70 animate-fade-in" onClick={close}>
       <div
         className="relative w-full max-w-md bg-background rounded-2xl overflow-hidden shadow-2xl animate-scale-in"
         onClick={(e) => e.stopPropagation()}
@@ -38,7 +38,7 @@ const BogoPopup = () => {
         </button>
 
         <div className="bg-gradient-to-br from-primary via-primary/90 to-accent text-primary-foreground p-6 md:p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 backdrop-blur mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 mb-4">
             <Gift className="h-8 w-8" />
           </div>
           <p className="text-[11px] uppercase tracking-[0.3em] font-semibold mb-2 flex items-center justify-center gap-2">

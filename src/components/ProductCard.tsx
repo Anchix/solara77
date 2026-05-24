@@ -28,7 +28,7 @@ const ProductCard = ({ product }: { product: Product }) => {
             <img
               src={hoverImg}
               alt={`${product.name} alternate`}
-              className={`absolute inset-0 w-full h-full object-contain p-8 opacity-0 transition-opacity duration-700 group-hover:opacity-100 ${isOutOfStock ? "opacity-50" : ""}`}
+              className={`hidden md:block absolute inset-0 w-full h-full object-contain p-8 opacity-0 transition-opacity duration-700 group-hover:opacity-100 ${isOutOfStock ? "opacity-50" : ""}`}
               loading="lazy"
             />
           )}
@@ -38,7 +38,7 @@ const ProductCard = ({ product }: { product: Product }) => {
             </span>
           )}
           {showBogo && (
-            <span className="absolute top-3 right-3 z-10 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 animate-pulse">
+            <span className="absolute top-3 right-3 z-10 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md flex items-center gap-1">
               <Gift className="h-3 w-3" /> Buy 1 Get 1
             </span>
           )}

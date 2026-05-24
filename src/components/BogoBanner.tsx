@@ -7,14 +7,14 @@ const BogoBanner = () => {
   if (!isBogoActive()) return null;
   return (
     <section className="relative overflow-hidden bg-gradient-to-r from-primary via-primary/90 to-accent text-primary-foreground">
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
+      <div className="absolute inset-0 opacity-20 pointer-events-none hidden md:block">
         <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-white/30 blur-3xl" />
         <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full bg-white/30 blur-3xl" />
       </div>
       <div className="container relative py-8 md:py-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <div className="flex items-start md:items-center gap-4">
-            <div className="hidden md:flex w-14 h-14 rounded-full bg-white/15 backdrop-blur items-center justify-center shrink-0">
+            <div className="hidden md:flex w-14 h-14 rounded-full bg-white/15 items-center justify-center shrink-0">
               <Gift className="h-7 w-7" />
             </div>
             <div>
