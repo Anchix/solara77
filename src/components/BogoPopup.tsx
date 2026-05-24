@@ -24,7 +24,7 @@ const BogoPopup = () => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-foreground/60 backdrop-blur-sm animate-fade-in" onClick={close}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-foreground/70 animate-fade-in" onClick={close}>
       <div
         className="relative w-full max-w-md bg-background rounded-2xl overflow-hidden shadow-2xl animate-scale-in"
         onClick={(e) => e.stopPropagation()}
