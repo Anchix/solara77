@@ -26,7 +26,7 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <header className="sticky top-0 z-50 bg-background border-b border-border">
       <div className="container flex items-center justify-between h-16 md:h-20">
         <Link to="/" className="font-display text-2xl md:text-3xl font-semibold tracking-wide text-primary">
           SOLURA
