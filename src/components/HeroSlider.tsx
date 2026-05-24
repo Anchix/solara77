@@ -100,14 +100,14 @@ const HeroSlider = () => {
       {/* Navigation arrows */}
       <button
         onClick={prev}
-        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center text-primary-foreground hover:bg-primary-foreground/30 transition-colors"
+        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-foreground/30 flex items-center justify-center text-primary-foreground hover:bg-foreground/40 transition-colors"
         aria-label="Previous slide"
       >
         <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
       </button>
       <button
         onClick={next}
-        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center text-primary-foreground hover:bg-primary-foreground/30 transition-colors"
+        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-foreground/30 flex items-center justify-center text-primary-foreground hover:bg-foreground/40 transition-colors"
         aria-label="Next slide"
       >
         <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
