@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -11,6 +11,7 @@ import BogoPopup from "@/components/BogoPopup";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import Index from "./pages/Index";
+import MaintenancePage, { useMaintenanceMode } from "@/components/MaintenancePage";
 
 // Idle-prefetch likely next pages so client-side navigation is instant
 if (typeof window !== "undefined") {
@@ -35,17 +36,71 @@ const MyOrders = lazy(() => import("./pages/MyOrders"));
 const Admin = lazy(() => import("./pages/Admin"));
 const FounderStory = lazy(() => import("./pages/FounderStory"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Off = lazy(() => import("./pages/Off"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 min — instant nav between pages
+      staleTime: 5 * 60 * 1000,
       gcTime: 30 * 60 * 1000,
       refetchOnWindowFocus: false,
       retry: 1,
     },
   },
 });
+
+const BYPASS_PATHS = ["/admin", "/off"];
+
+const AppShell = () => {
+  const location = useLocation();
+  const maintenance = useMaintenanceMode();
+  const bypass = BYPASS_PATHS.some((p) => location.pathname.startsWith(p));
+
+  if (maintenance && !bypass) {
+    return (
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/off" element={<Off />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="*" element={<MaintenancePage />} />
+        </Routes>
+      </Suspense>
+    );
+  }
+
+  return (
+    <>
+      <AnnouncementBar />
+      <Navbar />
+      <CartDrawer />
+      <main>
+        <Suspense fallback={<div className="min-h-[60vh]" />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/product/:slug" element={<ProductDetail />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/my-orders" element={<MyOrders />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/off" element={<Off />} />
+            <Route path="/founder-story" element={<FounderStory />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </main>
+      <Footer />
+      <Suspense fallback={null}>
+        <ChatBot />
+      </Suspense>
+      <BogoPopup />
+    </>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -54,33 +109,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AnnouncementBar />
-          <Navbar />
-          <CartDrawer />
-          <main>
-            <Suspense fallback={<div className="min-h-[60vh]" />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/product/:slug" element={<ProductDetail />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/my-orders" element={<MyOrders />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/founder-story" element={<FounderStory />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </main>
-          <Footer />
-          <Suspense fallback={null}>
-            <ChatBot />
-          </Suspense>
-          <BogoPopup />
+          <AppShell />
         </BrowserRouter>
       </CartProvider>
     </TooltipProvider>
