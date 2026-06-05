@@ -341,6 +341,7 @@ function buildStaticHtml(template, page) {
   html = html.replace("</head>", `${seoTags}\n</head>`);
   html = html.replace(/<div id="root">[\s\S]*?<\/div>\s*<script/, `<div id="root">${bodyHtml}</div>\n    <script`);
   return html;
+}
 
 async function main() {
   if (!fs.existsSync(DIST)) {
