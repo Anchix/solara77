@@ -11,9 +11,14 @@ export default function MaintenancePage() {
         <p className="text-pink-700/80 text-base md:text-lg leading-relaxed">
           Our site is temporarily down for maintenance. Please check back shortly.
         </p>
-        <div className="mt-8 text-xs uppercase tracking-[0.2em] text-pink-400">
+        <a
+          href="https://wa.me/917857905819"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-8 inline-block text-xs uppercase tracking-[0.2em] text-pink-400 hover:text-pink-600 transition-colors underline-offset-4 hover:underline"
+        >
           Solura Cosmetics
-        </div>
+        </a>
       </div>
     </div>
   );
