@@ -3,13 +3,11 @@ import { useProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun, Gift, Flame } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
 import ProductReviews from "@/components/ProductReviews";
 import { supabase } from "@/integrations/supabase/client";
 import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
-import { isBogoActive } from "@/lib/bogo";
-import CountdownTimer from "@/components/CountdownTimer";
 
 const SITE_URL = "https://soluracosmo.com";
 
@@ -164,7 +162,7 @@ const ProductDetail = () => {
   const handleAdd = () => { for (let i = 0; i < qty; i++) addToCart(product); };
   const discount = product.sale_price ? `${Math.round((1 - product.sale_price / product.price) * 100)}% off` : null;
   const images = product.images && product.images.length > 0 ? product.images : ["/placeholder.svg"];
-  const showBogo = product.is_bogo && isBogoActive() && !product.is_out_of_stock;
+  
 
   const detailRows = [
     { label: "Brand", value: product.brand },
@@ -201,11 +199,6 @@ const ProductDetail = () => {
                   className={`absolute inset-0 w-full h-full object-contain p-4 md:p-8 transition-opacity duration-700 ease-in-out ${i === selectedImage ? "opacity-100" : "opacity-0"}`}
                 />
               ))}
-              {showBogo && (
-                <span className="absolute top-3 left-3 z-10 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
-                  <Gift className="h-3.5 w-3.5" /> Buy 1 Get 1 FREE
-                </span>
-              )}
             </div>
             {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
@@ -240,25 +233,6 @@ const ProductDetail = () => {
             </div>
             <p className="text-muted-foreground leading-relaxed">{product.description}</p>
 
-            {showBogo && (
-              <div className="rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 p-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0">
-                    <Gift className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="font-display text-base font-semibold leading-tight">Buy 1, Get 1 FREE</p>
-                    <p className="text-xs text-muted-foreground">Add 2 to cart — pay for just 1. Auto-applied.</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between gap-2 pt-1 border-t border-primary/20">
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1">
-                    <Flame className="h-3 w-3 text-primary animate-pulse" /> Ends in
-                  </span>
-                  <CountdownTimer variant="dark" />
-                </div>
-              </div>
-            )}
 
             {/* Certifications */}
             <div className="flex flex-wrap gap-2">

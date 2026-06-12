@@ -2,14 +2,12 @@ import { Link } from "react-router-dom";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, Gift } from "lucide-react";
-import { isBogoActive } from "@/lib/bogo";
+import { ShoppingBag } from "lucide-react";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const { addToCart } = useCart();
 
   const isOutOfStock = product.is_out_of_stock;
-  const showBogo = product.is_bogo && isBogoActive() && !isOutOfStock;
   const primaryImg = product.images?.[0] || "/placeholder.svg";
   const hoverImg = product.images?.[1] || primaryImg;
   const hasHover = hoverImg !== primaryImg;
@@ -37,12 +35,7 @@ const ProductCard = ({ product }: { product: Product }) => {
               Out of Stock
             </span>
           )}
-          {showBogo && (
-            <span className="absolute top-3 right-3 z-10 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md flex items-center gap-1">
-              <Gift className="h-3 w-3" /> Buy 1 Get 1
-            </span>
-          )}
-          {!isOutOfStock && !showBogo && product.sale_price && product.sale_price < product.price && (
+          {!isOutOfStock && product.sale_price && product.sale_price < product.price && (
             <span className="absolute top-3 left-3 z-10 bg-accent text-accent-foreground text-xs font-medium px-2.5 py-1 rounded-full">
               {Math.round((1 - product.sale_price / product.price) * 100)}% off
             </span>
