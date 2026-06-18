@@ -173,7 +173,7 @@ const MyOrders = () => {
                 )}
 
                 <div className="flex gap-2 mt-3">
-                  {order.status === "pending" && (
+                  {(order.status === "pending" || order.status === "confirmed") && (
                     <Button variant="destructive" size="sm" onClick={() => handleCancel(order.id)}>Cancel Order</Button>
                   )}
                   <Button variant="outline" size="sm" className="gap-1" onClick={() => handleReorder(order.id)}>
