@@ -12,8 +12,6 @@ declare global {
   interface Window { Razorpay: any; }
 }
 
-const COD_FEE = 0;
-const SHIPPING_FEE = 50;
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -21,14 +19,30 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">("online");
   const [codEnabled, setCodEnabled] = useState(true);
+  const [prepaidShipping, setPrepaidShipping] = useState<number>(50);
+  const [codShipping, setCodShipping] = useState<number>(75);
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState<number>(999);
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", city: "", state: "", pincode: "" });
 
   useEffect(() => {
-    supabase.from("site_settings").select("value").eq("key", "cod_enabled").maybeSingle().then(({ data }) => {
-      const enabled = data ? (data.value === true || (data.value as any) === "true") : true;
-      setCodEnabled(enabled);
-      if (!enabled) setPaymentMethod("online");
-    });
+    supabase
+      .from("site_settings")
+      .select("key,value")
+      .in("key", ["cod_enabled", "shipping_prepaid", "shipping_cod", "free_shipping_threshold"])
+      .then(({ data }) => {
+        if (!data) return;
+        for (const row of data) {
+          const v: any = row.value;
+          if (row.key === "cod_enabled") {
+            const enabled = v === true || v === "true";
+            setCodEnabled(enabled);
+            if (!enabled) setPaymentMethod("online");
+          }
+          if (row.key === "shipping_prepaid") setPrepaidShipping(Number(v) || 0);
+          if (row.key === "shipping_cod") setCodShipping(Number(v) || 0);
+          if (row.key === "free_shipping_threshold") setFreeShippingThreshold(Number(v) || 0);
+        }
+      });
   }, []);
 
   // Coupon state
