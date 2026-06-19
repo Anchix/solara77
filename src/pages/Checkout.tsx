@@ -114,7 +114,9 @@ const Checkout = () => {
 
   const discountAmount = couponApplied?.discount || 0;
   const afterDiscount = totalPrice - discountAmount;
-  const finalTotal = Math.max(0, afterDiscount) + SHIPPING_FEE + (paymentMethod === "cod" ? COD_FEE : 0);
+  const baseShipping = paymentMethod === "cod" ? codShipping : prepaidShipping;
+  const shippingFee = totalPrice >= freeShippingThreshold ? 0 : baseShipping;
+  const finalTotal = Math.max(0, afterDiscount) + shippingFee;
 
   const handlePay = async () => {
     if (!form.name || !form.email || !form.phone || !form.address || !form.city || !form.state || !form.pincode) {
@@ -350,9 +352,14 @@ const Checkout = () => {
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span>₹{SHIPPING_FEE}</span>
+                  <span className="text-muted-foreground">Shipping {paymentMethod === "cod" ? "(COD)" : "(Prepaid)"}</span>
+                  <span>{shippingFee === 0 ? <span className="text-primary font-medium">FREE</span> : `₹${shippingFee}`}</span>
                 </div>
+                {shippingFee > 0 && totalPrice < freeShippingThreshold && (
+                  <p className="text-xs text-muted-foreground">
+                    Add ₹{(freeShippingThreshold - totalPrice).toLocaleString("en-IN")} more for free shipping
+                  </p>
+                )}
               </div>
               <div className="border-t border-border pt-3 flex justify-between font-semibold text-lg">
                 <span>Total</span>
