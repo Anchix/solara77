@@ -27,7 +27,7 @@ serve(async (req) => {
       });
     }
 
-    const validStatuses = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
+    const validStatuses = ["pending", "confirmed", "shipped", "delivered"];
     if (!validStatuses.includes(status)) {
       return new Response(JSON.stringify({ error: `Invalid status. Must be one of: ${validStatuses.join(", ")}` }), {
         status: 400,
