@@ -82,14 +82,6 @@ const MyOrders = () => {
     setLoading(false);
   };
 
-  const handleCancel = async (orderId: string) => {
-    const { error } = await supabase.functions.invoke("update-order-status", {
-      body: { orderId, status: "cancelled" },
-    });
-    if (error) { toast.error("Failed to cancel"); return; }
-    toast.success("Order cancelled");
-    setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status: "cancelled" } : o)));
-  };
 
   const handleReorder = async (orderId: string) => {
     const items = orderItems[orderId];
@@ -173,9 +165,6 @@ const MyOrders = () => {
                 )}
 
                 <div className="flex gap-2 mt-3">
-                  {(order.status === "pending" || order.status === "confirmed") && (
-                    <Button variant="destructive" size="sm" onClick={() => handleCancel(order.id)}>Cancel Order</Button>
-                  )}
                   <Button variant="outline" size="sm" className="gap-1" onClick={() => handleReorder(order.id)}>
                     <RotateCcw className="h-3 w-3" /> Reorder
                   </Button>
