@@ -42,6 +42,7 @@ const AdminSEO = () => {
   ]);
   const [customPath, setCustomPath] = useState("/");
   const [loading, setLoading] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
   const [result, setResult] = useState<AuditResult | null>(null);
 
   useEffect(() => {
@@ -59,18 +60,44 @@ const AdminSEO = () => {
 
   const runAudit = async (path: string) => {
     setLoading(true);
+    setAiLoading(false);
     setResult(null);
+    const url = `${SITE}${path}`;
     try {
-      const { data, error } = await supabase.functions.invoke("seo-audit", {
-        body: { url: `${SITE}${path}` },
+      // Phase 1: fast fetch of on-page signals
+      const { data: fData, error: fErr } = await supabase.functions.invoke("seo-audit", {
+        body: { url, mode: "fetch" },
       });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
-      setResult(data as AuditResult);
+      if (fErr) throw fErr;
+      if ((fData as any)?.error) throw new Error((fData as any).error);
+
+      const baseResult: AuditResult = {
+        url,
+        fetched: (fData as any).fetched,
+        ai: {
+          score: 0,
+          summary: "Generating AI analysis...",
+          primaryKeywords: [],
+          secondaryKeywords: [],
+          suggestions: [],
+        },
+      };
+      setResult(baseResult);
+      setLoading(false);
+      setAiLoading(true);
+
+      // Phase 2: AI analysis (may take 10-30s)
+      const { data: aData, error: aErr } = await supabase.functions.invoke("seo-audit", {
+        body: { url, mode: "ai", fetched: baseResult.fetched },
+      });
+      if (aErr) throw aErr;
+      if ((aData as any)?.error) throw new Error((aData as any).error);
+      setResult({ ...baseResult, ai: (aData as any).ai });
     } catch (e: any) {
       toast.error(e.message || "Audit failed");
     } finally {
       setLoading(false);
+      setAiLoading(false);
     }
   };
 
