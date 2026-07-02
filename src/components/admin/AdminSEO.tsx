@@ -174,7 +174,14 @@ const AdminSEO = () => {
       {loading && (
         <div className="bg-card border border-border p-8 text-center text-sm text-muted-foreground">
           <Loader2 className="h-5 w-5 animate-spin mx-auto mb-2" />
-          Fetching page and analysing...
+          Fetching page signals...
+        </div>
+      )}
+
+      {aiLoading && (
+        <div className="bg-card border border-border p-3 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          Running AI analysis (10–30s)...
         </div>
       )}
 
