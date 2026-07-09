@@ -24,6 +24,7 @@ if (typeof window !== "undefined") {
 }
 
 const ChatBot = lazy(() => import("@/components/ChatBot"));
+const BogoPopup = lazy(() => import("@/components/BogoPopup"));
 const Shop = lazy(() => import("./pages/Shop"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const Blog = lazy(() => import("./pages/Blog"));
@@ -97,6 +98,10 @@ const AppShell = () => {
       <Suspense fallback={null}>
         <ChatBot />
       </Suspense>
+      <Suspense fallback={null}>
+        <BogoPopup />
+      </Suspense>
+      
       
     </>
   );

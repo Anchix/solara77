@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Leaf, Sun, Shield, Award, CheckCircle, Star, Truck, CreditCard, Droplet, Flower2, Wind, Heart } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import HeroSlider from "@/components/HeroSlider";
+import BogoBanner from "@/components/BogoBanner";
 
 import naturalBeauty from "@/assets/natural-beauty.jpg";
 import certifications from "@/assets/certifications.png";
@@ -31,6 +32,11 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Hero Slider */}
       <HeroSlider />
+
+      {/* BOGO Banner */}
+      <BogoBanner />
+
+
 
 
       {/* Trust badges */}

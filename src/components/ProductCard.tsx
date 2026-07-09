@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Gift } from "lucide-react";
+import { isBogoActive } from "@/lib/bogo";
+
 
 const ProductCard = ({ product }: { product: Product }) => {
   const { addToCart } = useCart();
@@ -38,6 +40,11 @@ const ProductCard = ({ product }: { product: Product }) => {
           {!isOutOfStock && product.sale_price && product.sale_price < product.price && (
             <span className="absolute top-3 left-3 z-10 bg-accent text-accent-foreground text-xs font-medium px-2.5 py-1 rounded-full">
               {Math.round((1 - product.sale_price / product.price) * 100)}% off
+            </span>
+          )}
+          {!isOutOfStock && product.is_bogo && isBogoActive() && (
+            <span className="absolute bottom-3 left-3 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 animate-pulse shadow-lg">
+              <Gift className="h-3 w-3" /> BUY 1 GET 1 FREE
             </span>
           )}
         </div>
