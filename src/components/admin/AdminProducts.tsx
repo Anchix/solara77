@@ -18,6 +18,7 @@ const emptyProduct = {
   texture: "", usage_time: "", how_to_use: "", expected_result: "",
   storage_info: "", safety_info: "", package_type: "", country_of_origin: "India",
   is_out_of_stock: false,
+  is_bogo: false,
 };
 
 const callAdminProducts = async (body: any) => {
@@ -60,6 +61,7 @@ const AdminProducts = () => {
     storage_info: p.storage_info || "", safety_info: p.safety_info || "",
     package_type: p.package_type || "", country_of_origin: p.country_of_origin || "India",
     is_out_of_stock: p.is_out_of_stock ?? false,
+    is_bogo: p.is_bogo ?? false,
   });
 
   const handleSave = async () => {
@@ -81,6 +83,7 @@ const AdminProducts = () => {
       safety_info: editing.safety_info || null, package_type: editing.package_type || null,
       country_of_origin: editing.country_of_origin || null,
       is_out_of_stock: editing.is_out_of_stock ?? false,
+      is_bogo: editing.is_bogo ?? false,
     };
 
     try {
@@ -143,6 +146,15 @@ const AdminProducts = () => {
                   </div>
                   <Switch checked={editing?.is_out_of_stock ?? false} onCheckedChange={(checked) => setEditing({ ...editing, is_out_of_stock: checked })} />
                 </div>
+
+                <div className="flex items-center justify-between py-2">
+                  <div>
+                    <Label>Buy 1 Get 1 FREE 🎁</Label>
+                    <p className="text-xs text-muted-foreground">Include this product in the B1G1 offer (ends 15 July)</p>
+                  </div>
+                  <Switch checked={editing?.is_bogo ?? false} onCheckedChange={(checked) => setEditing({ ...editing, is_bogo: checked })} />
+                </div>
+
 
 
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-2">Product Details</p>

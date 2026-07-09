@@ -3,11 +3,13 @@ import { useProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun, Gift } from "lucide-react";
 import { useState, useEffect } from "react";
 import ProductReviews from "@/components/ProductReviews";
 import { supabase } from "@/integrations/supabase/client";
 import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
+import { isBogoActive, BOGO_END } from "@/lib/bogo";
+import CountdownTimer from "@/components/CountdownTimer";
 
 const SITE_URL = "https://soluracosmo.com";
 
@@ -232,6 +234,23 @@ const ProductDetail = () => {
               )}
             </div>
             <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+
+            {product.is_bogo && isBogoActive() && !product.is_out_of_stock && (
+              <div className="relative overflow-hidden rounded-lg bg-gradient-to-r from-primary via-primary/90 to-accent text-primary-foreground p-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                    <Gift className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] uppercase tracking-widest opacity-90">Limited Offer · Ends 15 July</p>
+                    <h3 className="font-display text-lg font-semibold leading-tight">Buy 1 Get 1 FREE</h3>
+                    <p className="text-xs opacity-90">Add 2 to cart — pay for 1. No code needed.</p>
+                    <div className="mt-2"><CountdownTimer end={BOGO_END} compact /></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
 
 
             {/* Certifications */}
