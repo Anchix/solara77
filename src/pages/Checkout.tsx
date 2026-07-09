@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Tag } from "lucide-react";
+import { Tag, Gift } from "lucide-react";
+import { computeBogo } from "@/lib/bogo";
 
 declare global {
   interface Window { Razorpay: any; }
@@ -112,8 +113,9 @@ const Checkout = () => {
     setCouponCode("");
   };
 
+  const bogo = computeBogo(items);
   const discountAmount = couponApplied?.discount || 0;
-  const afterDiscount = totalPrice - discountAmount;
+  const afterDiscount = totalPrice - discountAmount - bogo.savings;
   const baseShipping = paymentMethod === "cod" ? codShipping : prepaidShipping;
   const shippingFee = totalPrice >= freeShippingThreshold ? 0 : baseShipping;
   const finalTotal = Math.max(0, afterDiscount) + shippingFee;
@@ -349,6 +351,12 @@ const Checkout = () => {
                   <div className="flex justify-between text-sm text-primary">
                     <span>Coupon Discount</span>
                     <span>−₹{couponApplied.discount}</span>
+                  </div>
+                )}
+                {bogo.savings > 0 && (
+                  <div className="flex justify-between text-sm text-primary">
+                    <span className="flex items-center gap-1"><Gift className="h-3.5 w-3.5" /> B1G1 ({bogo.freeUnits} free)</span>
+                    <span>−₹{bogo.savings.toLocaleString("en-IN")}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
