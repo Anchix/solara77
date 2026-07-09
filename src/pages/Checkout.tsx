@@ -113,8 +113,9 @@ const Checkout = () => {
     setCouponCode("");
   };
 
+  const bogo = computeBogo(items);
   const discountAmount = couponApplied?.discount || 0;
-  const afterDiscount = totalPrice - discountAmount;
+  const afterDiscount = totalPrice - discountAmount - bogo.savings;
   const baseShipping = paymentMethod === "cod" ? codShipping : prepaidShipping;
   const shippingFee = totalPrice >= freeShippingThreshold ? 0 : baseShipping;
   const finalTotal = Math.max(0, afterDiscount) + shippingFee;
