@@ -50,10 +50,36 @@ const CartDrawer = () => {
               ))}
             </div>
 
+            {bogoActive && (
+              <div className="rounded-lg bg-primary/10 border border-primary/20 p-3 space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 font-semibold text-primary">
+                    <Gift className="h-3.5 w-3.5" /> Buy 1 Get 1 FREE
+                  </span>
+                  <CountdownTimer end={BOGO_END} compact />
+                </div>
+                {bogo.freeUnits > 0 ? (
+                  <p className="text-xs text-primary">
+                    🎉 You unlocked <b>{bogo.freeUnits} FREE item{bogo.freeUnits > 1 ? "s" : ""}</b> — saving ₹{bogo.savings.toLocaleString("en-IN")}!
+                  </p>
+                ) : items.some((i) => i.product.is_bogo) ? (
+                  <p className="text-xs text-muted-foreground">Add 1 more of a B1G1 product to unlock your FREE item.</p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">Add a B1G1 bestseller to your cart to claim a free item.</p>
+                )}
+              </div>
+            )}
+
             <div className="border-t border-border pt-4 space-y-2">
+              {bogo.savings > 0 && (
+                <div className="flex justify-between text-sm text-primary">
+                  <span>B1G1 Savings</span>
+                  <span>−₹{bogo.savings.toLocaleString("en-IN")}</span>
+                </div>
+              )}
               <div className="flex justify-between font-semibold">
                 <span>Total</span>
-                <span>₹{totalPrice.toLocaleString("en-IN")}</span>
+                <span>₹{Math.max(0, totalPrice - bogo.savings).toLocaleString("en-IN")}</span>
               </div>
               <Button className="w-full mt-2" size="lg" onClick={() => { setIsOpen(false); navigate("/checkout"); }}>
                 Proceed to Checkout
