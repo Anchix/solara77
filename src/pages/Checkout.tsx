@@ -353,6 +353,12 @@ const Checkout = () => {
                     <span>−₹{couponApplied.discount}</span>
                   </div>
                 )}
+                {bogo.savings > 0 && (
+                  <div className="flex justify-between text-sm text-primary">
+                    <span className="flex items-center gap-1"><Gift className="h-3.5 w-3.5" /> B1G1 ({bogo.freeUnits} free)</span>
+                    <span>−₹{bogo.savings.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping {paymentMethod === "cod" ? "(COD)" : "(Prepaid)"}</span>
                   <span>{shippingFee === 0 ? <span className="text-primary font-medium">FREE</span> : `₹${shippingFee}`}</span>
