@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Tag } from "lucide-react";
+import { Tag, Gift } from "lucide-react";
+import { computeBogo } from "@/lib/bogo";
 
 declare global {
   interface Window { Razorpay: any; }
