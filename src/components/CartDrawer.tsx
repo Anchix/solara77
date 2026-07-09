@@ -1,12 +1,17 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash2, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { computeBogo, isBogoActive, BOGO_END } from "@/lib/bogo";
+import CountdownTimer from "./CountdownTimer";
 
 const CartDrawer = () => {
   const { items, isOpen, setIsOpen, updateQuantity, removeFromCart, totalPrice } = useCart();
   const navigate = useNavigate();
+  const bogo = computeBogo(items);
+  const bogoActive = isBogoActive();
+
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
