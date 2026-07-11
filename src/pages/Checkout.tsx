@@ -170,7 +170,17 @@ const Checkout = () => {
 
         toast.success("Order placed! Cash on Delivery ✅", { description: `Order #${orderData.order_number || orderData.id.slice(0, 8)}`, duration: 5000 });
 
+        trackPurchase({
+          transaction_id: orderData.order_number || orderData.id,
+          value: finalTotal,
+          shipping: shippingFee,
+          coupon: couponApplied?.code,
+          payment_method: "cod",
+          items: gaItems(),
+        });
+
         clearCart(); navigate(`/order-confirmation/${orderData.id}`);
+
       } catch (err: any) { toast.error("Order failed: " + err.message); }
       finally { setLoading(false); }
       return;
@@ -219,7 +229,16 @@ const Checkout = () => {
             });
             if (verifyError) throw new Error(verifyError.message);
             toast.success("Payment received! Order confirmed ✅", { description: `Order #${verifyData.orderNumber || verifyData.orderId}`, duration: 5000 });
+            trackPurchase({
+              transaction_id: verifyData.orderNumber || verifyData.orderId,
+              value: finalTotal,
+              shipping: shippingFee,
+              coupon: couponApplied?.code,
+              payment_method: "online",
+              items: gaItems(),
+            });
             clearCart(); navigate(`/order-confirmation/${verifyData.orderId}`);
+
           } catch (err: any) {
             // Mark attempt as failed
             try {
