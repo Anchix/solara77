@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Tag, Gift } from "lucide-react";
 import { computeBogo } from "@/lib/bogo";
+import { trackDiscountApplied, trackPurchase } from "@/lib/analytics";
+
 
 declare global {
   interface Window { Razorpay: any; }
@@ -101,6 +103,8 @@ const Checkout = () => {
 
       setCouponApplied({ code: data.code, discount });
       toast.success(`Coupon applied! You save ₹${discount}`);
+      trackDiscountApplied({ discount_type: "coupon", code: data.code, value: discount });
+
 
       // Increment used_count via secure function
       await supabase.rpc("increment_coupon_usage", { _coupon_id: data.id });
@@ -119,6 +123,22 @@ const Checkout = () => {
   const baseShipping = paymentMethod === "cod" ? codShipping : prepaidShipping;
   const shippingFee = totalPrice >= freeShippingThreshold ? 0 : baseShipping;
   const finalTotal = Math.max(0, afterDiscount) + shippingFee;
+
+  // Fire discount_applied once when BOGO savings kick in
+  useEffect(() => {
+    if (bogo.savings > 0) {
+      trackDiscountApplied({ discount_type: "bogo", value: bogo.savings, code: "BOGO_JULY_2026" });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bogo.savings]);
+
+  const gaItems = () => items.map((i) => ({
+    item_id: i.product.id,
+    item_name: i.product.name,
+    price: i.product.sale_price ?? i.product.price,
+    quantity: i.quantity,
+  }));
+
 
   const handlePay = async () => {
     if (!form.name || !form.email || !form.phone || !form.address || !form.city || !form.state || !form.pincode) {
