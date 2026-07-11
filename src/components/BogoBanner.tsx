@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Gift, Flame } from "lucide-react";
 import CountdownTimer from "./CountdownTimer";
 import { BOGO_END, isBogoActive } from "@/lib/bogo";
+import { trackBogoBannerClick } from "@/lib/analytics";
+
 
 const BogoBanner = () => {
   if (!isBogoActive()) return null;
@@ -30,10 +32,12 @@ const BogoBanner = () => {
             <CountdownTimer end={BOGO_END} />
             <Link
               to="/shop"
+              onClick={() => trackBogoBannerClick("home_hero_banner")}
               className="text-[11px] md:text-xs font-semibold bg-background text-foreground px-4 py-2 rounded-full hover:opacity-90 transition-opacity"
             >
               Shop the Offer →
             </Link>
+
           </div>
         </div>
       </div>
