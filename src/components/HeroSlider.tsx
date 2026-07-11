@@ -9,12 +9,13 @@ import heroSlide3 from "@/assets/hero-slide-3.jpg";
 const slides = [
   {
     image: heroSlide1,
-    subtitle: "Chemical-Free · Natural · Luxurious",
-    title: "Discover Your Natural Radiance",
-    description: "Premium skincare and haircare products crafted with natural ingredients for your everyday glow.",
-    cta: { label: "Shop Now", to: "/shop" },
+    subtitle: "Limited Time · Ends 15 July",
+    title: "Buy 1 Get 1 Free",
+    description: "On selected bestsellers. Chemical-free skincare & haircare — no code needed, discount auto-applied at checkout.",
+    cta: { label: "Claim the Offer", to: "/shop" },
     ctaSecondary: { label: "Our Story", to: "/founder-story" },
   },
+
   {
     image: heroSlide2,
     subtitle: "Handcrafted With Love",
