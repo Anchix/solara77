@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Gift, X } from "lucide-react";
 import CountdownTimer from "./CountdownTimer";
 import { BOGO_END, isBogoActive } from "@/lib/bogo";
+import { trackBogoPopupOpen, trackBogoPopupCTA } from "@/lib/analytics";
+
 
 const SESSION_KEY = "bogo_popup_dismissed";
 
@@ -12,8 +14,12 @@ const BogoPopup = () => {
   useEffect(() => {
     if (!isBogoActive()) return;
     if (sessionStorage.getItem(SESSION_KEY)) return;
-    const t = setTimeout(() => setOpen(true), 6000);
+    const t = setTimeout(() => {
+      setOpen(true);
+      trackBogoPopupOpen();
+    }, 6000);
     return () => clearTimeout(t);
+
   }, []);
 
   const close = () => {
@@ -48,11 +54,12 @@ const BogoPopup = () => {
           </div>
           <Link
             to="/shop"
-            onClick={close}
+            onClick={() => { trackBogoPopupCTA(); close(); }}
             className="block w-full bg-foreground text-background font-semibold py-3 rounded-lg hover:opacity-90 transition-opacity"
           >
             Claim My Free Item
           </Link>
+
           <button onClick={close} className="text-xs text-muted-foreground hover:text-foreground">
             No thanks
           </button>
