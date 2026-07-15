@@ -7,7 +7,7 @@ const baseMessages = [
 ];
 
 const bogoMessages = [
-  "🎁 BUY 1 GET 1 FREE on selected bestsellers — Ends 15 July!",
+  "🎁 BUY 1 GET 1 FREE on selected bestsellers — Ends 31 July!",
   "⏰ Hurry! Buy 1 Get 1 FREE ending soon — Shop now",
 ];
 
