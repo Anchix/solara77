@@ -9,7 +9,7 @@ import heroSlide3 from "@/assets/hero-slide-3.jpg";
 const slides = [
   {
     image: heroSlide1,
-    subtitle: "Limited Time · Ends 15 July",
+    subtitle: "Limited Time · Ends 31 July",
     title: "Buy 1 Get 1 Free",
     description: "On selected bestsellers. Chemical-free skincare & haircare — no code needed, discount auto-applied at checkout.",
     cta: { label: "Claim the Offer", to: "/shop" },

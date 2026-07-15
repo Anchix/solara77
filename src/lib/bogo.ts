@@ -1,7 +1,7 @@
 import { CartItem } from "@/data/products";
 
-// Buy 1 Get 1 FREE ends 15th July 2026 (IST)
-export const BOGO_END = new Date("2026-07-15T23:59:59+05:30");
+// Buy 1 Get 1 FREE ends 31st July 2026 (IST)
+export const BOGO_END = new Date("2026-07-31T23:59:59+05:30");
 
 export const isBogoActive = () => new Date() < BOGO_END;
 
