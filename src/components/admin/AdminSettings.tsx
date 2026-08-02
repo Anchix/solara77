@@ -107,7 +107,19 @@ const AdminSettings = () => {
         <p className="text-xs text-muted-foreground mb-5">
           Set shipping charges and the free-shipping threshold. Free shipping applies when the subtotal is at or above the threshold.
         </p>
+        <div className="flex items-center justify-between py-3 border-t border-border mb-4">
+          <div>
+            <Label htmlFor="free-prepaid-toggle" className="text-sm font-medium">Free shipping on all prepaid orders</Label>
+            <p className="text-xs text-muted-foreground mt-1">
+              {freePrepaid
+                ? "Prepaid (online) orders ship free regardless of order value."
+                : "Prepaid orders are charged the prepaid shipping fee below."}
+            </p>
+          </div>
+          <Switch id="free-prepaid-toggle" checked={freePrepaid} disabled={savingPrepaid} onCheckedChange={toggleFreePrepaid} />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
           <div>
             <Label htmlFor="prepaid">Prepaid shipping (₹)</Label>
             <Input id="prepaid" type="number" min={0} value={prepaidShipping}
