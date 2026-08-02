@@ -5,7 +5,7 @@ import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
 import { applySeo } from "@/lib/seo";
 
 const faqs = [
-  { q: "Are Solura products chemical-free?", a: "Yes. Every Solura product is crafted with natural ingredients and is GMP, ISO, Cruelty Free and Non GMO compliant." },
+  { q: "Are Solura products herbal and safe?", a: "Yes. Every Solura product is crafted with natural ingredients and is GMP, ISO, Cruelty Free and Non GMO compliant." },
   { q: "Do you ship across India?", a: "Yes, we ship pan-India with a flat ₹50 shipping fee on all orders." },
   { q: "How long does delivery take?", a: "Most orders are delivered within 4-7 business days depending on your location." },
   { q: "Can I track my order without creating an account?", a: "Yes. Solura is a guest-friendly experience — track your order anytime from the My Orders page using the phone number you placed the order with." },
