@@ -10,7 +10,7 @@ const Shop = () => {
   useEffect(() => {
     applySeo({
       title: "Shop Natural Skincare & Haircare — Solura Cosmetics",
-      description: "Browse Solura's collection of chemical-free, natural skincare and haircare crafted in India. Free tracking, flat ₹50 shipping.",
+      description: "Browse Solura's collection of innovative herbal skincare and haircare crafted in India. Free tracking, flat ₹50 shipping.",
       path: "/shop",
     });
   }, []);
@@ -37,7 +37,7 @@ const Shop = () => {
         <div className="text-center mb-12">
           <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Solura Collection</p>
           <h1 className="font-display text-4xl md:text-5xl font-light">Shop All Products</h1>
-          <p className="mt-4 text-muted-foreground max-w-md mx-auto">Natural, chemical-free cosmetics crafted for your daily glow.</p>
+          <p className="mt-4 text-muted-foreground max-w-md mx-auto">Innovative herbal products crafted for your daily glow.</p>
         </div>
         {isLoading ? (
           <p className="text-center text-muted-foreground">Loading...</p>

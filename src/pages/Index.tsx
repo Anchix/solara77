@@ -45,7 +45,7 @@ const Index = () => {
           <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Truck className="h-4 w-4 text-primary" /> Fast Delivery</div>
           <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><CreditCard className="h-4 w-4 text-primary" /> Secure Payments</div>
           <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Shield className="h-4 w-4 text-primary" /> 100% Genuine Products</div>
-          <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Leaf className="h-4 w-4 text-primary" /> Chemical-Free</div>
+          <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground"><Leaf className="h-4 w-4 text-primary" /> Innovative Herbal</div>
         </div>
       </section>
 
@@ -56,7 +56,7 @@ const Index = () => {
             <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Our Collection</p>
             <h2 className="font-display text-3xl md:text-5xl font-light">Bestsellers</h2>
             <p className="text-sm text-muted-foreground mt-3 max-w-md mx-auto">
-              Hand-crafted, chemical-free essentials loved by 5000+ customers.
+              Hand-crafted, innovative herbal essentials loved by 5000+ customers.
             </p>
           </div>
           {isLoading ? (
@@ -142,7 +142,7 @@ const Index = () => {
               <h2 className="font-display text-2xl md:text-4xl font-light">Pure Ingredients,<br />Real Results</h2>
               <div className="space-y-4">
                 {[
-                  { icon: Leaf, title: "Chemical-Free", desc: "100% natural ingredients, no harsh chemicals or parabens" },
+                  { icon: Leaf, title: "Innovative Herbal", desc: "100% natural ingredients, no harsh chemicals or parabens" },
                   { icon: Sun, title: "Daily Glow", desc: "Designed for everyday use to enhance your natural radiance" },
                   { icon: Sparkles, title: "Premium Quality", desc: "Carefully crafted formulations tested for all skin types" },
                 ].map((v) => (
@@ -196,7 +196,7 @@ const Index = () => {
       <section className="py-12 md:py-20">
         <div className="container text-center max-w-2xl mx-auto px-4">
           <h2 className="font-display text-2xl md:text-4xl font-light mb-4">Ready to Glow?</h2>
-          <p className="text-muted-foreground mb-8 text-sm md:text-base">Join thousands of happy customers who've switched to natural, chemical-free skincare.</p>
+          <p className="text-muted-foreground mb-8 text-sm md:text-base">Join thousands of happy customers who've switched to innovative herbal skincare.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="gap-2"><Link to="/shop">Shop Now <ArrowRight className="h-4 w-4" /></Link></Button>
             <Button asChild variant="outline" size="lg"><Link to="/founder-story">Our Story</Link></Button>

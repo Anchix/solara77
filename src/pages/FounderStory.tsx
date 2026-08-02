@@ -14,7 +14,7 @@ const milestones = [
 
 const values = [
   { icon: Heart, title: "No Fake Promises", desc: "We believe in honesty — every product delivers what it claims." },
-  { icon: Lightbulb, title: "Natural Ingredients", desc: "100% chemical-free formulations with eco-friendly solutions." },
+  { icon: Lightbulb, title: "Natural Ingredients", desc: "Innovative herbal formulations with eco-friendly solutions." },
   { icon: Target, title: "Real Results", desc: "Designed for long-term skin and hair health, not temporary fixes." },
   { icon: Sparkles, title: "Affordable Luxury", desc: "Premium quality skincare accessible to everyone." },
 ];

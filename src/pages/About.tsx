@@ -16,8 +16,8 @@ const faqs = [
 const About = () => {
   useEffect(() => {
     applySeo({
-      title: "About Solura — Natural, Chemical-Free Cosmetics from India",
-      description: "Learn about Solura Cosmetics: our mission, natural ingredients, and the values behind our chemical-free skincare and haircare products.",
+      title: "About Solura — Innovative Herbal Products from India",
+      description: "Learn about Solura Cosmetics: our mission, natural ingredients, and the values behind our innovative herbal skincare and haircare products.",
       path: "/about",
     });
     setJsonLd("faq", {
@@ -43,7 +43,7 @@ const About = () => {
         <div className="space-y-12">
           <div className="max-w-2xl mx-auto text-center space-y-4 text-muted-foreground leading-relaxed">
             <p>
-              Solura was born from a simple belief: everyone deserves access to premium, chemical-free beauty products that actually work. What started as a project at a startup pitch competition has grown into a brand trusted by thousands across India.
+              Solura was born from a simple belief: everyone deserves access to premium, innovative herbal beauty products that actually work. What started as a project at a startup pitch competition has grown into a brand trusted by thousands across India.
             </p>
             <p>
               Our products are crafted with carefully sourced natural ingredients — from hibiscus-infused shampoos to botanical night creams — each formulation is designed to enhance your natural beauty without compromising on quality or safety.
