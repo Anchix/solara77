@@ -25,13 +25,14 @@ const Checkout = () => {
   const [prepaidShipping, setPrepaidShipping] = useState<number>(50);
   const [codShipping, setCodShipping] = useState<number>(75);
   const [freeShippingThreshold, setFreeShippingThreshold] = useState<number>(999);
+  const [freePrepaid, setFreePrepaid] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", city: "", state: "", pincode: "" });
 
   useEffect(() => {
     supabase
       .from("site_settings")
       .select("key,value")
-      .in("key", ["cod_enabled", "shipping_prepaid", "shipping_cod", "free_shipping_threshold"])
+      .in("key", ["cod_enabled", "shipping_prepaid", "shipping_cod", "free_shipping_threshold", "free_prepaid_shipping"])
       .then(({ data }) => {
         if (!data) return;
         for (const row of data) {
@@ -44,6 +45,7 @@ const Checkout = () => {
           if (row.key === "shipping_prepaid") setPrepaidShipping(Number(v) || 0);
           if (row.key === "shipping_cod") setCodShipping(Number(v) || 0);
           if (row.key === "free_shipping_threshold") setFreeShippingThreshold(Number(v) || 0);
+          if (row.key === "free_prepaid_shipping") setFreePrepaid(v === true || v === "true");
         }
       });
   }, []);
@@ -121,7 +123,8 @@ const Checkout = () => {
   const discountAmount = couponApplied?.discount || 0;
   const afterDiscount = totalPrice - discountAmount - bogo.savings;
   const baseShipping = paymentMethod === "cod" ? codShipping : prepaidShipping;
-  const shippingFee = totalPrice >= freeShippingThreshold ? 0 : baseShipping;
+  const prepaidFreeApplies = freePrepaid && paymentMethod === "online";
+  const shippingFee = prepaidFreeApplies || totalPrice >= freeShippingThreshold ? 0 : baseShipping;
   const finalTotal = Math.max(0, afterDiscount) + shippingFee;
 
   // Fire discount_applied once when BOGO savings kick in

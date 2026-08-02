@@ -3,7 +3,9 @@ import { isBogoActive } from "@/lib/bogo";
 const baseMessages = [
   "✨ Get 10% OFF on your first purchase — use code WELCOME10",
   "🚚 Free shipping on prepaid orders above ₹999",
-  "🌿 100% Chemical-Free · Cruelty-Free · GMP Certified",
+  "🌿 Innovative Herbal Products · Cruelty-Free · GMP Certified",
+  "🤖 AI-Powered Skincare – Coming Soon",
+
 ];
 
 const bogoMessages = [

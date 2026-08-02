@@ -109,7 +109,7 @@ const ProductDetail = () => {
       });
 
     const faqs = [
-      { q: `Is ${product.name} chemical-free?`, a: "Yes. All Solura products are crafted with natural, chemical-free ingredients and are cruelty free, GMP, ISO, and Non GMO compliant." },
+      { q: `Is ${product.name} herbal and safe?`, a: "Yes. All Solura products are crafted with innovative herbal ingredients and are cruelty free, GMP, ISO, and Non GMO compliant." },
       { q: `How do I use ${product.name}?`, a: product.how_to_use || "Apply as directed on the packaging. For best results use consistently as part of your daily routine." },
       { q: "What is the shipping fee?", a: "We charge a flat ₹50 shipping fee on all orders across India." },
       { q: "How can I track my order?", a: "After placing your order you can track its status from the My Orders page using your phone number." },

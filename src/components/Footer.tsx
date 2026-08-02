@@ -7,7 +7,7 @@ const Footer = () => (
         <div className="md:col-span-2">
           <h3 className="font-display text-3xl font-semibold mb-4">SOLURA</h3>
           <p className="text-primary-foreground/70 max-w-sm leading-relaxed">
-            Premium, chemical-free cosmetics crafted for your daily glow. Born from a passion for natural beauty and a startup pitch competition.
+            Premium, innovative herbal cosmetics crafted for your daily glow. Born from a passion for natural beauty and a startup pitch competition.
           </p>
           <div className="mt-4 text-sm text-primary-foreground/60">
             <p>184, South Manthai Street, Pallapatti</p>
