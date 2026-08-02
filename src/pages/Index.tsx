@@ -36,6 +36,21 @@ const Index = () => {
       {/* BOGO Banner */}
       <BogoBanner />
 
+      {/* AI-Powered Skincare teaser */}
+      <section className="py-8 md:py-12 bg-secondary/60 border-y border-border">
+        <div className="container px-4 text-center max-w-2xl mx-auto">
+          <span className="inline-flex items-center gap-2 text-[10px] md:text-xs uppercase tracking-[0.25em] text-primary mb-3">
+            <Sparkles className="h-3.5 w-3.5" /> Coming Soon
+          </span>
+          <h2 className="font-display text-2xl md:text-4xl font-light italic">AI-Powered Skincare – Coming Soon</h2>
+          <p className="text-sm md:text-base text-muted-foreground mt-3">
+            Personalised herbal routines built for your skin, powered by AI. Something new is brewing at Solura.
+          </p>
+        </div>
+      </section>
+
+
+
 
 
 
