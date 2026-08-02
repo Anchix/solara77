@@ -8,11 +8,13 @@ import { toast } from "sonner";
 
 const AdminSettings = () => {
   const [codEnabled, setCodEnabled] = useState(true);
+  const [freePrepaid, setFreePrepaid] = useState(false);
   const [prepaidShipping, setPrepaidShipping] = useState<number>(50);
   const [codShipping, setCodShipping] = useState<number>(75);
   const [freeShippingThreshold, setFreeShippingThreshold] = useState<number>(999);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savingPrepaid, setSavingPrepaid] = useState(false);
   const [savingShipping, setSavingShipping] = useState(false);
 
   useEffect(() => {
@@ -20,11 +22,12 @@ const AdminSettings = () => {
       const { data } = await supabase
         .from("site_settings")
         .select("key,value")
-        .in("key", ["cod_enabled", "shipping_prepaid", "shipping_cod", "free_shipping_threshold"]);
+        .in("key", ["cod_enabled", "shipping_prepaid", "shipping_cod", "free_shipping_threshold", "free_prepaid_shipping"]);
       if (data) {
         for (const row of data) {
           const v: any = row.value;
           if (row.key === "cod_enabled") setCodEnabled(v === true || v === "true");
+          if (row.key === "free_prepaid_shipping") setFreePrepaid(v === true || v === "true");
           if (row.key === "shipping_prepaid") setPrepaidShipping(Number(v) || 0);
           if (row.key === "shipping_cod") setCodShipping(Number(v) || 0);
           if (row.key === "free_shipping_threshold") setFreeShippingThreshold(Number(v) || 0);
@@ -34,6 +37,22 @@ const AdminSettings = () => {
     };
     load();
   }, []);
+
+  const toggleFreePrepaid = async (checked: boolean) => {
+    setSavingPrepaid(true);
+    setFreePrepaid(checked);
+    const { error } = await supabase
+      .from("site_settings")
+      .upsert({ key: "free_prepaid_shipping", value: checked as any }, { onConflict: "key" });
+    if (error) {
+      toast.error("Failed to update: " + error.message);
+      setFreePrepaid(!checked);
+    } else {
+      toast.success(`Free prepaid shipping ${checked ? "enabled" : "disabled"}`);
+    }
+    setSavingPrepaid(false);
+  };
+
 
   const toggleCod = async (checked: boolean) => {
     setSaving(true);
