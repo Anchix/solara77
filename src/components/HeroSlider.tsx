@@ -35,7 +35,7 @@ const slides = [
     ctaSecondary: { label: "View Reviews", to: "/shop" },
   },
   {
-    image: heroSlide4.url,
+    image: heroSlide4,
     subtitle: "Exclusive Offer",
     title: "Save 10%–30% Today",
     description: "Limited-time savings across our bestselling skincare edit — plus free shipping on prepaid orders.",
@@ -43,7 +43,7 @@ const slides = [
     ctaSecondary: { label: "View Bestsellers", to: "/shop" },
   },
   {
-    image: heroSlide5.url,
+    image: heroSlide5,
     subtitle: "The Full Collection",
     title: "Skincare, Haircare & Lips",
     description: "Hibiglow, Bright-X, Brightening Cream and more — innovative herbal essentials in one place.",
