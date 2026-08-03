@@ -5,8 +5,8 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import heroSlide3 from "@/assets/hero-slide-3.jpg";
-import heroSlide4 from "@/assets/hero-slide-4.jpg.asset.json";
-import heroSlide5 from "@/assets/hero-slide-5.jpg.asset.json";
+import heroSlide4 from "@/assets/hero-slide-4.jpg";
+import heroSlide5 from "@/assets/hero-slide-5.jpg";
 
 const slides = [
   {
