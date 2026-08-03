@@ -34,6 +34,22 @@ const slides = [
     cta: { label: "Explore Products", to: "/shop" },
     ctaSecondary: { label: "View Reviews", to: "/shop" },
   },
+  {
+    image: heroSlide4.url,
+    subtitle: "Exclusive Offer",
+    title: "Save 10%–30% Today",
+    description: "Limited-time savings across our bestselling skincare edit — plus free shipping on prepaid orders.",
+    cta: { label: "Shop the Offer", to: "/shop" },
+    ctaSecondary: { label: "View Bestsellers", to: "/shop" },
+  },
+  {
+    image: heroSlide5.url,
+    subtitle: "The Full Collection",
+    title: "Skincare, Haircare & Lips",
+    description: "Hibiglow, Bright-X, Brightening Cream and more — innovative herbal essentials in one place.",
+    cta: { label: "Explore Collection", to: "/shop" },
+    ctaSecondary: { label: "Our Story", to: "/founder-story" },
+  },
 ];
 
 const HeroSlider = () => {
