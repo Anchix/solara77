@@ -5,6 +5,8 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import heroSlide3 from "@/assets/hero-slide-3.jpg";
+import heroSlide4 from "@/assets/hero-slide-4.jpg.asset.json";
+import heroSlide5 from "@/assets/hero-slide-5.jpg.asset.json";
 
 const slides = [
   {
@@ -31,6 +33,22 @@ const slides = [
     description: "Join thousands who've switched to innovative herbal skincare and haircare.",
     cta: { label: "Explore Products", to: "/shop" },
     ctaSecondary: { label: "View Reviews", to: "/shop" },
+  },
+  {
+    image: heroSlide4.url,
+    subtitle: "Exclusive Offer",
+    title: "Save 10%–30% Today",
+    description: "Limited-time savings across our bestselling skincare edit — plus free shipping on prepaid orders.",
+    cta: { label: "Shop the Offer", to: "/shop" },
+    ctaSecondary: { label: "View Bestsellers", to: "/shop" },
+  },
+  {
+    image: heroSlide5.url,
+    subtitle: "The Full Collection",
+    title: "Skincare, Haircare & Lips",
+    description: "Hibiglow, Bright-X, Brightening Cream and more — innovative herbal essentials in one place.",
+    cta: { label: "Explore Collection", to: "/shop" },
+    ctaSecondary: { label: "Our Story", to: "/founder-story" },
   },
 ];
 
