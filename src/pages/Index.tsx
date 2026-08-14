@@ -32,8 +32,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <LuckyDrawPopup />
+
       {/* Hero Slider */}
       <HeroSlider />
+
 
       {/* BOGO Banner */}
       <BogoBanner />
