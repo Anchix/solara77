@@ -18,7 +18,7 @@ const LuckyDrawPopup = () => {
 
   useEffect(() => {
     if (!isLuckyDrawActive()) return;
-    const first = setTimeout(() => setOpen(true), 8000);
+    const first = setTimeout(() => setOpen(true), 400);
     const loop = setInterval(() => setOpen(true), 120000); // every 2 minutes
     return () => {
       clearTimeout(first);
