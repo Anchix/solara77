@@ -14,16 +14,14 @@ const prizes = [
 ];
 
 const LuckyDrawPopup = () => {
-  const [open, setOpen] = useState(false);
+  // Opens instantly on every home-page load / hard refresh (no session gating)
+  const [open, setOpen] = useState(() => isLuckyDrawActive());
 
   useEffect(() => {
     if (!isLuckyDrawActive()) return;
-    const first = setTimeout(() => setOpen(true), 400);
+    setOpen(true);
     const loop = setInterval(() => setOpen(true), 120000); // every 2 minutes
-    return () => {
-      clearTimeout(first);
-      clearInterval(loop);
-    };
+    return () => clearInterval(loop);
   }, []);
 
   if (!open) return null;
