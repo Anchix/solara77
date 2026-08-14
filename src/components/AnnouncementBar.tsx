@@ -2,7 +2,7 @@ import { isBogoActive } from "@/lib/bogo";
 import { isIndependenceTheme, isLuckyDrawActive } from "@/lib/independence";
 
 const baseMessages = [
-  "🚚 Free Shipping on ALL Orders",
+  "🚚 Free shipping for all the Orders",
   "✨ Exclusive Offer: Save 10%–30% Today",
   "🌿 Innovative Herbal Products · Cruelty-Free · GMP Certified",
   "🤖 AI-Powered Skincare – Coming Soon",
