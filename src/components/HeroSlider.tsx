@@ -2,22 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import heroSlide3 from "@/assets/hero-slide-3.jpg";
-import heroSlide4 from "@/assets/hero-slide-4.jpg";
 import heroSlide5 from "@/assets/hero-slide-5.jpg";
 
-const slides = [
-  {
-    image: heroSlide1,
-    subtitle: "Limited Time · Ends 31 July",
-    title: "Buy 1 Get 1 Free",
-    description: "On selected bestsellers. Innovative herbal skincare & haircare — no code needed, discount auto-applied at checkout.",
-    cta: { label: "Claim the Offer", to: "/shop" },
-    ctaSecondary: { label: "Our Story", to: "/founder-story" },
-  },
 
+const slides = [
   {
     image: heroSlide2,
     subtitle: "Handcrafted With Love",
@@ -35,14 +25,6 @@ const slides = [
     ctaSecondary: { label: "View Reviews", to: "/shop" },
   },
   {
-    image: heroSlide4,
-    subtitle: "Exclusive Offer",
-    title: "Save 10%–30% Today",
-    description: "Limited-time savings across our bestselling skincare edit — plus free shipping on prepaid orders.",
-    cta: { label: "Shop the Offer", to: "/shop" },
-    ctaSecondary: { label: "View Bestsellers", to: "/shop" },
-  },
-  {
     image: heroSlide5,
     subtitle: "The Full Collection",
     title: "Skincare, Haircare & Lips",
@@ -51,6 +33,7 @@ const slides = [
     ctaSecondary: { label: "Our Story", to: "/founder-story" },
   },
 ];
+
 
 const HeroSlider = () => {
   const [current, setCurrent] = useState(0);
