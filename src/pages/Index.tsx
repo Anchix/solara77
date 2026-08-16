@@ -6,7 +6,6 @@ import { ArrowRight, Sparkles, Leaf, Sun, Shield, Award, CheckCircle, Star, Truc
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import HeroSlider from "@/components/HeroSlider";
 import BogoBanner from "@/components/BogoBanner";
-import LuckyDrawPopup from "@/components/LuckyDrawPopup";
 
 
 import naturalBeauty from "@/assets/natural-beauty.jpg";
@@ -32,7 +31,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <LuckyDrawPopup />
 
       {/* Hero Slider */}
       <HeroSlider />
