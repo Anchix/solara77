@@ -1,5 +1,5 @@
 import { isBogoActive } from "@/lib/bogo";
-import { isIndependenceTheme, isLuckyDrawActive } from "@/lib/independence";
+import { isIndependenceTheme } from "@/lib/independence";
 
 const baseMessages = [
   "🚚 Free shipping for all the Orders",
@@ -13,10 +13,6 @@ const independenceMessages = [
   "🇮🇳 Happy 80th Independence Day — Celebrate with Solura",
 ];
 
-const luckyDrawMessages = [
-  "🎟️ Shop ₹200+ & enter the Independence Day Lucky Draw — Win LED TV, Air Cooler & more",
-];
-
 const bogoMessages = [
   "🎁 BUY 1 GET 1 FREE on selected bestsellers — Ends 31 July!",
   "⏰ Hurry! Buy 1 Get 1 FREE ending soon — Shop now",
@@ -26,7 +22,6 @@ const AnnouncementBar = () => {
   const independence = isIndependenceTheme();
   const messages = [
     ...(independence ? independenceMessages : []),
-    ...(isLuckyDrawActive() ? luckyDrawMessages : []),
     ...(isBogoActive() ? bogoMessages : []),
     ...baseMessages,
   ];
