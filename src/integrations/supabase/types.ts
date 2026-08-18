@@ -403,6 +403,30 @@ export type Database = {
         }
         Relationships: []
       }
+      spin_wheel_spins: {
+        Row: {
+          code: string | null
+          created_at: string
+          discount_value: number
+          id: string
+          prize_label: string
+        }
+        Insert: {
+          code?: string | null
+          created_at?: string
+          discount_value?: number
+          id?: string
+          prize_label: string
+        }
+        Update: {
+          code?: string | null
+          created_at?: string
+          discount_value?: number
+          id?: string
+          prize_label?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
