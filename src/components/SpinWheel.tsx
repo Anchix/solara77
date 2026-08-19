@@ -62,7 +62,14 @@ const SpinWheel = () => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (localStorage.getItem(STORAGE_KEY)) return;
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setResult({ index: 0, label: parsed.label, code: parsed.code ?? null });
+      } catch { /* ignore */ }
+      return;
+    }
     timer.current = window.setTimeout(() => {
       setOpen(true);
       trackEvent("spin_wheel_open");
@@ -101,6 +108,16 @@ const SpinWheel = () => {
   };
 
   return (
+    <>
+    <button
+      onClick={() => { setOpen(true); trackEvent("spin_wheel_open", { source: "floating_button" }); }}
+      aria-label="Spin and win a discount"
+      className="fixed bottom-24 left-4 z-40 flex items-center gap-2 rounded-full bg-primary text-primary-foreground shadow-lg px-4 py-3 hover:scale-105 transition-transform"
+    >
+      <Gift className="h-4 w-4" />
+      <span className="text-xs font-medium tracking-wide">Spin & Win</span>
+    </button>
+
     <Dialog open={open} onOpenChange={(o) => { if (!spinning) setOpen(o); }}>
       <DialogContent className="max-w-sm sm:max-w-md p-0 overflow-hidden border-primary/30">
         <div className="bg-gradient-to-b from-secondary/70 via-background to-background px-5 pt-7 pb-6 text-center">
@@ -209,6 +226,7 @@ const SpinWheel = () => {
         </div>
       </DialogContent>
     </Dialog>
+    </>
   );
 };
 
