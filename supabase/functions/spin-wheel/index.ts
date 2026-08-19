@@ -44,6 +44,11 @@ Deno.serve(async (req) => {
     const segment = pickSegment();
 
     if (segment.value === 0) {
+      await supabase.from("spin_wheel_spins").insert({
+        prize_label: segment.label,
+        discount_value: 0,
+        code: null,
+      });
       return new Response(JSON.stringify({ index: segment.index, label: segment.label, code: null }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -63,6 +68,11 @@ Deno.serve(async (req) => {
         expires_at: expires,
       });
       if (!error) {
+        await supabase.from("spin_wheel_spins").insert({
+          prize_label: segment.label,
+          discount_value: segment.value,
+          code,
+        });
         return new Response(
           JSON.stringify({ index: segment.index, label: segment.label, code, expires_at: expires }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } },
