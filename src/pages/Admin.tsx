@@ -9,7 +9,8 @@ import AdminCoupons from "@/components/admin/AdminCoupons";
 import AdminSettings from "@/components/admin/AdminSettings";
 import AdminPaymentAttempts from "@/components/admin/AdminPaymentAttempts";
 import AdminSEO from "@/components/admin/AdminSEO";
-import { LogOut, LayoutDashboard, Package, ShoppingBag, FileText, Globe, Tag, Settings, CreditCard, Search } from "lucide-react";
+import AdminSpinWheel from "@/components/admin/AdminSpinWheel";
+import { LogOut, LayoutDashboard, Package, ShoppingBag, FileText, Globe, Tag, Settings, CreditCard, Search, Gift } from "lucide-react";
 
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -18,6 +19,7 @@ const navItems = [
   { id: "products", label: "Products", icon: ShoppingBag },
   { id: "coupons", label: "Coupons", icon: Tag },
   { id: "blog", label: "Blog", icon: FileText },
+  { id: "spinwheel", label: "Spin Wheel", icon: Gift },
   { id: "seo", label: "SEO Audit", icon: Search },
   { id: "settings", label: "Settings", icon: Settings },
 ] as const;
@@ -83,6 +85,7 @@ const Admin = () => {
           {activePage === "products" && <AdminProducts />}
           {activePage === "coupons" && <AdminCoupons />}
           {activePage === "blog" && <AdminBlog />}
+          {activePage === "spinwheel" && <AdminSpinWheel />}
           {activePage === "seo" && <AdminSEO />}
           {activePage === "settings" && <AdminSettings />}
         </div>
