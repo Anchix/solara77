@@ -63,6 +63,14 @@ const BlogPost = () => {
         }
         setLoading(false);
       });
+    supabase
+      .from("blog_posts")
+      .select("id, title, slug, excerpt, published_at, author, featured_image, content")
+      .not("published_at", "is", null)
+      .neq("slug", slug)
+      .order("published_at", { ascending: false })
+      .limit(3)
+      .then(({ data }) => setRelated((data || []) as BlogPostType[]));
   }, [slug]);
 
   useEffect(() => {
@@ -97,6 +105,7 @@ const BlogPost = () => {
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
     });
+    setMeta("name", "robots", "index, follow");
   }, [post]);
 
   if (loading) {
