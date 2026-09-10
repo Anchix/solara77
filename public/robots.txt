@@ -1,12 +1,27 @@
 User-agent: *
 Allow: /
 
-# Block admin / internal routes
+# Rendering resources must stay crawlable
+Allow: /assets/
+Allow: *.css
+Allow: *.js
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.png
+Allow: *.webp
+Allow: *.svg
+
+# Private / transactional routes (no SEO value)
 Disallow: /admin
+Disallow: /off
 Disallow: /auth
 Disallow: /checkout
 Disallow: /order-confirmation
 Disallow: /my-orders
 
+# Duplicate variants consolidated via 301 redirects
+Disallow: /*?fbclid=
+Disallow: /*?gclid=
+Disallow: /*?utm_
+
 Sitemap: https://soluracosmo.com/sitemap.xml
-Host: soluracosmo.com

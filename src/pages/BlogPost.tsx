@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { blogPosts as fallbackPosts, BlogPost as BlogPostType } from "@/data/products";
+import { blogPosts as fallbackPosts, BlogPost as BlogPostType, useProducts } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
@@ -45,6 +45,8 @@ const BlogPost = () => {
   const { slug } = useParams();
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [related, setRelated] = useState<BlogPostType[]>([]);
+  const { data: products = [] } = useProducts();
 
   useEffect(() => {
     if (!slug) return;
@@ -61,6 +63,14 @@ const BlogPost = () => {
         }
         setLoading(false);
       });
+    supabase
+      .from("blog_posts")
+      .select("id, title, slug, excerpt, published_at, author, featured_image, content")
+      .not("published_at", "is", null)
+      .neq("slug", slug)
+      .order("published_at", { ascending: false })
+      .limit(3)
+      .then(({ data }) => setRelated((data || []) as BlogPostType[]));
   }, [slug]);
 
   useEffect(() => {
@@ -95,6 +105,7 @@ const BlogPost = () => {
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
     });
+    setMeta("name", "robots", "index, follow");
   }, [post]);
 
   if (loading) {

@@ -10,6 +10,7 @@ type SeoOptions = {
   path: string; // e.g. "/shop"
   image?: string;
   type?: "website" | "article" | "product";
+  noindex?: boolean;
 };
 
 function upsertMeta(attr: "name" | "property", key: string, value: string) {
@@ -32,13 +33,37 @@ function upsertCanonical(href: string) {
   el.href = href;
 }
 
-export function applySeo({ title, description, path, image, type = "website" }: SeoOptions) {
+/**
+ * Normalises a path into a canonical URL:
+ * - drops query strings and hashes (tracking params never create a new page)
+ * - drops a trailing slash (except the homepage)
+ * - always resolves against the canonical https, non-www host
+ */
+export function canonicalUrl(path: string) {
+  let clean = (path || "/").split("?")[0].split("#")[0];
+  if (!clean.startsWith("/")) clean = `/${clean}`;
+  if (clean.length > 1) clean = clean.replace(/\/+$/, "");
+  return `${SITE_URL}${clean}`;
+}
+
+export function setRobots(value: string | null) {
   if (typeof document === "undefined") return;
-  const url = `${SITE_URL}${path}`;
-  const img = image || `${SITE_URL}/placeholder.svg`;
+  const el = document.head.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+  if (value === null) {
+    if (el) el.remove();
+    return;
+  }
+  upsertMeta("name", "robots", value);
+}
+
+export function applySeo({ title, description, path, image, type = "website", noindex = false }: SeoOptions) {
+  if (typeof document === "undefined") return;
+  const url = canonicalUrl(path);
+  const img = image || `${SITE_URL}/og-image.jpg`;
   document.title = title;
   upsertMeta("name", "description", description);
   upsertCanonical(url);
+  setRobots(noindex ? "noindex, follow" : "index, follow");
   upsertMeta("property", "og:title", title);
   upsertMeta("property", "og:description", description);
   upsertMeta("property", "og:url", url);
