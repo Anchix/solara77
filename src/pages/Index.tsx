@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { applySeo } from "@/lib/seo";
 import { useProducts } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -29,6 +31,15 @@ const certs = [
 
 const Index = () => {
   const { data: products = [], isLoading } = useProducts();
+
+  useEffect(() => {
+    applySeo({
+      title: "Solura Cosmetics | Innovative Herbal Skincare & Haircare India",
+      description:
+        "Shop Solura Cosmetics — innovative herbal skincare and haircare crafted in India. Ayurvedic-inspired formulas, GMP & ISO certified, cruelty-free. Free shipping over ₹999.",
+      path: "/",
+    });
+  }, []);
 
   return (
     <div className="min-h-screen">
