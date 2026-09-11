@@ -19,7 +19,7 @@ const testimonials = [
   { name: "Lakshmi", text: "The Bright-X Face Wash transformed my skin in just 2 weeks. My complexion has never looked better!", rating: 5 },
   { name: "Shaik Asfaq", text: "I've tried countless shampoos but Hibiglow is the only one that gives my hair that natural shine without any chemicals.", rating: 5 },
   { name: "Sasi Prabha", text: "The Glow'e Night Cream is absolute luxury. I wake up every morning with soft, glowing skin.", rating: 5 },
-  { name: "Priya M.", text: "Solura products are now a staple in my routine. Love that they're chemical-free and actually work!", rating: 4 },
+  { name: "Priya M.", text: "Solura products are now a staple in my routine. Love that they're herbal and actually work!", rating: 4 },
 ];
 
 const certs = [
