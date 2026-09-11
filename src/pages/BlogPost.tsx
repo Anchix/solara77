@@ -126,6 +126,47 @@ const BlogPost = () => {
         <p className="text-xs text-muted-foreground mb-2">{post.published_at ? format(new Date(post.published_at), "MMMM d, yyyy") : ""} · {post.author}</p>
         <h1 className="font-display text-3xl md:text-5xl font-semibold mb-6">{post.title}</h1>
         <div className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed whitespace-pre-line">{post.content}</div>
+
+        {products.length > 0 && (
+          <section className="mt-14 border-t border-border pt-8">
+            <h2 className="font-display text-2xl font-light mb-4">Products mentioned in this ritual</h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {products.slice(0, 3).map((p) => (
+                <li key={p.id}>
+                  <Link to={`/product/${p.slug}`} className="block group">
+                    <img
+                      src={(p.images && p.images[0]) || "/placeholder.svg"}
+                      alt={`${p.name} — Solura herbal ${p.category || "skincare"}`}
+                      loading="lazy"
+                      className="w-full aspect-square object-contain bg-secondary rounded-lg p-3"
+                    />
+                    <p className="mt-2 text-sm font-medium group-hover:text-primary transition-colors">{p.name}</p>
+                    <p className="text-xs text-muted-foreground">₹{p.sale_price ?? p.price}</p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link to="/shop" className="inline-block mt-5 text-sm text-primary underline underline-offset-4">
+              Shop all Solura herbal skincare & haircare
+            </Link>
+          </section>
+        )}
+
+        {related.length > 0 && (
+          <section className="mt-12 border-t border-border pt-8">
+            <h2 className="font-display text-2xl font-light mb-4">Related articles</h2>
+            <ul className="space-y-3">
+              {related.map((r) => (
+                <li key={r.id}>
+                  <Link to={`/blog/${r.slug}`} className="text-sm font-medium hover:text-primary transition-colors">
+                    {r.title}
+                  </Link>
+                  {r.excerpt && <p className="text-xs text-muted-foreground line-clamp-2">{r.excerpt}</p>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </article>
     </div>
   );
