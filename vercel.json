@@ -1,12 +1,7 @@
 {
   "redirects": [
-    {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "www.soluracosmo.com" }],
-      "destination": "https://soluracosmo.com/$1",
-      "permanent": true
-    },
     { "source": "/shop:num(\\d+)", "destination": "/shop", "permanent": true },
+
     { "source": "/shop-:num(\\d+)", "destination": "/shop", "permanent": true },
     { "source": "/blog:num(\\d+)", "destination": "/blog", "permanent": true },
     { "source": "/blog-:num(\\d+)", "destination": "/blog", "permanent": true },
