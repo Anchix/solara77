@@ -144,15 +144,15 @@ function buildPostHtml(template, post) {
 function buildSitemap(posts, products) {
   const urls = [
     ...STATIC_ROUTES.map((r) => ({ loc: `${SITE_URL}${r}`, changefreq: "weekly", priority: r === "/" ? "1.0" : "0.8" })),
-    ...posts.map((p) => ({
+    ...posts.filter((p) => p.slug).map((p) => ({
       loc: `${SITE_URL}/blog/${p.slug}`,
-      lastmod: (p.updated_at || p.published_at || new Date().toISOString()).slice(0, 10),
+      lastmod: (p.updated_at || p.published_at || "").slice(0, 10) || undefined,
       changefreq: "monthly",
       priority: "0.7",
     })),
-    ...products.map((p) => ({
+    ...products.filter((p) => p.slug).map((p) => ({
       loc: `${SITE_URL}/product/${p.slug}`,
-      lastmod: (p.updated_at || new Date().toISOString()).slice(0, 10),
+      lastmod: (p.updated_at || "").slice(0, 10) || undefined,
       changefreq: "weekly",
       priority: "0.8",
     })),
@@ -190,10 +190,10 @@ function buildStaticPages(posts) {
       path: "/blog",
       title: "Solura Journal — Natural Skincare & Haircare Insights from India",
       description:
-        "Read the Solura Journal for expert tips on Ayurvedic skincare, chemical-free haircare, ingredient deep-dives and daily glow rituals from India's homegrown beauty brand.",
+        "Read the Solura Journal for expert tips on Ayurvedic skincare, innovative herbal haircare, ingredient deep-dives and daily glow rituals from India's homegrown beauty brand.",
       h1: "Solura Journal — Natural Beauty Insights",
       intro:
-        "Welcome to the Solura Journal. We share ingredient stories, Ayurvedic routines, glow-up guides and behind-the-scenes notes from our chemical-free skincare and haircare lab in India.",
+        "Welcome to the Solura Journal. We share ingredient stories, Ayurvedic routines, glow-up guides and behind-the-scenes notes from our herbal skincare and haircare lab in India.",
       body: `
         <section>
           <h2>Latest articles</h2>
@@ -204,9 +204,9 @@ function buildStaticPages(posts) {
           <ul>
             <li><strong>Ingredient spotlights</strong> — the science and Ayurveda behind hibiscus, saffron, rosewater, aloe, sandalwood and turmeric.</li>
             <li><strong>Routine guides</strong> — morning and night rituals for Indian skin types, climates and seasons.</li>
-            <li><strong>Hair stories</strong> — combating hair fall, dandruff and dullness with chemical-free formulas.</li>
+            <li><strong>Hair stories</strong> — combating hair fall, dandruff and dullness with innovative herbal formulas.</li>
             <li><strong>Founder notes</strong> — how Solura Cosmetics is built, formulated and certified (GMP, ISO, Cruelty Free, Non-GMO).</li>
-            <li><strong>Customer rituals</strong> — real routines from our 5,000+ Solura community.</li>
+            <li><strong>Customer rituals</strong> — real routines shared by the Solura community.</li>
           </ul>
         </section>
         <section>
@@ -218,10 +218,10 @@ function buildStaticPages(posts) {
       path: "/shop",
       title: "Shop Natural Skincare & Haircare — Solura Cosmetics India",
       description:
-        "Shop Solura's chemical-free skincare and haircare collection — face washes, serums, night creams, shampoos and hair oils crafted with Ayurvedic botanicals. GMP & ISO certified.",
+        "Shop Solura's innovative herbal skincare and haircare collection — face washes, serums, night creams, shampoos and hair oils crafted with Ayurvedic botanicals. GMP & ISO certified.",
       h1: "Shop Solura — Natural Skincare & Haircare",
       intro:
-        "Explore our complete collection of chemical-free, Ayurvedic-inspired skincare and haircare. Every product is GMP and ISO certified, cruelty-free, and crafted in small batches in India.",
+        "Explore our complete collection of innovative herbal, Ayurvedic-inspired skincare and haircare. Every product is GMP and ISO certified, cruelty-free, and crafted in small batches in India.",
       body: `
         <section>
           <h2>Skincare bestsellers</h2>
@@ -242,17 +242,17 @@ function buildStaticPages(posts) {
         </section>
         <section>
           <h2>Why Solura</h2>
-          <p>100% chemical-free · GMP Certified · ISO Certified · Cruelty Free · Non-GMO · Flat ₹50 shipping across India · Cash on Delivery + secure UPI/card payments.</p>
+          <p>Innovative herbal formulas · GMP Certified · ISO Certified · Cruelty Free · Non-GMO · ₹50 prepaid / ₹75 COD shipping, free over ₹999 · Cash on Delivery + secure UPI/card payments.</p>
         </section>`,
     },
     {
       path: "/about",
       title: "About Solura Cosmetics — Chemical-Free Indian Beauty Brand",
       description:
-        "Solura Cosmetics is a homegrown Indian beauty brand making luxury, chemical-free skincare and haircare with Ayurvedic ingredients. GMP & ISO certified, cruelty-free.",
+        "Solura Cosmetics is a homegrown Indian beauty brand making luxury, innovative herbal skincare and haircare with Ayurvedic ingredients. GMP & ISO certified, cruelty-free.",
       h1: "About Solura Cosmetics",
       intro:
-        "Solura is a homegrown Indian beauty brand on a mission to make luxury, chemical-free skincare and haircare accessible to every household — without compromising on results or ethics.",
+        "Solura is a homegrown Indian beauty brand on a mission to make luxury, innovative herbal skincare and haircare accessible to every household — without compromising on results or ethics.",
       body: `
         <section>
           <h2>Our philosophy</h2>
@@ -264,7 +264,7 @@ function buildStaticPages(posts) {
         </section>
         <section>
           <h2>Community</h2>
-          <p>Trusted by 5,000+ customers across India, with 4.8/5 average reviews on bestsellers like Bright-X, Hibiglow and Glow'e.</p>
+          <p>Verified customer reviews are published on every Solura product page, including bestsellers like Bright-X, Hibiglow and Glow'e.</p>
         </section>
         <section>
           <h2>Learn more</h2>
@@ -275,14 +275,14 @@ function buildStaticPages(posts) {
       path: "/founder-story",
       title: "Our Founder Story — The Origin of Solura Cosmetics",
       description:
-        "Discover the founder story behind Solura Cosmetics — a chemical-free, Ayurvedic-inspired Indian beauty brand built on family rituals, science and 5,000+ trusted customers.",
+        "Discover the founder story behind Solura Cosmetics — an innovative herbal, Ayurvedic-inspired Indian beauty brand built on family rituals and modern cosmetic science.",
       h1: "The Solura Founder Story",
       intro:
         "Solura Cosmetics was born from a simple frustration: too many Indian beauty shelves were stacked with harsh chemicals, vague claims and overpriced imports. We set out to change that.",
       body: `
         <section>
           <h2>Roots in Ayurveda</h2>
-          <p>Growing up in India, our founder watched her family blend hibiscus, rosewater and saffron into daily rituals that delivered real skin and hair results. Solura is the modern, lab-certified continuation of those rituals — chemical-free and built for today's busy routines.</p>
+          <p>Growing up in India, our founder watched her family blend hibiscus, rosewater and saffron into daily rituals that delivered real skin and hair results. Solura is the modern, lab-certified continuation of those rituals — innovative herbal and built for today's busy routines.</p>
         </section>
         <section>
           <h2>Built in India, for India</h2>
