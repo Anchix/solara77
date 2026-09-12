@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Search, AlertCircle, CheckCircle2, TrendingUp, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
-const SITE = "https://soluracosmo.com";
+const SITE = "https://www.soluracosmo.com";
 
 interface AuditResult {
   url: string;
