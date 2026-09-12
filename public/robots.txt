@@ -24,4 +24,4 @@ Disallow: /*?fbclid=
 Disallow: /*?gclid=
 Disallow: /*?utm_
 
-Sitemap: https://soluracosmo.com/sitemap.xml
+Sitemap: https://www.soluracosmo.com/sitemap.xml

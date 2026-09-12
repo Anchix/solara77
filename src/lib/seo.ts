@@ -2,7 +2,7 @@
 // and Open Graph / Twitter meta tags client-side. Use in a useEffect so it
 // runs on each route mount and overrides the static index.html defaults.
 
-export const SITE_URL = "https://soluracosmo.com";
+export const SITE_URL = "https://www.soluracosmo.com";
 
 type SeoOptions = {
   title: string;

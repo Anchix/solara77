@@ -11,7 +11,7 @@ import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
 import { isBogoActive, BOGO_END } from "@/lib/bogo";
 import CountdownTimer from "@/components/CountdownTimer";
 
-const SITE_URL = "https://soluracosmo.com";
+const SITE_URL = "https://www.soluracosmo.com";
 
 const certs = [
   { icon: Award, name: "GMP" },
