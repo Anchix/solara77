@@ -8,8 +8,18 @@ import heroSlide5 from "@/assets/hero-slide-5.jpg";
 import lipstickOfferAsset from "@/assets/solura-hot-red-lipstick-offer.jpeg.asset.json";
 import shampooOfferAsset from "@/assets/solura-hibiglow-shampoo-offer.jpeg.asset.json";
 
+interface HeroSlide {
+  image: string;
+  alt: string;
+  offer?: boolean;
+  subtitle?: string;
+  title?: string;
+  description?: string;
+  cta?: { label: string; to: string };
+  ctaSecondary?: { label: string; to: string };
+}
 
-const slides = [
+const slides: HeroSlide[] = [
   {
     image: lipstickOfferAsset.url,
     alt: "Solura Hot Red Lipstick offer price ₹60, valid September 14 and 15",
