@@ -1,3 +1,3 @@
 # Roadmap
 
-- [ ] Show the shampoo offer as an immediate homepage popup
+- [x] Show the shampoo offer as an immediate homepage popup
