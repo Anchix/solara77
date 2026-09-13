@@ -8,7 +8,7 @@ import { ArrowRight, Sparkles, Leaf, Sun, Shield, Award, CheckCircle, Star, Truc
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import HeroSlider from "@/components/HeroSlider";
 import BogoBanner from "@/components/BogoBanner";
-import SpinWheel from "@/components/SpinWheel";
+import ShampooOfferPopup from "@/components/ShampooOfferPopup";
 
 
 import naturalBeauty from "@/assets/natural-beauty.jpg";
@@ -43,8 +43,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <SpinWheel />
-
+      <ShampooOfferPopup />
       {/* Hero Slider */}
       <HeroSlider />
 
