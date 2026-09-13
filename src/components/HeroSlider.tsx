@@ -5,8 +5,8 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import heroSlide3 from "@/assets/hero-slide-3.jpg";
 import heroSlide5 from "@/assets/hero-slide-5.jpg";
-import lipstickOfferAsset from "@/assets/solura-hot-red-lipstick-offer.jpeg.asset.json";
-import shampooOfferAsset from "@/assets/solura-hibiglow-shampoo-offer.jpeg.asset.json";
+import lipstickOffer from "@/assets/solura-hot-red-lipstick-offer.jpeg";
+import shampooOffer from "@/assets/solura-hibiglow-shampoo-offer.jpeg";
 
 interface HeroSlide {
   image: string;
@@ -21,12 +21,12 @@ interface HeroSlide {
 
 const slides: HeroSlide[] = [
   {
-    image: lipstickOfferAsset.url,
+    image: lipstickOffer,
     alt: "Solura Hot Red Lipstick offer price ₹60, valid September 14 and 15",
     offer: true,
   },
   {
-    image: shampooOfferAsset.url,
+    image: shampooOffer,
     alt: "Solura Hibiglow anti-dandruff shampoo offer price ₹99, valid September 14 and 15",
     offer: true,
   },
