@@ -1,6 +1,11 @@
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
+export interface ProductFaq {
+  question: string;
+  answer: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -11,6 +16,7 @@ export interface Product {
   images: string[] | null;
   category: string | null;
   specs: Record<string, string> | null;
+  faqs?: ProductFaq[] | null;
   brand: string | null;
   product_type: string | null;
   net_quantity: string | null;
@@ -47,6 +53,9 @@ export interface BlogPost {
 const mapProduct = (p: any): Product => ({
   ...p,
   specs: p.specs as Record<string, string> | null,
+  faqs: Array.isArray(p.faqs)
+    ? (p.faqs as ProductFaq[]).filter((f) => f && f.question && f.answer)
+    : [],
 });
 
 export const useProducts = () =>
