@@ -8,11 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import type { Product } from "@/data/products";
 
 const emptyProduct = {
-  name: "", slug: "", description: "", price: "", sale_price: "", category: "", specs: "",
+  name: "", slug: "", description: "", price: "", sale_price: "", category: "",
+  specRows: [] as { key: string; value: string }[],
+  faqRows: [] as { question: string; answer: string }[],
   image1: "", image2: "", image3: "", image4: "", image5: "",
   brand: "", product_type: "", net_quantity: "", skin_type: "", key_benefits: "",
   texture: "", usage_time: "", how_to_use: "", expected_result: "",
@@ -52,7 +54,9 @@ const AdminProducts = () => {
   const toForm = (p: Product) => ({
     id: p.id, name: p.name, slug: p.slug, description: p.description || "",
     price: String(p.price), sale_price: p.sale_price ? String(p.sale_price) : "",
-    category: p.category || "", specs: p.specs ? JSON.stringify(p.specs, null, 2) : "",
+    category: p.category || "",
+    specRows: p.specs ? Object.entries(p.specs).map(([key, value]) => ({ key, value: String(value) })) : [],
+    faqRows: Array.isArray(p.faqs) ? p.faqs.map((f) => ({ question: f.question || "", answer: f.answer || "" })) : [],
     image1: p.images?.[0] || "", image2: p.images?.[1] || "", image3: p.images?.[2] || "",
     image4: p.images?.[3] || "", image5: p.images?.[4] || "",
     brand: p.brand || "", product_type: p.product_type || "", net_quantity: p.net_quantity || "",
@@ -66,15 +70,18 @@ const AdminProducts = () => {
 
   const handleSave = async () => {
     if (!editing?.name || !editing?.slug || !editing?.price) { toast.error("Name, slug, and price are required"); return; }
-    let parsedSpecs = {};
-    if (editing.specs) {
-      try { parsedSpecs = JSON.parse(editing.specs); } catch { toast.error("Specs must be valid JSON"); return; }
-    }
+    const parsedSpecs: Record<string, string> = {};
+    (editing.specRows || []).forEach((r: any) => {
+      if (r.key?.trim()) parsedSpecs[r.key.trim()] = (r.value || "").trim();
+    });
+    const faqs = (editing.faqRows || [])
+      .filter((f: any) => f.question?.trim() && f.answer?.trim())
+      .map((f: any) => ({ question: f.question.trim(), answer: f.answer.trim() }));
     const images = [editing.image1, editing.image2, editing.image3, editing.image4, editing.image5].filter(Boolean);
     const payload: any = {
       name: editing.name, slug: editing.slug, description: editing.description || null,
       price: Number(editing.price), sale_price: editing.sale_price ? Number(editing.sale_price) : null,
-      category: editing.category || null, images, specs: parsedSpecs,
+      category: editing.category || null, images, specs: parsedSpecs, faqs,
       brand: editing.brand || null, product_type: editing.product_type || null,
       net_quantity: editing.net_quantity || null, skin_type: editing.skin_type || null,
       key_benefits: editing.key_benefits || null, texture: editing.texture || null,
@@ -108,6 +115,18 @@ const AdminProducts = () => {
       toast.error("Failed: " + e.message);
     }
   };
+
+  const addRow = (field: "specRows" | "faqRows", row: any) =>
+    setEditing((prev: any) => ({ ...prev, [field]: [...(prev[field] || []), row] }));
+
+  const updateRow = (field: "specRows" | "faqRows", index: number, patch: any) =>
+    setEditing((prev: any) => ({
+      ...prev,
+      [field]: (prev[field] || []).map((r: any, i: number) => (i === index ? { ...r, ...patch } : r)),
+    }));
+
+  const removeRow = (field: "specRows" | "faqRows", index: number) =>
+    setEditing((prev: any) => ({ ...prev, [field]: (prev[field] || []).filter((_: any, i: number) => i !== index) }));
 
   const textField = (label: string, key: string, placeholder?: string) => (
     <div key={key}>
@@ -180,7 +199,37 @@ const AdminProducts = () => {
                     <Input key={n} placeholder={`Image URL ${n}`} value={editing[`image${n}`]} onChange={(e) => setEditing({ ...editing, [`image${n}`]: e.target.value })} />
                   ))}
                 </div>
-                <div><Label>Specs (JSON)</Label><Textarea value={editing.specs} onChange={(e) => setEditing({ ...editing, specs: e.target.value })} className="mt-1 font-mono text-xs" rows={4} placeholder='{"Volume": "100ml"}' /></div>
+                <div className="space-y-2 pt-2">
+                  <Label>Specifications</Label>
+                  <p className="text-xs text-muted-foreground">Shown in the Specifications tab on the product page.</p>
+                  {(editing.specRows || []).map((row: any, i: number) => (
+                    <div key={i} className="flex gap-2">
+                      <Input placeholder="Label (e.g. Volume)" value={row.key} onChange={(e) => updateRow("specRows", i, { key: e.target.value })} />
+                      <Input placeholder="Value (e.g. 100ml)" value={row.value} onChange={(e) => updateRow("specRows", i, { value: e.target.value })} />
+                      <Button type="button" variant="outline" size="icon" onClick={() => removeRow("specRows", i)}><Trash2 className="h-4 w-4" /></Button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => addRow("specRows", { key: "", value: "" })}>
+                    <Plus className="h-3 w-3" /> Add Specification
+                  </Button>
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  <Label>FAQs</Label>
+                  <p className="text-xs text-muted-foreground">Shown as a Frequently Asked Questions section on the product page.</p>
+                  {(editing.faqRows || []).map((row: any, i: number) => (
+                    <div key={i} className="space-y-2 border border-border rounded p-3">
+                      <div className="flex gap-2">
+                        <Input placeholder="Question" value={row.question} onChange={(e) => updateRow("faqRows", i, { question: e.target.value })} />
+                        <Button type="button" variant="outline" size="icon" onClick={() => removeRow("faqRows", i)}><Trash2 className="h-4 w-4" /></Button>
+                      </div>
+                      <Textarea placeholder="Answer" rows={2} value={row.answer} onChange={(e) => updateRow("faqRows", i, { answer: e.target.value })} />
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => addRow("faqRows", { question: "", answer: "" })}>
+                    <Plus className="h-3 w-3" /> Add FAQ
+                  </Button>
+                </div>
                 <Button onClick={handleSave} className="w-full">Save Product</Button>
               </div>
             )}

@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -116,6 +117,7 @@ const App = () => (
         <BrowserRouter>
           <AppShell />
         </BrowserRouter>
+        <SpeedInsights />
       </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>

@@ -246,6 +246,7 @@ export type Database = {
           created_at: string
           description: string | null
           expected_result: string | null
+          faqs: Json
           how_to_use: string | null
           id: string
           images: string[] | null
@@ -274,6 +275,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           expected_result?: string | null
+          faqs?: Json
           how_to_use?: string | null
           id?: string
           images?: string[] | null
@@ -302,6 +304,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           expected_result?: string | null
+          faqs?: Json
           how_to_use?: string | null
           id?: string
           images?: string[] | null

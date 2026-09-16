@@ -3,6 +3,7 @@ import { useProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ShoppingBag, ArrowLeft, Award, CheckCircle, Leaf, Sun, Gift } from "lucide-react";
 import { useState, useEffect } from "react";
 import ProductReviews from "@/components/ProductReviews";
@@ -108,7 +109,8 @@ const ProductDetail = () => {
         setJsonLd("product", productLd);
       });
 
-    const faqs = [
+    const customFaqs = (product.faqs || []).map((f) => ({ q: f.question, a: f.answer }));
+    const faqs = customFaqs.length > 0 ? customFaqs : [
       { q: `Is ${product.name} herbal and safe?`, a: "Yes. All Solura products are crafted with innovative herbal ingredients and are cruelty free, GMP, ISO, and Non GMO compliant." },
       { q: `How do I use ${product.name}?`, a: product.how_to_use || "Apply as directed on the packaging. For best results use consistently as part of your daily routine." },
       { q: "What is the shipping fee?", a: "Shipping is ₹50 for prepaid orders and ₹75 for Cash on Delivery, and free on orders of ₹999 or more." },
@@ -322,6 +324,21 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* FAQ Section */}
+        {(product.faqs?.length ?? 0) > 0 && (
+          <section className="mt-16 border-t border-border pt-8">
+            <h2 className="font-display text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+            <Accordion type="single" collapsible className="w-full">
+              {product.faqs!.map((f, i) => (
+                <AccordionItem key={i} value={`faq-${i}`}>
+                  <AccordionTrigger className="text-left text-sm font-medium">{f.question}</AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground leading-relaxed">{f.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </section>
+        )}
 
         {/* Reviews Section */}
         <div className="mt-16 border-t border-border pt-8">
