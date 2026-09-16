@@ -12,7 +12,9 @@ import { Plus } from "lucide-react";
 import type { Product } from "@/data/products";
 
 const emptyProduct = {
-  name: "", slug: "", description: "", price: "", sale_price: "", category: "", specs: "",
+  name: "", slug: "", description: "", price: "", sale_price: "", category: "",
+  specRows: [] as { key: string; value: string }[],
+  faqRows: [] as { question: string; answer: string }[],
   image1: "", image2: "", image3: "", image4: "", image5: "",
   brand: "", product_type: "", net_quantity: "", skin_type: "", key_benefits: "",
   texture: "", usage_time: "", how_to_use: "", expected_result: "",
@@ -52,7 +54,9 @@ const AdminProducts = () => {
   const toForm = (p: Product) => ({
     id: p.id, name: p.name, slug: p.slug, description: p.description || "",
     price: String(p.price), sale_price: p.sale_price ? String(p.sale_price) : "",
-    category: p.category || "", specs: p.specs ? JSON.stringify(p.specs, null, 2) : "",
+    category: p.category || "",
+    specRows: p.specs ? Object.entries(p.specs).map(([key, value]) => ({ key, value: String(value) })) : [],
+    faqRows: Array.isArray(p.faqs) ? p.faqs.map((f) => ({ question: f.question || "", answer: f.answer || "" })) : [],
     image1: p.images?.[0] || "", image2: p.images?.[1] || "", image3: p.images?.[2] || "",
     image4: p.images?.[3] || "", image5: p.images?.[4] || "",
     brand: p.brand || "", product_type: p.product_type || "", net_quantity: p.net_quantity || "",
