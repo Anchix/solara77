@@ -93,7 +93,11 @@ const MyOrders = () => {
         .eq("id", item.product_id)
         .maybeSingle();
       if (product) {
-        const p = { ...product, specs: product.specs as Record<string, string> | null };
+        const p = {
+          ...product,
+          specs: product.specs as Record<string, string> | null,
+          faqs: Array.isArray(product.faqs) ? (product.faqs as unknown as { question: string; answer: string }[]) : [],
+        };
         for (let i = 0; i < item.quantity; i++) addToCart(p);
       }
     }
