@@ -70,15 +70,18 @@ const AdminProducts = () => {
 
   const handleSave = async () => {
     if (!editing?.name || !editing?.slug || !editing?.price) { toast.error("Name, slug, and price are required"); return; }
-    let parsedSpecs = {};
-    if (editing.specs) {
-      try { parsedSpecs = JSON.parse(editing.specs); } catch { toast.error("Specs must be valid JSON"); return; }
-    }
+    const parsedSpecs: Record<string, string> = {};
+    (editing.specRows || []).forEach((r: any) => {
+      if (r.key?.trim()) parsedSpecs[r.key.trim()] = (r.value || "").trim();
+    });
+    const faqs = (editing.faqRows || [])
+      .filter((f: any) => f.question?.trim() && f.answer?.trim())
+      .map((f: any) => ({ question: f.question.trim(), answer: f.answer.trim() }));
     const images = [editing.image1, editing.image2, editing.image3, editing.image4, editing.image5].filter(Boolean);
     const payload: any = {
       name: editing.name, slug: editing.slug, description: editing.description || null,
       price: Number(editing.price), sale_price: editing.sale_price ? Number(editing.sale_price) : null,
-      category: editing.category || null, images, specs: parsedSpecs,
+      category: editing.category || null, images, specs: parsedSpecs, faqs,
       brand: editing.brand || null, product_type: editing.product_type || null,
       net_quantity: editing.net_quantity || null, skin_type: editing.skin_type || null,
       key_benefits: editing.key_benefits || null, texture: editing.texture || null,
