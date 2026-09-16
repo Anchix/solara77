@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import type { Product } from "@/data/products";
 
 const emptyProduct = {
@@ -116,6 +116,18 @@ const AdminProducts = () => {
     }
   };
 
+  const addRow = (field: "specRows" | "faqRows", row: any) =>
+    setEditing((prev: any) => ({ ...prev, [field]: [...(prev[field] || []), row] }));
+
+  const updateRow = (field: "specRows" | "faqRows", index: number, patch: any) =>
+    setEditing((prev: any) => ({
+      ...prev,
+      [field]: (prev[field] || []).map((r: any, i: number) => (i === index ? { ...r, ...patch } : r)),
+    }));
+
+  const removeRow = (field: "specRows" | "faqRows", index: number) =>
+    setEditing((prev: any) => ({ ...prev, [field]: (prev[field] || []).filter((_: any, i: number) => i !== index) }));
+
   const textField = (label: string, key: string, placeholder?: string) => (
     <div key={key}>
       <Label>{label}</Label>
@@ -187,7 +199,37 @@ const AdminProducts = () => {
                     <Input key={n} placeholder={`Image URL ${n}`} value={editing[`image${n}`]} onChange={(e) => setEditing({ ...editing, [`image${n}`]: e.target.value })} />
                   ))}
                 </div>
-                <div><Label>Specs (JSON)</Label><Textarea value={editing.specs} onChange={(e) => setEditing({ ...editing, specs: e.target.value })} className="mt-1 font-mono text-xs" rows={4} placeholder='{"Volume": "100ml"}' /></div>
+                <div className="space-y-2 pt-2">
+                  <Label>Specifications</Label>
+                  <p className="text-xs text-muted-foreground">Shown in the Specifications tab on the product page.</p>
+                  {(editing.specRows || []).map((row: any, i: number) => (
+                    <div key={i} className="flex gap-2">
+                      <Input placeholder="Label (e.g. Volume)" value={row.key} onChange={(e) => updateRow("specRows", i, { key: e.target.value })} />
+                      <Input placeholder="Value (e.g. 100ml)" value={row.value} onChange={(e) => updateRow("specRows", i, { value: e.target.value })} />
+                      <Button type="button" variant="outline" size="icon" onClick={() => removeRow("specRows", i)}><Trash2 className="h-4 w-4" /></Button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => addRow("specRows", { key: "", value: "" })}>
+                    <Plus className="h-3 w-3" /> Add Specification
+                  </Button>
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  <Label>FAQs</Label>
+                  <p className="text-xs text-muted-foreground">Shown as a Frequently Asked Questions section on the product page.</p>
+                  {(editing.faqRows || []).map((row: any, i: number) => (
+                    <div key={i} className="space-y-2 border border-border rounded p-3">
+                      <div className="flex gap-2">
+                        <Input placeholder="Question" value={row.question} onChange={(e) => updateRow("faqRows", i, { question: e.target.value })} />
+                        <Button type="button" variant="outline" size="icon" onClick={() => removeRow("faqRows", i)}><Trash2 className="h-4 w-4" /></Button>
+                      </div>
+                      <Textarea placeholder="Answer" rows={2} value={row.answer} onChange={(e) => updateRow("faqRows", i, { answer: e.target.value })} />
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" className="gap-2" onClick={() => addRow("faqRows", { question: "", answer: "" })}>
+                    <Plus className="h-3 w-3" /> Add FAQ
+                  </Button>
+                </div>
                 <Button onClick={handleSave} className="w-full">Save Product</Button>
               </div>
             )}
