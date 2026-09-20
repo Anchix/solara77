@@ -56,8 +56,8 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center py-12">
       <div className="w-full max-w-md mx-auto px-6">
         <div className="text-center mb-8">
-          <h1 className="font-display text-4xl font-semibold text-primary mb-2">SOLURA</h1>
-          <p className="text-muted-foreground">Sign in to track orders & get exclusive deals</p>
+          <h1 className="font-display text-4xl font-semibold text-primary mb-2">Sign In to Solura Cosmetics</h1>
+          <p className="text-muted-foreground">Track your orders & get exclusive deals</p>
         </div>
 
         <div className="bg-card border border-border rounded-lg p-6 space-y-6">
@@ -76,7 +76,12 @@ const Auth = () => {
                 <Label>Password</Label>
                 <div className="relative">
                   <Input type={showPassword ? "text" : "password"} value={loginForm.password} onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })} className="mt-1 pr-10" />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
