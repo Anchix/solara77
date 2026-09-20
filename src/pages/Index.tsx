@@ -42,7 +42,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <ShampooOfferPopup />
       {/* Hero Slider */}
       <HeroSlider />
 
