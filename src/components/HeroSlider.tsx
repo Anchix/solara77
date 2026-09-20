@@ -24,7 +24,7 @@ const slides: HeroSlide[] = [
     title: "Pure Ingredients, Real Results",
     description: "Experience the power of nature with our carefully crafted formulations tested for all skin types.",
     cta: { label: "Buy Now", to: "/shop" },
-    ctaSecondary: { label: "Learn More", to: "/about" },
+    ctaSecondary: { label: "Discover Our Story", to: "/about" },
   },
   {
     image: heroSlide3,
@@ -33,7 +33,7 @@ const slides: HeroSlide[] = [
     title: "Trusted by 5000+ Customers",
     description: "Join thousands who've switched to innovative herbal skincare and haircare.",
     cta: { label: "Explore Products", to: "/shop" },
-    ctaSecondary: { label: "View Reviews", to: "/shop" },
+    ctaSecondary: { label: "Shop Bestsellers", to: "/shop" },
   },
   {
     image: heroSlide5,
