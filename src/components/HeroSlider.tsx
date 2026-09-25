@@ -5,6 +5,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import heroSlide3 from "@/assets/hero-slide-3.jpg";
 import heroSlide5 from "@/assets/hero-slide-5.jpg";
+import weekendOfferSlide from "@/assets/weekend-offer-slide.png";
 
 interface HeroSlide {
   image: string;
@@ -14,9 +15,16 @@ interface HeroSlide {
   description?: string;
   cta?: { label: string; to: string };
   ctaSecondary?: { label: string; to: string };
+  offer?: boolean;
 }
 
 const slides: HeroSlide[] = [
+  {
+    image: weekendOfferSlide,
+    alt: "Solura Weekend Offer: buy Nude Pink Lipstick and get Hot Red Lipstick free, September 26 to 28, 2026",
+    offer: true,
+    cta: { label: "Shop Weekend Offer", to: "/shop" },
+  },
   {
     image: heroSlide2,
     alt: "Solura cosmetics made with carefully selected ingredients",
@@ -70,6 +78,23 @@ const HeroSlider = () => {
               }`}
               aria-hidden={!isActive}
             >
+              {slide.offer ? (
+                <Link
+                  to={slide.cta?.to ?? "/shop"}
+                  className="absolute inset-0 flex items-center justify-center bg-foreground"
+                  aria-label={slide.cta?.label ?? "Shop offer"}
+                >
+                  <img
+                    src={slide.image}
+                    alt={slide.alt}
+                    className="h-full w-full object-contain"
+                    width={1200}
+                    height={1200}
+                    decoding="sync"
+                    fetchPriority="high"
+                  />
+                </Link>
+              ) : (
               <>
                 <img
                   src={slide.image}
@@ -108,6 +133,7 @@ const HeroSlider = () => {
                   </div>
                 </div>
               </>
+              )}
             </div>
           );
         })}

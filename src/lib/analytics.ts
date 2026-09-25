@@ -24,13 +24,13 @@ export const trackEvent = (name: string, params: Record<string, any> = {}) => {
 
 // BOGO / offer specific helpers
 export const trackBogoBannerClick = (location: string) =>
-  trackEvent("bogo_banner_click", { promotion_id: "bogo_july_2026", promotion_name: "Buy 1 Get 1 Free", location });
+  trackEvent("bogo_banner_click", { promotion_id: "weekend_offer_sep_2026", promotion_name: "September Weekend Offers", location });
 
 export const trackBogoPopupOpen = () =>
-  trackEvent("bogo_popup_open", { promotion_id: "bogo_july_2026", promotion_name: "Buy 1 Get 1 Free" });
+  trackEvent("bogo_popup_open", { promotion_id: "weekend_offer_sep_2026", promotion_name: "September Weekend Offers" });
 
 export const trackBogoPopupCTA = () =>
-  trackEvent("bogo_popup_cta_click", { promotion_id: "bogo_july_2026", promotion_name: "Buy 1 Get 1 Free" });
+  trackEvent("bogo_popup_cta_click", { promotion_id: "weekend_offer_sep_2026", promotion_name: "September Weekend Offers" });
 
 export const trackDiscountApplied = (params: {
   discount_type: "bogo" | "coupon";

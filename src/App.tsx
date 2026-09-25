@@ -25,7 +25,7 @@ if (typeof window !== "undefined") {
 }
 
 const ChatBot = lazy(() => import("@/components/ChatBot"));
-const BogoPopup = lazy(() => import("@/components/BogoPopup"));
+const WeekendOfferPopup = lazy(() => import("@/components/WeekendOfferPopup"));
 const Shop = lazy(() => import("./pages/Shop"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const Blog = lazy(() => import("./pages/Blog"));
@@ -100,7 +100,7 @@ const AppShell = () => {
         <ChatBot />
       </Suspense>
       <Suspense fallback={null}>
-        <BogoPopup />
+        <WeekendOfferPopup />
       </Suspense>
       
       
