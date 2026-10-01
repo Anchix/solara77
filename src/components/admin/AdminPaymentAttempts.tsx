@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { CreditCard, CheckCircle2, XCircle, Clock, AlertCircle } from "lucide-react";
 
 type Attempt = {
@@ -29,7 +30,7 @@ const AdminPaymentAttempts = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
+    const load = async () => {
       const { data } = await supabase
         .from("payment_attempts")
         .select("*")
@@ -37,6 +38,19 @@ const AdminPaymentAttempts = () => {
         .limit(500);
       if (data) setAttempts(data as any);
       setLoading(false);
+    };
+    (async () => {
+      await load();
+      // Recover any payments that went through on Razorpay but never became orders
+      try {
+        const { data } = await supabase.functions.invoke("reconcile-payments", { body: {} });
+        if (data?.recovered?.length || data?.needsDetails?.length) {
+          toast.success(`Recovered ${data.recovered.length} paid order(s)`, {
+            description: data.needsDetails?.length ? `${data.needsDetails.length} paid without address — check Notes` : undefined,
+          });
+          await load();
+        }
+      } catch {}
     })();
   }, []);
 
