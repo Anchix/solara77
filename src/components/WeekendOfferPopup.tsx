@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import CountdownTimer from "@/components/CountdownTimer";
-import popupImage from "@/assets/weekend-offer-popup.png";
+import popupAsset from "@/assets/nude-pink-bogo-banner.png.asset.json";
+const popupImage = popupAsset.url;
 import { WEEKEND_OFFER_END } from "@/lib/weekendOffer";
 import { trackBogoPopupCTA, trackBogoPopupOpen } from "@/lib/analytics";
 
-const SESSION_KEY = "weekend_offer_sep_2026_dismissed";
+const SESSION_KEY = "bogo_offer_oct_2026_dismissed";
 
 const WeekendOfferPopup = () => {
   const [open, setOpen] = useState(false);
@@ -29,7 +30,7 @@ const WeekendOfferPopup = () => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100%-1.5rem)] max-w-xl gap-0 overflow-hidden border-primary/20 bg-card p-0 shadow-2xl">
-        <DialogTitle className="sr-only">Solura Weekend Offer, September 26 to 28</DialogTitle>
+        <DialogTitle className="sr-only">Solura Buy 1 Get 1 Free offer</DialogTitle>
         <DialogDescription className="sr-only">
           Four limited-time beauty offers with free products added automatically at checkout.
         </DialogDescription>

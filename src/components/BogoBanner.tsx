@@ -20,7 +20,7 @@ const BogoBanner = () => {
             </div>
             <div>
               <p className="text-[10px] md:text-xs uppercase tracking-[0.25em] opacity-90 flex items-center gap-1.5">
-                <Flame className="h-3 w-3" /> Limited Time · September 26–28
+                <Flame className="h-3 w-3" /> Limited Time · Ends Tonight
               </p>
               <h2 className="font-display text-xl md:text-3xl font-semibold leading-tight">
                 Weekend Gifts <span className="italic">FREE</span>
