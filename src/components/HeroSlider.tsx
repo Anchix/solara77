@@ -5,7 +5,9 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import heroSlide3 from "@/assets/hero-slide-3.jpg";
 import heroSlide5 from "@/assets/hero-slide-5.jpg";
-import weekendOfferSlide from "@/assets/weekend-offer-slide.png";
+import bogoBanner from "@/assets/nude-pink-bogo-banner.png.asset.json";
+import CountdownTimer from "./CountdownTimer";
+import { WEEKEND_OFFER_END } from "@/lib/weekendOffer";
 
 interface HeroSlide {
   image: string;
@@ -20,10 +22,10 @@ interface HeroSlide {
 
 const slides: HeroSlide[] = [
   {
-    image: weekendOfferSlide,
-    alt: "Solura Weekend Offer: buy Nude Pink Lipstick and get Hot Red Lipstick free, September 26 to 28, 2026",
+    image: bogoBanner.url,
+    alt: "Solura Buy 1 Get 1 Free offer on Nude Pink Lipstick, limited time",
     offer: true,
-    cta: { label: "Shop Weekend Offer", to: "/shop" },
+    cta: { label: "Shop Buy 1 Get 1 Free offer", to: "/shop" },
   },
   {
     image: heroSlide2,
@@ -81,7 +83,7 @@ const HeroSlider = () => {
               {slide.offer ? (
                 <Link
                   to={slide.cta?.to ?? "/shop"}
-                  className="absolute inset-0 flex items-center justify-center bg-foreground"
+                  className="absolute inset-0 flex items-center justify-center bg-secondary"
                   aria-label={slide.cta?.label ?? "Shop offer"}
                 >
                   <img
@@ -93,6 +95,10 @@ const HeroSlider = () => {
                     decoding="sync"
                     fetchPriority="high"
                   />
+                  <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs md:text-sm text-primary-foreground shadow-lg">
+                    <span className="font-semibold uppercase tracking-wider">Offer ends in</span>
+                    <CountdownTimer end={WEEKEND_OFFER_END} compact />
+                  </div>
                 </Link>
               ) : (
               <>

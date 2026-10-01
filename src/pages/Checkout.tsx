@@ -196,7 +196,14 @@ const Checkout = () => {
       });
       if (orderError || !orderData?.id) throw new Error(orderError?.message || "Failed to create order");
 
-      // Log the payment attempt as "created"
+      const { data: authUser } = await supabase.auth.getUser();
+      const customerPayload = { ...form, user_id: authUser?.user?.id || null };
+      const itemsPayload = items.map((i) => ({
+        product_id: i.product.id, name: i.product.name,
+        quantity: i.quantity, price: i.product.sale_price ?? i.product.price,
+      }));
+
+      // Log the payment attempt with full order details so a paid order can always be recovered
       try {
         await supabase.from("payment_attempts").insert({
           razorpay_order_id: orderData.id,
@@ -205,8 +212,22 @@ const Checkout = () => {
           customer_name: form.name,
           email: form.email,
           phone: form.phone,
-        });
+          order_payload: { customer: customerPayload, items: itemsPayload, total: finalTotal },
+        } as any);
       } catch (e) { console.error("Log attempt failed:", e); }
+
+      const finishOrder = (orderId: string, orderNumber?: string) => {
+        toast.success("Payment received! Order confirmed ✅", { description: `Order #${orderNumber || orderId}`, duration: 5000 });
+        trackPurchase({
+          transaction_id: orderNumber || orderId,
+          value: finalTotal,
+          shipping: shippingFee,
+          coupon: couponApplied?.code,
+          payment_method: "online",
+          items: gaItems(),
+        });
+        clearCart(); navigate(`/order-confirmation/${orderId}`);
+      };
 
       const options = {
         key: "rzp_live_ScznhZSQVoONHS",
@@ -215,44 +236,41 @@ const Checkout = () => {
         description: `Order of ${items.length} item(s)`,
         order_id: orderData.id,
         handler: async (response: any) => {
-          try {
-            const { data: user } = await supabase.auth.getUser();
-            const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-payment", {
-              body: {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                customer: { ...form, user_id: user?.user?.id || null },
-                items: items.map((i) => ({
-                  product_id: i.product.id, name: i.product.name,
-                  quantity: i.quantity, price: i.product.sale_price ?? i.product.price,
-                })),
-                total: finalTotal,
-              },
-            });
-            if (verifyError) throw new Error(verifyError.message);
-            toast.success("Payment received! Order confirmed ✅", { description: `Order #${verifyData.orderNumber || verifyData.orderId}`, duration: 5000 });
-            trackPurchase({
-              transaction_id: verifyData.orderNumber || verifyData.orderId,
-              value: finalTotal,
-              shipping: shippingFee,
-              coupon: couponApplied?.code,
-              payment_method: "online",
-              items: gaItems(),
-            });
-            clearCart(); navigate(`/order-confirmation/${verifyData.orderId}`);
-
-          } catch (err: any) {
-            // Mark attempt as failed
+          // Retry verification up to 3 times; then fall back to server-side recovery
+          let lastErr: any = null;
+          for (let attempt = 0; attempt < 3; attempt++) {
             try {
-              await supabase.from("payment_attempts").update({
-                status: "failed",
-                razorpay_payment_id: response.razorpay_payment_id,
-                error_message: err.message,
-              }).eq("razorpay_order_id", response.razorpay_order_id);
-            } catch {}
-            toast.error("Payment verification failed: " + err.message);
+              const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-payment", {
+                body: {
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  customer: customerPayload,
+                  items: itemsPayload,
+                  total: finalTotal,
+                },
+              });
+              if (verifyError || !verifyData?.orderId) throw new Error(verifyError?.message || "Verification failed");
+              finishOrder(verifyData.orderId, verifyData.orderNumber);
+              return;
+            } catch (err) {
+              lastErr = err;
+              await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+            }
           }
+          try {
+            const { data: rec } = await supabase.functions.invoke("reconcile-payments", {
+              body: { razorpay_order_id: response.razorpay_order_id },
+            });
+            if (rec?.orderId) { finishOrder(rec.orderId, rec.orderNumber); return; }
+          } catch {}
+          try {
+            await supabase.from("payment_attempts").update({
+              razorpay_payment_id: response.razorpay_payment_id,
+              error_message: lastErr?.message || "Verification failed",
+            }).eq("razorpay_order_id", response.razorpay_order_id);
+          } catch {}
+          toast.error("Payment received — we're confirming your order. You'll get an SMS shortly; no need to pay again.", { duration: 10000 });
         },
         modal: {
           ondismiss: async () => {

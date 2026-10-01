@@ -1,7 +1,8 @@
 import type { CartItem } from "@/data/products";
 
 export const WEEKEND_OFFER_START = new Date("2026-09-26T00:00:00+05:30");
-export const WEEKEND_OFFER_END = new Date("2026-09-28T23:59:59+05:30");
+// Rolling 24h offer: countdown resets every day at midnight IST (see CountdownTimer loop)
+export const WEEKEND_OFFER_END = new Date("2026-10-01T23:59:59+05:30");
 
 const HOT_RED = {
   productId: "892a2392-7786-4a8e-a6e3-3996eee9ea82",
@@ -59,7 +60,7 @@ export interface WeekendOfferResult {
 }
 
 export const isWeekendOfferActive = (now = new Date()) =>
-  now >= WEEKEND_OFFER_START && now <= WEEKEND_OFFER_END;
+  now >= WEEKEND_OFFER_START;
 
 export const isWeekendOfferProduct = (slug: string) =>
   offerRules.some((rule) => rule.triggerSlug === slug);

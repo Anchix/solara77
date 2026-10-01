@@ -55,6 +55,16 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Idempotency: if an order already exists for this payment (e.g. auto-recovered), return it
+    const { data: existingOrder } = await supabase
+      .from("orders").select("id, order_number").eq("razorpay_order_id", razorpay_order_id).maybeSingle();
+    if (existingOrder) {
+      return new Response(
+        JSON.stringify({ orderId: existingOrder.id, orderNumber: existingOrder.order_number, status: "confirmed" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .insert({
