@@ -202,6 +202,7 @@ export type Database = {
           error_message: string | null
           id: string
           order_id: string | null
+          order_payload: Json | null
           phone: string | null
           razorpay_order_id: string | null
           razorpay_payment_id: string | null
@@ -216,6 +217,7 @@ export type Database = {
           error_message?: string | null
           id?: string
           order_id?: string | null
+          order_payload?: Json | null
           phone?: string | null
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
@@ -230,6 +232,7 @@ export type Database = {
           error_message?: string | null
           id?: string
           order_id?: string | null
+          order_payload?: Json | null
           phone?: string | null
           razorpay_order_id?: string | null
           razorpay_payment_id?: string | null
