@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+const DAY = 86400000;
+
 const compute = (end: Date) => {
-  const diff = Math.max(0, end.getTime() - Date.now());
+  // Loops every 24 hours once the end time passes, so the offer timer never shows "ended"
+  let diff = end.getTime() - Date.now();
+  if (diff <= 0) diff = DAY - ((-diff) % DAY);
   const days = Math.floor(diff / 86400000);
   const hours = Math.floor((diff % 86400000) / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);
