@@ -5,7 +5,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 import heroSlide3 from "@/assets/hero-slide-3.jpg";
 import heroSlide5 from "@/assets/hero-slide-5.jpg";
-import bogoBanner from "@/assets/nude-pink-bogo-banner.png.asset.json";
+import bogoBanner from "@/assets/nude-pink-bogo-banner.png";
 import CountdownTimer from "./CountdownTimer";
 import { WEEKEND_OFFER_END } from "@/lib/weekendOffer";
 
