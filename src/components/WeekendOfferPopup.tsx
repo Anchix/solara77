@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import CountdownTimer from "@/components/CountdownTimer";
-import popupAsset from "@/assets/nude-pink-bogo-banner.png.asset.json";
-const popupImage = popupAsset.url;
+import popupImage from "@/assets/nude-pink-bogo-banner.png";
 import { WEEKEND_OFFER_END } from "@/lib/weekendOffer";
 import { trackBogoPopupCTA, trackBogoPopupOpen } from "@/lib/analytics";
 
