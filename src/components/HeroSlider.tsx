@@ -22,7 +22,7 @@ interface HeroSlide {
 
 const slides: HeroSlide[] = [
   {
-    image: bogoBanner.url,
+    image: bogoBanner,
     alt: "Solura Buy 1 Get 1 Free offer on Nude Pink Lipstick, limited time",
     offer: true,
     cta: { label: "Shop Buy 1 Get 1 Free offer", to: "/shop" },
