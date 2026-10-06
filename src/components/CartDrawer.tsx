@@ -73,13 +73,13 @@ const CartDrawer = () => {
             <div className="border-t border-border pt-4 space-y-2">
               {bogo.savings > 0 && (
                 <div className="flex justify-between text-sm text-primary">
-                  <span>B1G1 Savings</span>
-                  <span>−₹{bogo.savings.toLocaleString("en-IN")}</span>
+                  <span>Free gift{bogo.freeUnits > 1 ? "s" : ""} added</span>
+                  <span>FREE (worth ₹{bogo.savings.toLocaleString("en-IN")})</span>
                 </div>
               )}
               <div className="flex justify-between font-semibold">
                 <span>Total</span>
-                <span>₹{Math.max(0, totalPrice - bogo.savings).toLocaleString("en-IN")}</span>
+                <span>₹{totalPrice.toLocaleString("en-IN")}</span>
               </div>
               <Button className="w-full mt-2" size="lg" onClick={() => { setIsOpen(false); navigate("/checkout"); }}>
                 Proceed to Checkout

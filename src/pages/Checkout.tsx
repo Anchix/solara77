@@ -121,7 +121,8 @@ const Checkout = () => {
 
   const bogo = computeBogo(items);
   const discountAmount = couponApplied?.discount || 0;
-  const afterDiscount = totalPrice - discountAmount - bogo.savings;
+  // Weekend gifts are added FREE on top of paid items — they never reduce the paid amount
+  const afterDiscount = totalPrice - discountAmount;
   const baseShipping = paymentMethod === "cod" ? codShipping : prepaidShipping;
   const prepaidFreeApplies = freePrepaid && paymentMethod === "online";
   const shippingFee = prepaidFreeApplies || totalPrice >= freeShippingThreshold ? 0 : baseShipping;
@@ -150,6 +151,7 @@ const Checkout = () => {
     if (form.phone.length < 10) { toast.error("Enter a valid phone number"); return; }
     if (form.pincode.length !== 6) { toast.error("Enter a valid 6-digit pincode"); return; }
     if (items.length === 0) { toast.error("Cart is empty"); return; }
+    if (finalTotal <= 0) { toast.error("Order total can't be ₹0. Please refresh your cart."); return; }
 
     if (paymentMethod === "cod") {
       setLoading(true);
@@ -168,7 +170,10 @@ const Checkout = () => {
           items.map((i) => ({
             order_id: orderData.id, product_id: i.product.id, product_name: i.product.name,
             quantity: i.quantity, price: i.product.sale_price ?? i.product.price,
-          }))
+          })).concat(bogo.gifts.map((g) => ({
+            order_id: orderData.id, product_id: g.productId, product_name: g.productName,
+            quantity: g.quantity, price: 0,
+          })))
         );
 
         toast.success("Order placed! Cash on Delivery ✅", { description: `Order #${orderData.order_number || orderData.id.slice(0, 8)}`, duration: 5000 });
@@ -201,7 +206,9 @@ const Checkout = () => {
       const itemsPayload = items.map((i) => ({
         product_id: i.product.id, name: i.product.name,
         quantity: i.quantity, price: i.product.sale_price ?? i.product.price,
-      }));
+      })).concat(bogo.gifts.map((g) => ({
+        product_id: g.productId, name: g.productName, quantity: g.quantity, price: 0,
+      })));
 
       // Log the payment attempt with full order details so a paid order can always be recovered
       try {
@@ -416,7 +423,7 @@ const Checkout = () => {
                 {bogo.savings > 0 && (
                   <div className="flex justify-between text-sm text-primary">
                     <span className="flex items-center gap-1"><Gift className="h-3.5 w-3.5" /> B1G1 ({bogo.freeUnits} free)</span>
-                    <span>−₹{bogo.savings.toLocaleString("en-IN")}</span>
+                    <span>FREE (worth ₹{bogo.savings.toLocaleString("en-IN")})</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
