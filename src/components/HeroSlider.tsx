@@ -6,10 +6,14 @@ import diwaliSlide from "@/assets/solura-diwali-slide.jpeg.asset.json";
 import royaltySlide from "@/assets/solura-royalty-slide.jpeg.asset.json";
 import festiveSlide from "@/assets/solura-festive-slide.jpeg.asset.json";
 
+import diwaliFallback from "@/assets/solura-diwali-fallback.webp";
+import royaltyFallback from "@/assets/solura-royalty-fallback.webp";
+import festiveFallback from "@/assets/solura-festive-fallback.webp";
+
 const slides = [
-  { image: diwaliSlide.url, alt: "Solura — Brighten Like Diwali, up to 50% off on viral picks", width: 1376, height: 768 },
-  { image: royaltySlide.url, alt: "Solura Brightening Cream — Brighten Like Royalty, up to 50% off on viral picks", width: 1142, height: 768 },
-  { image: festiveSlide.url, alt: "Solura festive pre-sale — special offer, up to 50% off", width: 1376, height: 768 },
+  { image: diwaliSlide.url, fallback: diwaliFallback, alt: "Solura — Brighten Like Diwali, up to 50% off on viral picks", width: 1376, height: 768 },
+  { image: royaltySlide.url, fallback: royaltyFallback, alt: "Solura Brightening Cream — Brighten Like Royalty, up to 50% off on viral picks", width: 1142, height: 768 },
+  { image: festiveSlide.url, fallback: festiveFallback, alt: "Solura festive pre-sale — special offer, up to 50% off", width: 1376, height: 768 },
 ];
 
 const HeroSlider = () => {
@@ -44,6 +48,7 @@ const HeroSlider = () => {
               >
                 <img
                   src={slide.image}
+                  onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = slide.fallback; }}
                   alt={slide.alt}
                   className="h-full w-full object-contain"
                   width={slide.width}

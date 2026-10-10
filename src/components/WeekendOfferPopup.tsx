@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { Button } from "@/components/ui/button";
 import CountdownTimer from "@/components/CountdownTimer";
 import popupAsset from "@/assets/solura-beauty-sale-popup.jpeg.asset.json";
+import popupFallback from "@/assets/solura-beauty-sale-fallback.webp";
 import { WEEKEND_OFFER_END } from "@/lib/weekendOffer";
 import { trackBogoPopupCTA, trackBogoPopupOpen } from "@/lib/analytics";
 
@@ -35,6 +36,7 @@ const WeekendOfferPopup = () => {
         </DialogDescription>
         <img
           src={popupAsset.url}
+          onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = popupFallback; }}
           alt="Solura Beauty Sale — sale is now live, up to 50% off"
           className="max-h-[66vh] w-full object-contain"
           width={768}
