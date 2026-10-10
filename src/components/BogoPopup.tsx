@@ -45,7 +45,7 @@ const BogoPopup = () => {
           </div>
           <p className="text-[10px] uppercase tracking-[0.3em] opacity-90 mb-2">Exclusive Offer</p>
           <h3 className="font-display text-3xl font-semibold mb-1">Buy 1 Get 1 FREE</h3>
-          <p className="text-sm opacity-90">On selected bestsellers · Ends 31 July</p>
+          <p className="text-sm opacity-90">On selected bestsellers</p>
         </div>
         <div className="p-6 text-center space-y-4">
           <p className="text-xs uppercase tracking-widest text-muted-foreground">Hurry, offer ends in</p>

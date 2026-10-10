@@ -14,7 +14,7 @@ const independenceMessages = [
 ];
 
 const bogoMessages = [
-  "🎁 BUY 1 GET 1 FREE on selected bestsellers — Ends 31 July!",
+  "🎁 BUY 1 GET 1 FREE on selected bestsellers",
   "⏰ Hurry! Buy 1 Get 1 FREE ending soon — Shop now",
 ];
 
