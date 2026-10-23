@@ -92,3 +92,35 @@
     @apply font-display;
   }
 }
+
+/* ============ Diwali theme (window in src/lib/diwali.ts) ============ */
+:root {
+  --diwali-gold: 42 62% 52%;
+  --diwali-ember: 24 85% 55%;
+}
+
+.diwali-bulb {
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: 0.75rem;
+  border-radius: 9999px;
+  background: hsl(var(--diwali-gold));
+  box-shadow: 0 0 10px 2px hsl(var(--diwali-gold) / 0.6);
+  animation: diwali-flicker 2.4s ease-in-out infinite;
+}
+
+.diwali-bulb--ember {
+  background: hsl(var(--diwali-ember));
+  box-shadow: 0 0 10px 2px hsl(var(--diwali-ember) / 0.55);
+}
+
+@keyframes diwali-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.72; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diwali-bulb {
+    animation: none;
+  }
+}
