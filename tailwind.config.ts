@@ -54,6 +54,8 @@ export default {
         gold: "hsl(var(--gold))",
         cream: "hsl(var(--cream))",
         forest: "hsl(var(--forest))",
+        "diwali-gold": "hsl(var(--diwali-gold))",
+        "diwali-ember": "hsl(var(--diwali-ember))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -93,6 +95,7 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.6s ease-out forwards",
         marquee: "marquee 30s linear infinite",
+        flicker: "diwali-flicker 2.4s ease-in-out infinite",
       },
     },
   },
