@@ -8,6 +8,7 @@ import { ArrowRight, Sparkles, Leaf, Sun, Shield, Award, CheckCircle, Star, Truc
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import HeroSlider from "@/components/HeroSlider";
 import BogoBanner from "@/components/BogoBanner";
+import { isDiwaliTheme } from "@/lib/diwali";
 
 
 import naturalBeauty from "@/assets/natural-beauty.jpg";
@@ -29,6 +30,7 @@ const certs = [
 ];
 
 const Index = () => {
+  const diwali = isDiwaliTheme();
   const { data: products = [], isLoading } = useProducts();
 
   useEffect(() => {
@@ -81,10 +83,12 @@ const Index = () => {
       <section className="py-12 md:py-20">
         <div className="container">
           <div className="text-center mb-8 md:mb-12">
-            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Our Collection</p>
-            <h2 className="font-display text-3xl md:text-5xl font-light">Bestsellers</h2>
+            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">{diwali ? "Festival of Glow" : "Our Collection"}</p>
+            <h2 className="font-display text-3xl md:text-5xl font-light">{diwali ? "Diwali Bestsellers" : "Bestsellers"}</h2>
             <p className="text-sm text-muted-foreground mt-3 max-w-md mx-auto">
-              Hand-crafted, innovative herbal essentials loved by 5000+ customers.
+              {diwali
+                ? "Festive herbal favourites loved by 5000+ customers — Buy 1, Get 1 FREE on selected picks."
+                : "Hand-crafted, innovative herbal essentials loved by 5000+ customers."}
             </p>
           </div>
           {isLoading ? (
@@ -223,8 +227,8 @@ const Index = () => {
       {/* CTA */}
       <section className="py-12 md:py-20">
         <div className="container text-center max-w-2xl mx-auto px-4">
-          <h2 className="font-display text-2xl md:text-4xl font-light mb-4">Ready to Glow?</h2>
-          <p className="text-muted-foreground mb-8 text-sm md:text-base">Join thousands of happy customers who've switched to innovative herbal skincare.</p>
+          <h2 className="font-display text-2xl md:text-4xl font-light mb-4">{diwali ? "Wishing You a Glowing Diwali" : "Ready to Glow?"}</h2>
+          <p className="text-muted-foreground mb-8 text-sm md:text-base">{diwali ? "Festive gift offers light up until 10 November — shop your Diwali glow today." : "Join thousands of happy customers who've switched to innovative herbal skincare."}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="gap-2"><Link to="/shop">Shop Now <ArrowRight className="h-4 w-4" /></Link></Button>
             <Button asChild variant="outline" size="lg"><Link to="/founder-story">Our Story</Link></Button>

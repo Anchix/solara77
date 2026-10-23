@@ -3,6 +3,7 @@ import { ShoppingBag, Menu, X, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import DiwaliLights from "@/components/DiwaliLights";
 
 const Navbar = () => {
   const { totalItems, setIsOpen } = useCart();
@@ -71,6 +72,8 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+
+      <DiwaliLights />
 
       {mobileOpen && (
         <nav className="md:hidden border-t border-border bg-background px-6 py-4 space-y-3">

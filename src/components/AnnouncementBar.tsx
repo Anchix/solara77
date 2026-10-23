@@ -1,5 +1,6 @@
 import { isBogoActive } from "@/lib/bogo";
 import { isIndependenceTheme } from "@/lib/independence";
+import { isDiwaliTheme } from "@/lib/diwali";
 
 const baseMessages = [
   "🚚 Free shipping for all the Orders",
@@ -18,11 +19,19 @@ const bogoMessages = [
   "⏰ Hurry! Buy 1 Get 1 FREE ending soon — Shop now",
 ];
 
+const diwaliMessages = [
+  "🪔 Happy Diwali from Solura — Festival of Glow",
+  "🎁 Diwali Gift Offers: Buy 1, Get 1 FREE on selected bestsellers",
+  "✨ Hand-crafted herbal gifts for your Diwali rituals",
+];
+
 const AnnouncementBar = () => {
   const independence = isIndependenceTheme();
+  const diwali = isDiwaliTheme();
   const messages = [
+    ...(diwali ? diwaliMessages : []),
     ...(independence ? independenceMessages : []),
-    ...(isBogoActive() ? bogoMessages : []),
+    ...(isBogoActive() && !diwali ? bogoMessages : []),
     ...baseMessages,
   ];
   const loop = [...messages, ...messages];
@@ -30,6 +39,9 @@ const AnnouncementBar = () => {
     <div className="w-full bg-primary text-primary-foreground overflow-hidden border-b border-primary/20">
       {independence && (
         <div className="h-1 w-full bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
+      )}
+      {diwali && (
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-diwali-gold to-transparent" />
       )}
       <div className="relative flex whitespace-nowrap py-2">
         <div className="flex animate-marquee gap-12 pr-12">
@@ -40,6 +52,9 @@ const AnnouncementBar = () => {
           ))}
         </div>
       </div>
+      {diwali && (
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-diwali-gold to-transparent" />
+      )}
       {independence && (
         <div className="h-1 w-full bg-gradient-to-r from-[#138808] via-white to-[#FF9933]" />
       )}
@@ -48,5 +63,3 @@ const AnnouncementBar = () => {
 };
 
 export default AnnouncementBar;
-
-
