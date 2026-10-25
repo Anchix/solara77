@@ -48,6 +48,8 @@ const Index = () => {
       {/* Hero Slider */}
       <HeroSlider />
 
+      {/* Diwali diya row under the hero */}
+      <DiwaliDiyas />
 
       {/* BOGO Banner */}
       <BogoBanner />
