@@ -134,90 +134,9 @@
   50% { opacity: 0.96; filter: drop-shadow(0 0 30px hsl(var(--diwali-gold) / 0.6)); }
 }
 
-.diya {
-  --diya-delay: 0s;
-  position: relative;
-  width: 2.4rem;
-  height: 3.4rem;
-}
-
-.diya--small {
-  transform: scale(0.82);
-  transform-origin: bottom center;
-}
-
-.diya-glow {
-  position: absolute;
-  bottom: 0.9rem;
-  left: 50%;
-  width: 4.2rem;
-  height: 4.2rem;
-  transform: translateX(-50%);
-  border-radius: 9999px;
-  background: radial-gradient(
-    circle,
-    hsl(var(--diwali-gold) / 0.55) 0%,
-    hsl(24 85% 55% / 0.25) 45%,
-    transparent 70%
-  );
-  animation: diwali-pulse 3s ease-in-out infinite;
-  animation-delay: var(--diya-delay);
-}
-
-.diya-flame {
-  position: absolute;
-  bottom: 1.15rem;
-  left: 50%;
-  width: 0.55rem;
-  height: 1.15rem;
-  transform: translateX(-50%);
-  border-radius: 50% 50% 50% 50% / 64% 64% 36% 36%;
-  background: linear-gradient(
-    to top,
-    hsl(24 90% 50%) 0%,
-    hsl(var(--diwali-gold)) 55%,
-    #fff6d8 100%
-  );
-  box-shadow: 0 0 12px 3px hsl(var(--diwali-gold) / 0.8);
-  transform-origin: bottom center;
-  animation: diwali-flame 1.7s ease-in-out infinite;
-  animation-delay: var(--diya-delay);
-}
-
-.diya-bowl {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1.05rem;
-  border-radius: 0.35rem 0.35rem 1.1rem 1.1rem / 0.3rem 0.3rem 1.4rem 1.4rem;
-  background: linear-gradient(
-    to bottom,
-    hsl(28 45% 32%) 0%,
-    hsl(24 50% 22%) 70%,
-    hsl(24 45% 14%) 100%
-  );
-  box-shadow:
-    inset 0 2px 2px hsl(42 62% 52% / 0.45),
-    0 3px 6px hsl(340 15% 15% / 0.25);
-}
-
-@keyframes diwali-flame {
-  0%, 100% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 1; }
-  25% { transform: translateX(-48%) scale(1.06, 1.12) rotate(2.5deg); opacity: 0.92; }
-  50% { transform: translateX(-52%) scale(0.94, 0.96) rotate(-3deg); opacity: 0.85; }
-  75% { transform: translateX(-49%) scale(1.04, 1.08) rotate(2deg); opacity: 0.96; }
-}
-
-@keyframes diwali-pulse {
-  0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
-  50% { opacity: 1; transform: translateX(-50%) scale(1.12); }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .diwali-bulb,
-  .diya-flame,
-  .diya-glow {
+  .diya-row-img {
     animation: none;
   }
 }
