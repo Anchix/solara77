@@ -104,7 +104,7 @@ const DiwaliFireworks = () => {
       ctx.clearRect(0, 0, width, height);
       if (!visible) return;
 
-      if (now - lastSpawn > 1300) spawnRocket(now);
+      if (now - lastSpawn > 1050) spawnRocket(now);
 
       // rockets
       for (let i = rockets.length - 1; i >= 0; i--) {
@@ -145,8 +145,12 @@ const DiwaliFireworks = () => {
           particles.splice(i, 1);
           continue;
         }
-        ctx.globalAlpha = Math.min(1, t * 1.3);
+        ctx.globalAlpha = Math.min(1, t * 1.3) * 0.35;
         ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 3.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = Math.min(1, t * 1.3);
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
