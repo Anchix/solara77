@@ -9,6 +9,7 @@ import festiveSlide from "@/assets/solura-festive-slide.jpeg.asset.json";
 import diwaliFallback from "@/assets/solura-diwali-fallback.webp";
 import royaltyFallback from "@/assets/solura-royalty-fallback.webp";
 import festiveFallback from "@/assets/solura-festive-fallback.webp";
+import DiwaliFireworks from "@/components/DiwaliFireworks";
 
 const slides = [
   { image: diwaliSlide.url, fallback: diwaliFallback, alt: "Solura — Brighten Like Diwali, up to 50% off on viral picks", width: 1376, height: 768 },
@@ -61,6 +62,9 @@ const HeroSlider = () => {
           );
         })}
       </div>
+
+      {/* Diwali fireworks over the artwork (theme window in src/lib/diwali.ts) */}
+      <DiwaliFireworks />
 
       {/* Navigation arrows */}
       <Button variant="ghost" size="icon"
