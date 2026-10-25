@@ -124,6 +124,16 @@
 }
 
 /* ---------- Diyas (DiwaliDiyas.tsx) ---------- */
+.diya-row-img {
+  filter: drop-shadow(0 0 22px hsl(var(--diwali-gold) / 0.45));
+  animation: diya-row-breathe 3.6s ease-in-out infinite;
+}
+
+@keyframes diya-row-breathe {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 22px hsl(var(--diwali-gold) / 0.45)); }
+  50% { opacity: 0.96; filter: drop-shadow(0 0 30px hsl(var(--diwali-gold) / 0.6)); }
+}
+
 .diya {
   --diya-delay: 0s;
   position: relative;
