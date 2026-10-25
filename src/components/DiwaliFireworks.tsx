@@ -79,20 +79,20 @@ const DiwaliFireworks = () => {
     };
 
     const explode = (r: Rocket) => {
-      const n = 34 + ((Math.random() * 14) | 0);
-      const speed = height / 260;
+      const n = 46 + ((Math.random() * 24) | 0);
+      const speed = height / 150;
       for (let i = 0; i < n; i++) {
         const angle = (i / n) * Math.PI * 2 + Math.random() * 0.3;
-        const v = speed * (0.55 + Math.random() * 0.75);
+        const v = speed * (0.5 + Math.random() * 0.85);
         particles.push({
           x: r.x,
           y: r.y,
           vx: Math.cos(angle) * v,
           vy: Math.sin(angle) * v,
           life: 0,
-          maxLife: 60 + Math.random() * 30,
+          maxLife: 70 + Math.random() * 35,
           color: Math.random() < 0.75 ? r.color : PALETTE[(Math.random() * PALETTE.length) | 0],
-          size: 1.1 + Math.random() * 1.4,
+          size: 1.4 + Math.random() * 1.6,
         });
       }
     };
