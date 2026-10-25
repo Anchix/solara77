@@ -62,6 +62,9 @@ const HeroSlider = () => {
         })}
       </div>
 
+      {/* Diwali fireworks over the artwork (theme window in src/lib/diwali.ts) */}
+      <DiwaliFireworks />
+
       {/* Navigation arrows */}
       <Button variant="ghost" size="icon"
         onClick={prev}
