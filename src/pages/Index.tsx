@@ -52,6 +52,9 @@ const Index = () => {
       {/* Diwali diya row under the hero */}
       <DiwaliDiyas />
 
+      {/* Anniversary 27-min flash sale countdown */}
+      <FlashSaleBanner />
+
       {/* BOGO Banner */}
       <BogoBanner />
 
