@@ -4,10 +4,11 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 const DAY = 86400000;
 
-const compute = (end: Date) => {
-  // Loops every 24 hours once the end time passes, so the offer timer never shows "ended"
+const compute = (end: Date, noLoop = false) => {
+  // Loops every 24 hours once the end time passes, so the offer timer never shows "ended".
+  // noLoop keeps a fixed deadline (used by the flash-sale countdown).
   let diff = end.getTime() - Date.now();
-  if (diff <= 0) diff = DAY - ((-diff) % DAY);
+  if (diff <= 0 && !noLoop) diff = DAY - ((-diff) % DAY);
   const days = Math.floor(diff / 86400000);
   const hours = Math.floor((diff % 86400000) / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);
@@ -15,13 +16,13 @@ const compute = (end: Date) => {
   return { days, hours, minutes, seconds, ended: diff <= 0 };
 };
 
-const CountdownTimer = ({ end, compact = false }: { end: Date; compact?: boolean }) => {
-  const [t, setT] = useState(() => compute(end));
+const CountdownTimer = ({ end, compact = false, noLoop = false }: { end: Date; compact?: boolean; noLoop?: boolean }) => {
+  const [t, setT] = useState(() => compute(end, noLoop));
 
   useEffect(() => {
-    const id = setInterval(() => setT(compute(end)), 1000);
+    const id = setInterval(() => setT(compute(end, noLoop)), 1000);
     return () => clearInterval(id);
-  }, [end]);
+  }, [end, noLoop]);
 
   if (t.ended) return <span className="font-semibold">Offer ended</span>;
 

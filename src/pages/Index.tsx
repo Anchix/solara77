@@ -9,6 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import HeroSlider from "@/components/HeroSlider";
 import BogoBanner from "@/components/BogoBanner";
 import DiwaliDiyas from "@/components/DiwaliDiyas";
+import FlashSaleBanner from "@/components/FlashSaleBanner";
 import { isDiwaliTheme } from "@/lib/diwali";
 
 
@@ -50,6 +51,9 @@ const Index = () => {
 
       {/* Diwali diya row under the hero */}
       <DiwaliDiyas />
+
+      {/* Anniversary 27-min flash sale countdown */}
+      <FlashSaleBanner />
 
       {/* BOGO Banner */}
       <BogoBanner />
