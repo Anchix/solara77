@@ -7,3 +7,5 @@
 - [x] Launch Diwali theme Oct 24 – Nov 10, 2026 (festive gold accents, garland, festive banners, Diwali popup, copy)
 - [x] Replace CSS diyas with realistic diya artwork, add hero fireworks
 - [x] Add Anniversary Flash Sale banners (27-min sale, Oct 27) as hero slides with countdown to 7 PM IST
+- [ ] Launch Dhanteras offers Nov 6–8, 2026: Nude Pink ₹99 (MRP ₹185), Hot Red ₹49 (MRP ₹185), Hibiglow Shampoo buy one get one
+- [ ] Add Diwali prize wheel with 90% 15% off, 9% 10% off, and 1% 20% off; no 5% prize
