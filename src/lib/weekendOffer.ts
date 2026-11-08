@@ -1,7 +1,7 @@
 import type { CartItem } from "@/data/products";
+import { computeDhanterasGifts, DHANTERAS_END, DHANTERAS_START, isDhanterasActive } from "@/lib/dhanteras";
 
 export const WEEKEND_OFFER_START = new Date("2026-09-26T00:00:00+05:30");
-// Rolling 24h offer: countdown resets every day at midnight IST (see CountdownTimer loop)
 export const WEEKEND_OFFER_END = new Date("2026-10-01T23:59:59+05:30");
 
 const HOT_RED = {
@@ -60,7 +60,7 @@ export interface WeekendOfferResult {
 }
 
 export const isWeekendOfferActive = (now = new Date()) =>
-  now >= WEEKEND_OFFER_START;
+  now >= WEEKEND_OFFER_START && now <= WEEKEND_OFFER_END;
 
 export const isWeekendOfferProduct = (slug: string) =>
   offerRules.some((rule) => rule.triggerSlug === slug);
@@ -72,7 +72,14 @@ export const computeWeekendOffer = (
   items: CartItem[],
   now = new Date(),
 ): WeekendOfferResult => {
-  if (!isWeekendOfferActive(now)) return { freeUnits: 0, savings: 0, gifts: [] };
+  const dhanterasGifts = computeDhanterasGifts(items, now);
+  if (!isWeekendOfferActive(now)) {
+    return {
+      gifts: dhanterasGifts,
+      freeUnits: dhanterasGifts.reduce((sum, gift) => sum + gift.quantity, 0),
+      savings: dhanterasGifts.reduce((sum, gift) => sum + gift.quantity * gift.unitValue, 0),
+    };
+  }
 
   const giftsByProduct = new Map<string, WeekendGift>();
 
@@ -96,7 +103,7 @@ export const computeWeekendOffer = (
     }
   }
 
-  const gifts = [...giftsByProduct.values()];
+  const gifts = [...giftsByProduct.values(), ...dhanterasGifts];
   return {
     gifts,
     freeUnits: gifts.reduce((sum, gift) => sum + gift.quantity, 0),

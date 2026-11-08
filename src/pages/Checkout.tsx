@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tag, Gift } from "lucide-react";
 import { computeBogo } from "@/lib/bogo";
 import { trackDiscountApplied, trackPurchase } from "@/lib/analytics";
+import { getDhanterasPrice } from "@/lib/dhanteras";
 
 
 declare global {
@@ -139,7 +140,7 @@ const Checkout = () => {
   const gaItems = () => items.map((i) => ({
     item_id: i.product.id,
     item_name: i.product.name,
-    price: i.product.sale_price ?? i.product.price,
+    price: getDhanterasPrice(i.product),
     quantity: i.quantity,
   }));
 
@@ -169,7 +170,7 @@ const Checkout = () => {
         await supabase.from("order_items").insert(
           items.map((i) => ({
             order_id: orderData.id, product_id: i.product.id, product_name: i.product.name,
-            quantity: i.quantity, price: i.product.sale_price ?? i.product.price,
+            quantity: i.quantity, price: getDhanterasPrice(i.product),
           })).concat(bogo.gifts.map((g) => ({
             order_id: orderData.id, product_id: g.productId, product_name: g.productName,
             quantity: g.quantity, price: 0,
@@ -205,7 +206,7 @@ const Checkout = () => {
       const customerPayload = { ...form, user_id: authUser?.user?.id || null };
       const itemsPayload = items.map((i) => ({
         product_id: i.product.id, name: i.product.name,
-        quantity: i.quantity, price: i.product.sale_price ?? i.product.price,
+        quantity: i.quantity, price: getDhanterasPrice(i.product),
       })).concat(bogo.gifts.map((g) => ({
         product_id: g.productId, name: g.productName, quantity: g.quantity, price: 0,
       })));
@@ -379,7 +380,7 @@ const Checkout = () => {
               {items.map((item) => (
                 <div key={item.product.id} className="flex justify-between text-sm">
                   <span className="text-muted-foreground">{item.product.name} × {item.quantity}</span>
-                  <span>₹{((item.product.sale_price ?? item.product.price) * item.quantity).toLocaleString("en-IN")}</span>
+                  <span>₹{(getDhanterasPrice(item.product) * item.quantity).toLocaleString("en-IN")}</span>
                 </div>
               ))}
 

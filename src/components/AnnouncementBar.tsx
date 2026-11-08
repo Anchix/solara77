@@ -1,6 +1,7 @@
 import { isBogoActive } from "@/lib/bogo";
 import { isIndependenceTheme } from "@/lib/independence";
 import { isDiwaliTheme } from "@/lib/diwali";
+import { isDhanterasActive } from "@/lib/dhanteras";
 
 const baseMessages = [
   "🚚 Free shipping for all the Orders",
@@ -25,13 +26,20 @@ const diwaliMessages = [
   "✨ Hand-crafted herbal gifts for your Diwali rituals",
 ];
 
+const dhanterasMessages = [
+  "🪔 Dhanteras · Nov 6–8 only: Nude Pink ₹99 · Hot Red ₹49",
+  "🎁 Hibiglow Shampoo: Buy 1, Get 1 Free · Ends Nov 8",
+];
+
 const AnnouncementBar = () => {
   const independence = isIndependenceTheme();
   const diwali = isDiwaliTheme();
+  const dhanteras = isDhanterasActive();
   const messages = [
+    ...(dhanteras ? dhanterasMessages : []),
     ...(diwali ? diwaliMessages : []),
     ...(independence ? independenceMessages : []),
-    ...(isBogoActive() && !diwali ? bogoMessages : []),
+    ...(isBogoActive() && !diwali && !dhanteras ? bogoMessages : []),
     ...baseMessages,
   ];
   const loop = [...messages, ...messages];

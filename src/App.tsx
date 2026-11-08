@@ -13,6 +13,7 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import Index from "./pages/Index";
 import MaintenancePage, { useMaintenanceMode } from "@/components/MaintenancePage";
+import SpinWheel from "@/components/SpinWheel";
 
 // Idle-prefetch likely next pages so client-side navigation is instant
 if (typeof window !== "undefined") {
@@ -75,6 +76,7 @@ const AppShell = () => {
       <AnnouncementBar />
       <Navbar />
       <CartDrawer />
+      <SpinWheel />
       <main>
         <Suspense fallback={<div className="min-h-[60vh]" />}>
           <Routes>

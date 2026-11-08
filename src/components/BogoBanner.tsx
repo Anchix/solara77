@@ -3,11 +3,9 @@ import { Gift, Flame } from "lucide-react";
 import CountdownTimer from "./CountdownTimer";
 import { BOGO_END, isBogoActive } from "@/lib/bogo";
 import { trackBogoBannerClick } from "@/lib/analytics";
-import { isDiwaliTheme } from "@/lib/diwali";
 
 
 const BogoBanner = () => {
-  const diwali = isDiwaliTheme();
   if (!isBogoActive()) return null;
 
 
@@ -23,22 +21,22 @@ const BogoBanner = () => {
             </div>
             <div>
               <p className="text-[10px] md:text-xs uppercase tracking-[0.25em] opacity-90 flex items-center gap-1.5">
-                <Flame className="h-3 w-3" /> {diwali ? "Diwali Gift Offers · Limited Time" : "Limited Time · Ends Tonight"}
+                <Flame className="h-3 w-3" /> Dhanteras · 3 days only
               </p>
               <h2 className="font-display text-xl md:text-3xl font-semibold leading-tight">
-                {diwali ? <>Diwali Gifts <span className="italic">FREE</span></> : <>Weekend Gifts <span className="italic">FREE</span></>}
+                Dhanteras Beauty Offers
               </h2>
-              <p className="text-xs md:text-sm opacity-90 mt-0.5">{diwali ? "Buy 1, Get 1 FREE on lipstick, cream, soap & shampoo · No code needed" : "Lipstick, cream, soap & shampoo offers · No code needed"}</p>
+              <p className="text-xs md:text-sm opacity-90 mt-0.5">Nude Pink ₹99 · Hot Red ₹49 · Hibiglow Shampoo Buy 1, Get 1 FREE</p>
             </div>
           </div>
           <div className="flex flex-col items-center md:items-end gap-2">
-            <CountdownTimer end={BOGO_END} />
+            <CountdownTimer end={BOGO_END} noLoop />
             <Link
               to="/shop"
               onClick={() => trackBogoBannerClick("home_hero_banner")}
               className="text-[11px] md:text-xs font-semibold bg-background text-foreground px-4 py-2 rounded-full hover:opacity-90 transition-opacity"
             >
-              Shop Diwali Gifts →
+              Shop Dhanteras Offers →
             </Link>
 
           </div>

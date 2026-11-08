@@ -5,6 +5,7 @@ import { Minus, Plus, Trash2, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { computeBogo, isBogoActive, BOGO_END } from "@/lib/bogo";
 import CountdownTimer from "./CountdownTimer";
+import { getDhanterasPrice } from "@/lib/dhanteras";
 
 const CartDrawer = () => {
   const { items, isOpen, setIsOpen, updateQuantity, removeFromCart, totalPrice } = useCart();
@@ -37,7 +38,7 @@ const CartDrawer = () => {
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-sm truncate">{item.product.name}</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      ₹{item.product.sale_price ?? item.product.price}
+                      ₹{getDhanterasPrice(item.product)}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="p-1 rounded hover:bg-secondary"><Minus className="h-3 w-3" /></button>
@@ -54,18 +55,18 @@ const CartDrawer = () => {
               <div className="rounded-lg bg-primary/10 border border-primary/20 p-3 space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="flex items-center gap-1.5 font-semibold text-primary">
-                    <Gift className="h-3.5 w-3.5" /> Buy 1 Get 1 FREE
+                    <Gift className="h-3.5 w-3.5" /> Dhanteras Shampoo Offer
                   </span>
-                  <CountdownTimer end={BOGO_END} compact />
+                    <CountdownTimer end={BOGO_END} compact noLoop />
                 </div>
                 {bogo.freeUnits > 0 ? (
                   <p className="text-xs text-primary">
                     🎉 You unlocked <b>{bogo.freeUnits} FREE item{bogo.freeUnits > 1 ? "s" : ""}</b> — saving ₹{bogo.savings.toLocaleString("en-IN")}!
                   </p>
                 ) : items.some((i) => i.product.is_bogo) ? (
-                  <p className="text-xs text-muted-foreground">Add 1 more of a B1G1 product to unlock your FREE item.</p>
+                    <p className="text-xs text-muted-foreground">Add Hibiglow Shampoo to unlock one free bottle.</p>
                 ) : (
-                  <p className="text-xs text-muted-foreground">Add a B1G1 bestseller to your cart to claim a free item.</p>
+                  <p className="text-xs text-muted-foreground">Buy Hibiglow Shampoo and get one free automatically.</p>
                 )}
               </div>
             )}

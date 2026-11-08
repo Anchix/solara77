@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
 import { CartItem, Product } from "@/data/products";
 import { toast } from "sonner";
+import { getDhanterasPrice } from "@/lib/dhanteras";
 
 interface CartContextType {
   items: CartItem[];
@@ -66,7 +67,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce(
-    (sum, i) => sum + (i.product.sale_price ?? i.product.price) * i.quantity,
+    (sum, i) => sum + getDhanterasPrice(i.product) * i.quantity,
     0
   );
 

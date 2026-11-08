@@ -6,23 +6,13 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-// index, label, discount %, weight
-const SEGMENTS = [
-  { index: 0, label: "20% OFF", value: 20, weight: 7 },
-  { index: 1, label: "25% OFF", value: 25, weight: 1 },
-  { index: 2, label: "Better luck next time", value: 0, weight: 0.5 },
-  { index: 3, label: "15% OFF", value: 15, weight: 2 },
-  { index: 4, label: "80% OFF", value: 80, weight: 0.5 },
-];
-
 const pickSegment = () => {
-  const total = SEGMENTS.reduce((s, x) => s + x.weight, 0);
-  let r = Math.random() * total;
-  for (const s of SEGMENTS) {
-    r -= s.weight;
-    if (r <= 0) return s;
-  }
-  return SEGMENTS[0];
+  const bytes = new Uint32Array(1);
+  crypto.getRandomValues(bytes);
+  const index = Math.floor((bytes[0] / 0x1_0000_0000) * 100);
+  if (index < 90) return { index, label: "15% OFF", value: 15 };
+  if (index < 99) return { index, label: "10% OFF", value: 10 };
+  return { index, label: "20% OFF", value: 20 };
 };
 
 const randomCode = (value: number) => {
@@ -42,17 +32,6 @@ Deno.serve(async (req) => {
     );
 
     const segment = pickSegment();
-
-    if (segment.value === 0) {
-      await supabase.from("spin_wheel_spins").insert({
-        prize_label: segment.label,
-        discount_value: 0,
-        code: null,
-      });
-      return new Response(JSON.stringify({ index: segment.index, label: segment.label, code: null }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
 
     const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
     let code = randomCode(segment.value);
