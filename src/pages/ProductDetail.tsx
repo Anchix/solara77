@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { setJsonLd, removeJsonLd } from "@/lib/jsonld";
 import { isBogoActive, BOGO_END } from "@/lib/bogo";
 import CountdownTimer from "@/components/CountdownTimer";
+import { getDhanterasPrice } from "@/lib/dhanteras";
 
 const SITE_URL = "https://www.soluracosmo.com";
 
@@ -33,7 +34,7 @@ const ProductDetail = () => {
     if (!product) return;
     const url = `${SITE_URL}/product/${product.slug}`;
     const imgs = product.images && product.images.length > 0 ? product.images : [`${SITE_URL}/placeholder.svg`];
-    const priceValue = product.sale_price ?? product.price;
+    const priceValue = getDhanterasPrice(product);
     const desc = (product.description || product.key_benefits || product.name).slice(0, 160);
 
     document.title = `${product.name} — Solura Cosmetics`;
@@ -164,7 +165,8 @@ const ProductDetail = () => {
   );
 
   const handleAdd = () => { for (let i = 0; i < qty; i++) addToCart(product); };
-  const discount = product.sale_price ? `${Math.round((1 - product.sale_price / product.price) * 100)}% off` : null;
+  const displayPrice = getDhanterasPrice(product);
+  const discount = displayPrice < product.price ? `${Math.round((1 - displayPrice / product.price) * 100)}% off` : null;
   const images = product.images && product.images.length > 0 ? product.images : ["/placeholder.svg"];
   
 
@@ -225,28 +227,28 @@ const ProductDetail = () => {
               <h1 className="font-display text-3xl md:text-4xl font-semibold">{product.name}</h1>
             </div>
             <div className="flex items-baseline gap-3">
-              {product.sale_price ? (
+              {displayPrice < product.price ? (
                 <>
-                  <span className="text-3xl font-semibold">₹{product.sale_price}</span>
+                  <span className="text-3xl font-semibold">₹{displayPrice}</span>
                   <span className="text-lg text-muted-foreground line-through">₹{product.price}</span>
                   <span className="bg-accent text-accent-foreground text-xs font-medium px-2 py-0.5 rounded-full">{discount}</span>
                 </>
               ) : (
-                <span className="text-3xl font-semibold">₹{product.price}</span>
+                <span className="text-3xl font-semibold">₹{displayPrice}</span>
               )}
             </div>
             <p className="text-muted-foreground leading-relaxed">{product.description}</p>
 
-            {product.is_bogo && isBogoActive() && !product.is_out_of_stock && (
+                {product.slug === "hibiglow-hair-cleanser-anti-dandruff-shampoo" && isBogoActive() && !product.is_out_of_stock && (
               <div className="relative overflow-hidden rounded-lg bg-gradient-to-r from-primary via-primary/90 to-accent text-primary-foreground p-4">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                     <Gift className="h-5 w-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] uppercase tracking-widest opacity-90">Limited Offer · Ends 15 July</p>
+                    <p className="text-[10px] uppercase tracking-widest opacity-90">Dhanteras Special · Ends Nov 8</p>
                     <h3 className="font-display text-lg font-semibold leading-tight">Buy 1 Get 1 FREE</h3>
-                    <p className="text-xs opacity-90">Add 2 to cart — pay for 1. No code needed.</p>
+                    <p className="text-xs opacity-90">Buy one Hibiglow Shampoo, get one free. Automatically added.</p>
                     <div className="mt-2"><CountdownTimer end={BOGO_END} compact /></div>
                   </div>
                 </div>
@@ -353,13 +355,13 @@ const ProductDetail = () => {
             <div className="flex-1 min-w-0">
               <p className="text-xs text-muted-foreground truncate">{product.name}</p>
               <div className="flex items-baseline gap-2">
-                {product.sale_price ? (
+                {displayPrice < product.price ? (
                   <>
-                    <span className="font-semibold text-base">₹{product.sale_price}</span>
+                    <span className="font-semibold text-base">₹{displayPrice}</span>
                     <span className="text-xs text-muted-foreground line-through">₹{product.price}</span>
                   </>
                 ) : (
-                  <span className="font-semibold text-base">₹{product.price}</span>
+                  <span className="font-semibold text-base">₹{displayPrice}</span>
                 )}
               </div>
             </div>

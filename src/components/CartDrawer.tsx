@@ -5,6 +5,7 @@ import { Minus, Plus, Trash2, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { computeBogo, isBogoActive, BOGO_END } from "@/lib/bogo";
 import CountdownTimer from "./CountdownTimer";
+import { getDhanterasPrice } from "@/lib/dhanteras";
 
 const CartDrawer = () => {
   const { items, isOpen, setIsOpen, updateQuantity, removeFromCart, totalPrice } = useCart();
@@ -37,7 +38,7 @@ const CartDrawer = () => {
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-sm truncate">{item.product.name}</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      ₹{item.product.sale_price ?? item.product.price}
+                      ₹{getDhanterasPrice(item.product)}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="p-1 rounded hover:bg-secondary"><Minus className="h-3 w-3" /></button>
