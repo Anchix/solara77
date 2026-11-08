@@ -2,36 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Copy, Check, Gift } from "lucide-react";
+import { Sparkles, Copy, Check, Gift, Flame } from "lucide-react";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/analytics";
+import { isDhanterasActive } from "@/lib/dhanteras";
 
-const STORAGE_KEY = "solura_spin_v1";
+const STORAGE_KEY = "solura_dhanteras_spin_v2";
 
-const SEGMENTS = [
-  { label: "20% OFF", sub: "code" },
-  { label: "25% OFF", sub: "code" },
-  { label: "Better luck", sub: "next time" },
-  { label: "15% OFF", sub: "code" },
-  { label: "80% OFF", sub: "code" },
-];
-
-const SEG_ANGLE = 360 / SEGMENTS.length;
-
-const fills = [
-  "hsl(var(--primary))",
-  "hsl(var(--secondary))",
-  "hsl(var(--muted))",
-  "hsl(var(--accent))",
-  "hsl(var(--primary))",
-];
-const texts = [
-  "hsl(var(--primary-foreground))",
-  "hsl(var(--secondary-foreground))",
-  "hsl(var(--muted-foreground))",
-  "hsl(var(--accent-foreground))",
-  "hsl(var(--primary-foreground))",
-];
+const SEGMENT_COUNT = 100;
+const SEG_ANGLE = 360 / SEGMENT_COUNT;
 
 const polar = (cx: number, cy: number, r: number, deg: number) => {
   const rad = ((deg - 90) * Math.PI) / 180;
@@ -45,6 +24,13 @@ const wedgePath = (i: number) => {
   const [x2, y2] = polar(100, 100, 92, end);
   return `M100,100 L${x1},${y1} A92,92 0 0,1 ${x2},${y2} Z`;
 };
+
+const segmentFill = (index: number) =>
+  index < 90
+    ? "hsl(var(--primary))"
+    : index < 99
+      ? "hsl(var(--accent))"
+      : "hsl(var(--diwali-gold))";
 
 interface Result {
   index: number;
@@ -62,6 +48,7 @@ const SpinWheel = () => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!isDhanterasActive()) return;
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
@@ -84,7 +71,7 @@ const SpinWheel = () => {
       const { data, error } = await supabase.functions.invoke("spin-wheel", { body: {} });
       if (error || !data || data.error) throw new Error("spin failed");
 
-      const target = 360 * 6 - (data.index * SEG_ANGLE + SEG_ANGLE / 2);
+      const target = 360 * 7 - (data.index * SEG_ANGLE + SEG_ANGLE / 2);
       setRotation(target);
 
       window.setTimeout(() => {
@@ -107,6 +94,8 @@ const SpinWheel = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  if (!isDhanterasActive()) return null;
+
   return (
     <>
     <button
@@ -119,15 +108,17 @@ const SpinWheel = () => {
     </button>
 
     <Dialog open={open} onOpenChange={(o) => { if (!spinning) setOpen(o); }}>
-      <DialogContent className="max-w-sm sm:max-w-md p-0 overflow-hidden border-primary/30">
-        <div className="bg-gradient-to-b from-secondary/70 via-background to-background px-5 pt-7 pb-6 text-center">
-          <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-primary">
-            <Sparkles className="h-3.5 w-3.5" /> Solura Beauty Spin
+      <DialogContent className="max-w-sm sm:max-w-md p-0 overflow-hidden border-diwali-gold/50">
+        <div className="relative overflow-hidden bg-gradient-to-b from-primary/15 via-background to-secondary/50 px-5 pt-7 pb-6 text-center">
+          <div aria-hidden="true" className="pointer-events-none absolute left-4 top-4 text-diwali-gold/60"><Sparkles className="h-5 w-5" /></div>
+          <div aria-hidden="true" className="pointer-events-none absolute right-4 top-4 text-diwali-gold/60"><Flame className="h-5 w-5" /></div>
+          <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-primary">
+            <Sparkles className="h-3.5 w-3.5" /> Dhanteras · Festival of Fortune
           </span>
           <h2 className="font-display text-2xl md:text-3xl font-light italic mt-2">
-            Spin & Unlock Your Glow Offer
+            Spin for Your Diwali Glow
           </h2>
-          <p className="text-xs text-muted-foreground mt-1">One spin per visitor · Code valid for 7 days</p>
+          <p className="text-xs text-muted-foreground mt-1">Win 10%, 15%, or 20% off · One spin per browser</p>
 
           <div className="relative mx-auto mt-6 w-[260px] h-[260px] sm:w-[300px] sm:h-[300px]">
             {/* pointer */}
@@ -135,7 +126,7 @@ const SpinWheel = () => {
               <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-t-[18px] border-l-transparent border-r-transparent border-t-primary drop-shadow" />
             </div>
 
-            <div className="absolute inset-0 rounded-full bg-primary/15 blur-xl" />
+            <div className="absolute inset-0 rounded-full bg-diwali-gold/20 blur-xl" />
 
             <svg
               viewBox="0 0 200 200"
@@ -151,48 +142,26 @@ const SpinWheel = () => {
                   <stop offset="100%" stopColor="hsl(var(--secondary))" />
                 </radialGradient>
               </defs>
-              <circle cx="100" cy="100" r="97" fill="hsl(var(--accent))" opacity="0.35" />
-              {SEGMENTS.map((s, i) => {
-                const mid = i * SEG_ANGLE + SEG_ANGLE / 2;
-                const [tx, ty] = polar(100, 100, 58, mid);
-                return (
-                  <g key={s.label}>
-                    <path d={wedgePath(i)} fill={fills[i]} stroke="hsl(var(--background))" strokeWidth="1.5" />
-                    <text
-                      x={tx}
-                      y={ty}
-                      fill={texts[i]}
-                      fontSize="11"
-                      fontWeight="600"
-                      textAnchor="middle"
-                      transform={`rotate(${mid} ${tx} ${ty})`}
-                    >
-                      {s.label}
-                    </text>
-                    <text
-                      x={tx}
-                      y={ty + 11}
-                      fill={texts[i]}
-                      fontSize="7"
-                      opacity="0.8"
-                      textAnchor="middle"
-                      transform={`rotate(${mid} ${tx} ${ty})`}
-                    >
-                      {s.sub}
-                    </text>
-                  </g>
-                );
-              })}
-              {Array.from({ length: 20 }).map((_, i) => {
+              <circle cx="100" cy="100" r="97" fill="hsl(var(--diwali-gold))" opacity="0.35" />
+              {Array.from({ length: SEGMENT_COUNT }).map((_, i) => (
+                <path key={i} d={wedgePath(i)} fill={segmentFill(i)} stroke="hsl(var(--background))" strokeWidth="0.7" />
+              ))}
+              {Array.from({ length: 40 }).map((_, i) => {
                 const [dx, dy] = polar(100, 100, 95, i * 18);
-                return <circle key={i} cx={dx} cy={dy} r="2" fill="hsl(var(--accent))" />;
+                return <circle key={i} cx={dx} cy={dy} r="1.5" fill="hsl(var(--diwali-gold))" />;
               })}
-              <circle cx="100" cy="100" r="20" fill="url(#hubGrad)" stroke="hsl(var(--primary))" strokeWidth="2" />
+              <circle cx="100" cy="100" r="20" fill="url(#hubGrad)" stroke="hsl(var(--diwali-gold))" strokeWidth="2" />
             </svg>
 
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <Gift className="h-5 w-5 text-primary" />
+              <span className="font-display text-xs font-semibold text-primary">🪔</span>
             </div>
+          </div>
+
+          <div className="mx-auto mt-4 flex max-w-sm justify-center gap-4 text-[10px] text-muted-foreground">
+            <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-primary" />15% · 90 in 100</span>
+            <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-accent" />10% · 9 in 100</span>
+            <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-diwali-gold" />20% · 1 in 100</span>
           </div>
 
           {!result ? (
@@ -203,7 +172,7 @@ const SpinWheel = () => {
             <div className="mt-6 space-y-3 animate-fade-in">
               {result.code ? (
                 <>
-                  <p className="font-display text-xl font-light">🎉 You won {result.label}!</p>
+                    <p className="font-display text-xl font-light">You won {result.label}!</p>
                   <button
                     onClick={copy}
                     className="w-full border border-dashed border-primary/60 rounded-md py-3 px-4 flex items-center justify-center gap-2 bg-primary/5 hover:bg-primary/10 transition-colors"
@@ -212,11 +181,11 @@ const SpinWheel = () => {
                     {copied ? <Check className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4 text-muted-foreground" />}
                   </button>
                   <p className="text-[11px] text-muted-foreground">
-                    Apply this code at checkout. Single use, valid for 7 days.
+                    Apply this single-use code at checkout within 7 days.
                   </p>
                 </>
               ) : (
-                <p className="font-display text-xl font-light">Better luck next time 💐</p>
+                <p className="font-display text-xl font-light">Your Dhanteras discount is ready.</p>
               )}
               <Button variant="outline" className="w-full" onClick={() => setOpen(false)}>
                 Continue Shopping

@@ -249,7 +249,7 @@ const ProductDetail = () => {
                     <p className="text-[10px] uppercase tracking-widest opacity-90">Dhanteras Special · Ends Nov 8</p>
                     <h3 className="font-display text-lg font-semibold leading-tight">Buy 1 Get 1 FREE</h3>
                     <p className="text-xs opacity-90">Buy one Hibiglow Shampoo, get one free. Automatically added.</p>
-                    <div className="mt-2"><CountdownTimer end={BOGO_END} compact /></div>
+                    <div className="mt-2"><CountdownTimer end={BOGO_END} compact noLoop /></div>
                   </div>
                 </div>
               </div>

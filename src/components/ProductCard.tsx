@@ -44,7 +44,7 @@ const ProductCard = ({ product }: { product: Product }) => {
               {Math.round((1 - displayPrice / product.price) * 100)}% off
             </span>
           )}
-          {!isOutOfStock && product.is_bogo && isBogoActive() && (
+          {!isOutOfStock && product.slug === "hibiglow-hair-cleanser-anti-dandruff-shampoo" && isBogoActive() && (
             <span className="absolute bottom-3 left-3 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 animate-pulse shadow-lg">
               <Gift className="h-3 w-3" /> BUY 1 GET 1 FREE
             </span>
