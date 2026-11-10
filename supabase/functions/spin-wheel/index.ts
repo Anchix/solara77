@@ -26,6 +26,16 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const now = Date.now();
+    const wheelStart = new Date("2026-10-24T00:00:00+05:30").getTime();
+    const wheelEnd = new Date("2026-11-10T23:59:59.999+05:30").getTime();
+    if (now < wheelStart || now > wheelEnd) {
+      return new Response(JSON.stringify({ error: "The Diwali wheel is closed" }), {
+        status: 410,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
