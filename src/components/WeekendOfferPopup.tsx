@@ -7,7 +7,7 @@ import popupAsset from "@/assets/solura-beauty-sale-popup.jpeg.asset.json";
 import popupFallback from "@/assets/solura-beauty-sale-fallback.webp";
 import diwaliPopup from "@/assets/diwali-gifts-popup.png";
 import { WEEKEND_OFFER_END } from "@/lib/weekendOffer";
-import { isDiwaliTheme } from "@/lib/diwali";
+import { DIWALI_THEME_END, isDiwaliTheme } from "@/lib/diwali";
 import { DHANTERAS_END, isDhanterasActive } from "@/lib/dhanteras";
 import { trackBogoPopupCTA, trackBogoPopupOpen } from "@/lib/analytics";
 import type { SyntheticEvent } from "react";
@@ -68,7 +68,7 @@ const WeekendOfferPopup = () => {
         <div className="flex flex-col items-center gap-3 border-t border-border bg-background p-4">
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span className="font-semibold text-foreground">{dhanteras ? "Dhanteras ends in" : "Festival offers end in"}</span>
-            <CountdownTimer end={dhanteras ? DHANTERAS_END : WEEKEND_OFFER_END} compact noLoop />
+            <CountdownTimer end={dhanteras ? DHANTERAS_END : diwali ? DIWALI_THEME_END : WEEKEND_OFFER_END} compact noLoop />
           </div>
           <Button asChild size="lg" className="w-full">
             <Link

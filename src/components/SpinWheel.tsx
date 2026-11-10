@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Copy, Check, Gift, Flame } from "lucide-react";
 import { toast } from "sonner";
 import { trackEvent } from "@/lib/analytics";
-import { isDhanterasActive } from "@/lib/dhanteras";
+import { isDiwaliTheme } from "@/lib/diwali";
 
 const STORAGE_KEY = "solura_dhanteras_spin_v2";
 
@@ -48,7 +48,7 @@ const SpinWheel = () => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!isDhanterasActive()) return;
+    if (!isDiwaliTheme()) return;
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
@@ -94,7 +94,7 @@ const SpinWheel = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (!isDhanterasActive()) return null;
+  if (!isDiwaliTheme()) return null;
 
   return (
     <>
@@ -113,7 +113,7 @@ const SpinWheel = () => {
           <div aria-hidden="true" className="pointer-events-none absolute left-4 top-4 text-diwali-gold/60"><Sparkles className="h-5 w-5" /></div>
           <div aria-hidden="true" className="pointer-events-none absolute right-4 top-4 text-diwali-gold/60"><Flame className="h-5 w-5" /></div>
           <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-primary">
-            <Sparkles className="h-3.5 w-3.5" /> Dhanteras · Festival of Fortune
+            <Sparkles className="h-3.5 w-3.5" /> Diwali · Festival of Fortune
           </span>
           <h2 className="font-display text-2xl md:text-3xl font-light italic mt-2">
             Spin for Your Diwali Glow
