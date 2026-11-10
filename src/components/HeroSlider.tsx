@@ -2,22 +2,22 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import flashLipsticks from "@/assets/solura-flash-sale-lipsticks.jpeg.asset.json";
-import flashSkincare from "@/assets/solura-flash-sale-skincare.jpeg.asset.json";
+import festiveRitual from "@/assets/diwali-festive-ritual.png.asset.json";
+import specialOffer from "@/assets/diwali-special-offer.png.asset.json";
 import diwaliSlide from "@/assets/solura-diwali-slide.jpeg.asset.json";
 import royaltySlide from "@/assets/solura-royalty-slide.jpeg.asset.json";
 import festiveSlide from "@/assets/solura-festive-slide.jpeg.asset.json";
 
-import flashLipsticksFallback from "@/assets/solura-flash-sale-lipsticks-fallback.webp";
-import flashSkincareFallback from "@/assets/solura-flash-sale-skincare-fallback.webp";
+import festiveRitualFallback from "@/assets/diwali-festive-ritual-fallback.webp";
+import specialOfferFallback from "@/assets/diwali-special-offer-fallback.webp";
 import diwaliFallback from "@/assets/solura-diwali-fallback.webp";
 import royaltyFallback from "@/assets/solura-royalty-fallback.webp";
 import festiveFallback from "@/assets/solura-festive-fallback.webp";
 import DiwaliFireworks from "@/components/DiwaliFireworks";
 
 const slides = [
-  { image: flashLipsticks.url, fallback: flashLipsticksFallback, alt: "Solura 1st Anniversary Mega Sale — 27-minute flash sale, October 27, 7:00–7:27 PM; lipsticks and soap at ₹27", width: 1024, height: 1024 },
-  { image: flashSkincare.url, fallback: flashSkincareFallback, alt: "Solura 1st Anniversary Mega Sale — 27-minute flash sale, only October 27; shampoo, face wash and brightening cream at ₹127", width: 1024, height: 1024 },
+  { image: festiveRitual.url, fallback: festiveRitualFallback, alt: "Solura festive little ritual — Buy 1 Get 1 Free on selected Diwali bestsellers", width: 900, height: 1600 },
+  { image: specialOffer.url, fallback: specialOfferFallback, alt: "Solura Dhan Diwali special offer with festive beauty products", width: 1080, height: 1350 },
   { image: diwaliSlide.url, fallback: diwaliFallback, alt: "Solura — Brighten Like Diwali, up to 50% off on viral picks", width: 1376, height: 768 },
   { image: royaltySlide.url, fallback: royaltyFallback, alt: "Solura Brightening Cream — Brighten Like Royalty, up to 50% off on viral picks", width: 1142, height: 768 },
   { image: festiveSlide.url, fallback: festiveFallback, alt: "Solura festive pre-sale — special offer, up to 50% off", width: 1376, height: 768 },
