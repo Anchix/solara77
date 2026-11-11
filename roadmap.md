@@ -10,3 +10,4 @@
 - [x] Configure Dhanteras offers Nov 6–8, 2026: Nude Pink ₹99 (MRP ₹185), Hot Red ₹49 (MRP ₹185), Hibiglow Shampoo buy one get one
 - [x] Add Diwali prize wheel with 90% 15% off, 9% 10% off, and 1% 20% off; no 5% prize
 - [x] Replace the first two homepage slides with the newly uploaded images
+- [ ] Add a “You may also like” section to product pages using Lovable AI to recommend related catalog products (pending available credits)
