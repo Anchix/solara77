@@ -7,21 +7,15 @@ import specialOffer from "@/assets/diwali-special-offer.png.asset.json";
 import diwaliSlide from "@/assets/solura-diwali-slide.jpeg.asset.json";
 import royaltySlide from "@/assets/solura-royalty-slide.jpeg.asset.json";
 import festiveSlide from "@/assets/solura-festive-slide.jpeg.asset.json";
-import flashSaleLipsticks from "@/assets/solura-flash-sale-lipsticks.jpeg.asset.json";
-import flashSaleSkincare from "@/assets/solura-flash-sale-skincare.jpeg.asset.json";
 
 import festiveRitualFallback from "@/assets/diwali-festive-ritual-fallback.webp";
 import specialOfferFallback from "@/assets/diwali-special-offer-fallback.webp";
 import diwaliFallback from "@/assets/solura-diwali-fallback.webp";
 import royaltyFallback from "@/assets/solura-royalty-fallback.webp";
 import festiveFallback from "@/assets/solura-festive-fallback.webp";
-import flashSaleLipsticksFallback from "@/assets/solura-flash-sale-lipsticks-fallback.webp";
-import flashSaleSkincareFallback from "@/assets/solura-flash-sale-skincare-fallback.webp";
 import DiwaliFireworks from "@/components/DiwaliFireworks";
 
 const slides = [
-  { image: flashSaleLipsticks.url, fallback: flashSaleLipsticksFallback, alt: "Solura first-anniversary flash sale — Nude Pink lipstick, Hot Red lipstick, and De Tan Soap offers", width: 900, height: 900 },
-  { image: flashSaleSkincare.url, fallback: flashSaleSkincareFallback, alt: "Solura first-anniversary skincare flash sale — Hibiglow Shampoo, BrightX Face Wash, and Brightening Cream offers", width: 900, height: 900 },
   { image: festiveRitual.url, fallback: festiveRitualFallback, alt: "Solura festive little ritual — Buy 1 Get 1 Free on selected Diwali bestsellers", width: 900, height: 1600 },
   { image: specialOffer.url, fallback: specialOfferFallback, alt: "Solura Dhan Diwali special offer with festive beauty products", width: 1080, height: 1350 },
   { image: diwaliSlide.url, fallback: diwaliFallback, alt: "Solura — Brighten Like Diwali, up to 50% off on viral picks", width: 1376, height: 768 },
