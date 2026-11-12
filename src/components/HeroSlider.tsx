@@ -2,25 +2,21 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import festiveRitual from "@/assets/diwali-festive-ritual.png.asset.json";
-import specialOffer from "@/assets/diwali-special-offer.png.asset.json";
-import diwaliSlide from "@/assets/solura-diwali-slide.jpeg.asset.json";
-import royaltySlide from "@/assets/solura-royalty-slide.jpeg.asset.json";
-import festiveSlide from "@/assets/solura-festive-slide.jpeg.asset.json";
-
-import festiveRitualFallback from "@/assets/diwali-festive-ritual-fallback.webp";
-import specialOfferFallback from "@/assets/diwali-special-offer-fallback.webp";
-import diwaliFallback from "@/assets/solura-diwali-fallback.webp";
-import royaltyFallback from "@/assets/solura-royalty-fallback.webp";
-import festiveFallback from "@/assets/solura-festive-fallback.webp";
+import festivalOffer from "@/assets/solura-festival-offer.jpeg.asset.json";
+import brightXFacewash from "@/assets/solura-bright-x-facewash.jpeg.asset.json";
+import anniversary from "@/assets/solura-one-year-anniversary.jpeg.asset.json";
+import hotRedCollection from "@/assets/solura-hot-red-collection.jpeg.asset.json";
+import festivalOfferFallback from "@/assets/solura-festival-offer-fallback.webp";
+import brightXFacewashFallback from "@/assets/solura-bright-x-facewash-fallback.webp";
+import anniversaryFallback from "@/assets/solura-one-year-anniversary-fallback.webp";
+import hotRedCollectionFallback from "@/assets/solura-hot-red-collection-fallback.webp";
 import DiwaliFireworks from "@/components/DiwaliFireworks";
 
 const slides = [
-  { image: festiveRitual.url, fallback: festiveRitualFallback, alt: "Solura festive little ritual — Buy 1 Get 1 Free on selected Diwali bestsellers", width: 900, height: 1600 },
-  { image: specialOffer.url, fallback: specialOfferFallback, alt: "Solura Dhan Diwali special offer with festive beauty products", width: 1080, height: 1350 },
-  { image: diwaliSlide.url, fallback: diwaliFallback, alt: "Solura — Brighten Like Diwali, up to 50% off on viral picks", width: 1376, height: 768 },
-  { image: royaltySlide.url, fallback: royaltyFallback, alt: "Solura Brightening Cream — Brighten Like Royalty, up to 50% off on viral picks", width: 1142, height: 768 },
-  { image: festiveSlide.url, fallback: festiveFallback, alt: "Solura festive pre-sale — special offer, up to 50% off", width: 1376, height: 768 },
+  { image: festivalOffer.url, fallback: festivalOfferFallback, alt: "Solura Festival Offer — beauty essentials and gift bag", width: 1600, height: 900 },
+  { image: brightXFacewash.url, fallback: brightXFacewashFallback, alt: "Solura Bright-X Face Wash skincare campaign", width: 1024, height: 1024 },
+  { image: anniversary.url, fallback: anniversaryFallback, alt: "Solura Cosmetics — one year of trust", width: 1024, height: 1024 },
+  { image: hotRedCollection.url, fallback: hotRedCollectionFallback, alt: "Solura Hot Red Collection lipstick campaign", width: 720, height: 447 },
 ];
 
 const HeroSlider = () => {
